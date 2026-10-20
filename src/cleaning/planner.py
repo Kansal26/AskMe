@@ -10,6 +10,7 @@ Features:
 from __future__ import annotations
 
 import json
+import time
 from typing import Any
 
 import pandas as pd
@@ -260,6 +261,9 @@ def generate_llm_plan(
         except Exception as e:
             attempts += 1
             last_error = str(e)
+            if attempts <= max_retries:
+                sleep_sec = 2.0 * (2 ** (attempts - 1))
+                time.sleep(sleep_sec)
 
     # Fallback to rule-based planner
     fallback = generate_rule_based_plan(profile)
