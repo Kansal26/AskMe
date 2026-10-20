@@ -79,26 +79,35 @@ def execute_step(df: pd.DataFrame, step: CleaningStep) -> tuple[pd.DataFrame, Au
                 f"df['{col}'] = df['{col}'].astype(str).str.strip().str.replace(r' {{2,}}', ' ', regex=True)\n"
             )
 
-    # 3. NORMALIZE CASE
+    # 3. NORMALIZE CASE (Variant-Evidence Gated)
     elif op == "normalize_case":
+        from src.cleaning.whitelist import get_variant_cluster_values
+
         mode = params.get("mode", "lower")
         if col in df_out.columns:
+            # Variant-Evidence Gate: only cells belonging to an actual variant cluster may be modified
+            variant_values = get_variant_cluster_values(df_out[col])
             s = df_out[col].astype(str)
             if mode == "upper":
-                cleaned = s.str.upper()
+                candidate = s.str.upper()
             elif mode == "title":
-                cleaned = s.str.title()
+                candidate = s.str.title()
             else:
-                cleaned = s.str.lower()
-            diff_mask = (s != cleaned) & df_out[col].notna()
+                candidate = s.str.lower()
+
+            # A value may only be changed if it belongs to a variant cluster in the column
+            is_in_variant_cluster = df_out[col].astype(str).isin(variant_values)
+            diff_mask = (s != candidate) & df_out[col].notna() & is_in_variant_cluster
             rows_affected = int(diff_mask.sum())
             if rows_affected > 0:
                 before_samples = s[diff_mask].head(3).tolist()
-                after_samples = cleaned[diff_mask].head(3).tolist()
-                df_out[col] = df_out[col].where(~diff_mask, cleaned)
+                after_samples = candidate[diff_mask].head(3).tolist()
+                df_out[col] = df_out[col].where(~diff_mask, candidate)
             py_code = (
-                f"# Step {step.step_id}: Normalize case in '{col}' to {mode}\n"
-                f"df['{col}'] = df['{col}'].astype(str).str.{mode}()\n"
+                f"# Step {step.step_id}: Normalize case in '{col}' to {mode} (variant-evidence gated)\n"
+                f"variant_vals = {variant_values}\n"
+                f"mask = df['{col}'].astype(str).isin(variant_vals)\n"
+                f"df.loc[mask, '{col}'] = df.loc[mask, '{col}'].astype(str).str.{mode}()\n"
             )
 
     # 4. PARSE DATES (with Ambiguity Flagging)
@@ -185,61 +194,51 @@ def execute_step(df: pd.DataFrame, step: CleaningStep) -> tuple[pd.DataFrame, Au
                 f")\n"
             )
 
-    # 6. FILL MISSING
+    # 6. FILL MISSING (Governed Policy: Flag-Only, Zero Imputation)
     elif op == "fill_missing":
         from src.cleaning.profiler import STANDARD_NULL_TOKENS
 
-        strategy = params.get("strategy", "leave_and_flag")
         if col in df_out.columns:
             null_mask = df_out[col].isna() | df_out[col].astype(str).str.strip().str.lower().isin(STANDARD_NULL_TOKENS)
             rows_affected = int(null_mask.sum())
 
-            if strategy == "leave_and_flag":
-                flag_col = f"is_missing_{col}"
-                df_out[flag_col] = null_mask
-                before_samples = [None] if rows_affected > 0 else []
-                after_samples = [f"Flagged in {flag_col}"] if rows_affected > 0 else []
-                py_code = (
-                    f"# Step {step.step_id}: Leave and flag missing values in '{col}'\n"
-                    f"df['is_missing_{col}'] = df['{col}'].isna()\n"
-                )
-            elif strategy == "mode":
-                mode_val = df_out[col].dropna().mode()
-                fill_val = mode_val.iloc[0] if len(mode_val) > 0 else "Unknown"
-                if rows_affected > 0:
-                    before_samples = [None]
-                    after_samples = [fill_val]
-                    df_out.loc[null_mask, col] = fill_val
-                py_code = (
-                    f"# Step {step.step_id}: Impute missing '{col}' with mode\n"
-                    f"df['{col}'] = df['{col}'].fillna('{fill_val}')\n"
-                )
-            elif strategy == "constant":
-                c_val = params.get("value", "Unknown")
-                if rows_affected > 0:
-                    before_samples = [None]
-                    after_samples = [c_val]
-                    df_out.loc[null_mask, col] = c_val
-                py_code = (
-                    f"# Step {step.step_id}: Impute missing '{col}' with constant\n"
-                    f"df['{col}'] = df['{col}'].fillna('{c_val}')\n"
-                )
+            # Governed policy: All missing values are strictly left and flagged across all columns.
+            flag_col = f"is_missing_{col}"
+            df_out[flag_col] = null_mask
+            before_samples = [None] if rows_affected > 0 else []
+            after_samples = [f"Flagged in {flag_col}"] if rows_affected > 0 else []
+            py_code = (
+                f"# Step {step.step_id}: Leave and flag missing values in '{col}'\n"
+                f"df['is_missing_{col}'] = df['{col}'].isna()\n"
+            )
 
-    # 7. MAP CATEGORIES
+    # 7. MAP CATEGORIES (Variant-Evidence Gated)
     elif op == "map_categories":
+        from src.cleaning.whitelist import get_variant_cluster_values
+
         mapping = params.get("mapping", {})
         if col in df_out.columns and mapping:
+            variant_values = get_variant_cluster_values(df_out[col])
+            # Only apply mapping for keys that belong to a real variant cluster
+            filtered_mapping = {
+                k: v for k, v in mapping.items()
+                if str(k) in variant_values and str(k) != str(v)
+            }
             s = df_out[col].astype(str)
-            cleaned = s.replace(mapping)
-            diff_mask = s != cleaned
-            rows_affected = int(diff_mask.sum())
-            if rows_affected > 0:
-                before_samples = s[diff_mask].head(3).tolist()
-                after_samples = cleaned[diff_mask].head(3).tolist()
-                df_out[col] = cleaned
+            if filtered_mapping:
+                cleaned = s.replace(filtered_mapping)
+                diff_mask = s != cleaned
+                rows_affected = int(diff_mask.sum())
+                if rows_affected > 0:
+                    before_samples = s[diff_mask].head(3).tolist()
+                    after_samples = cleaned[diff_mask].head(3).tolist()
+                    df_out[col] = cleaned
+            else:
+                rows_affected = 0
+
             py_code = (
-                f"# Step {step.step_id}: Map category spelling variants in '{col}'\n"
-                f"mapping = {mapping}\n"
+                f"# Step {step.step_id}: Map category spelling variants in '{col}' (variant-evidence gated)\n"
+                f"mapping = {filtered_mapping}\n"
                 f"df['{col}'] = df['{col}'].replace(mapping)\n"
             )
 
@@ -326,13 +325,14 @@ def execute_plan(
         df_updated, log_entry, code_snippet = execute_step(df_current, step)
         audit_log.append(log_entry)
 
-        if not dry_run and log_entry.status == "applied":
+        if dry_run:
+            log_entry.message = f"[DRY-RUN] Step would affect {log_entry.rows_affected:,} rows in '{step.column}'."
+            applied_count += 1
+        elif log_entry.status == "applied":
             df_current = df_updated
             applied_count += 1
             for line in code_snippet.strip().split("\n"):
                 script_lines.append(f"    {line}")
-        elif dry_run:
-            applied_count += 1
 
     script_lines.append("    return df")
     script_lines.append("")

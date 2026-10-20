@@ -70,16 +70,19 @@ Only 8 deterministic operations are permitted in `src/cleaning/whitelist.py`. An
    - Strips leading, trailing, and internal consecutive whitespace from text fields.
 3. `normalize_case`:
    - Normalizes text casing (`lower`, `upper`, `title`).
+   - **Variant-Evidence Gate (Damage Guard)**:
+     To prevent over-aggressive LLM edits from modifying clean uncorrupted data (e.g. converting valid proper names or clean title-cased entries), a normalization step may only execute if an empirical variant cluster exists in that column. Two values form a variant cluster if and only if they differ exclusively by case, whitespace, or small Levenshtein distance ($\le 2$). If all unique values in a column are distinct and uncontested, the validator rejects the step and logs the reason. Furthermore, the executor strictly scopes the modification to only those cells matching variant values.
 4. `parse_dates`:
    - Converts strings to ISO `YYYY-MM-DD`.
    - **Ambiguity Guard**: When a date like `03/04/2024` is encountered where both day and month are $\le 12$, it is flagged as ambiguous and preserved for explicit human confirmation.
 5. `to_numeric`:
    - Strips currency symbols (`$`, `₹`, `€`), removes thousand-separating commas, and casts to float.
 6. `fill_missing`:
-   - Strategies: `leave_and_flag`, or `mode` / `constant` strictly for approved low-stakes categorical fields (`channel`, `city`, `category`, `brand`, `reason`).
-   - **Safety Invariant**: Strictly enforces `leave_and_flag` for all monetary amounts (`net_amount`, `gross_amount`, `discount_amount`, `mrp`, `refund_amount`), identifiers (`order_id`, `customer_id`, etc.), dates, and numerical quantities. Imputation is strictly forbidden on these columns.
+   - **Governed Policy: Flag-Only Missing Values (Zero Imputation)**:
+     All missing values across all columns (both high-stakes numeric/dates and categorical fields) must strictly use `leave_and_flag`. This populates a dedicated boolean flag column (e.g., `is_missing_channel`, `is_missing_net_amount`) without fabricating or guessing data values. Mode and constant imputation are completely disabled across the system.
 7. `map_categories`:
    - Replaces spelling variants or typo clusters with an approved canonical term (e.g., `{"Skin care": "Skincare"}`).
+   - **Variant-Evidence Gate**: Requires empirical variant cluster evidence in the target column. Any proposed mapping targeting non-existent or uncontested clean categories is rejected.
 8. `flag_outliers`:
    - Identifies statistical IQR anomalies and populates a separate boolean flag column (e.g., `is_outlier_gross_amount`).
    - **Safety Invariant**: Flags anomalous records for segmentation; never deletes, winsorizes, or caps outlier values.
@@ -110,7 +113,7 @@ To provide complete evaluation transparency, the benchmark reports **both Strict
 A question passes strict matching if and only if:
 1. **Exact Column Match**: The set of column names and total column count returned by the agent must match the Gold SQL projection exactly.
 2. **Exact Row Ordering**: The ordering of rows returned by the agent must match the Gold SQL row-for-row ($r_{\text{agent}}[i] == r_{\text{gold}}[i]$ for all $i$).
-3. **Exact Values**: Values must match exactly, with floating-point values constrained to an absolute tolerance of $10^{-2}$ to prevent floating-point representation artifacts.
+3. **Exact Values**: Values must match exactly, with floating-point values constrained to standard float tolerances ($\text{abs\_tol} = 0.01, \text{rel\_tol} = 0.001$) to accommodate engine representation artifacts.
 
 ### 5.2 Lenient (Semantically Equivalent) Matching Rules
 Strict matching can penalize models that answer the business question correctly but return helpful supplementary context. Lenient matching applies a principled set of mathematical and business equivalence rules applied identically across all prompt arms:
@@ -126,20 +129,23 @@ Strict matching can penalize models that answer the business question correctly 
    - **Ranking Queries (`ORDER BY` + `LIMIT`)**: If the Gold SQL contains both an `ORDER BY` and a `LIMIT` clause (e.g., "Top 3 brands by revenue"), row order is semantically essential and must be strictly preserved.
    - **Unbounded Grouping Queries**: In standard SQL without `LIMIT`, row ordering is not semantically significant unless specified. For queries without `LIMIT`, row ordering is ignored (evaluated as a multiset / sorted row tuples before comparison).
 4. **Floating-Point Numeric Tolerance**:
-   - Numeric and financial calculations are compared using standard floating-point tolerance:
-     $$\text{math.isclose}(a, b, \text{abs\_tol}=0.02, \text{rel\_tol}=0.001)$$
-     This accommodates minor differences between queries that round before vs. after aggregation.
+   - Numeric and financial calculations are compared using tightened floating-point tolerance:
+     $$\text{math.isclose}(a, b, \text{abs\_tol}=0.01, \text{rel\_tol}=0.001)$$
+     This accommodates minor differences between queries that round before vs. after aggregation while strictly detecting incorrect calculation logic.
 5. **Text & NULL Normalization**:
    - Text strings are stripped of leading/trailing whitespace and compared case-insensitively. NULL and `None` values are matched identically.
 
-### 5.3 Refusal Accounting Metrics
-To prevent models from artificially inflating accuracy by refusing challenging questions ("blanket refusal gaming"), we report:
+### 5.3 Refusal Accounting Metrics & Infrastructure Error Isolation
+To prevent models from artificially inflating accuracy by refusing challenging questions ("blanket refusal gaming"), while isolating network unreliability from model competence:
+
+- **Infrastructure Error Handling**:
+  Transient API failures (e.g., HTTP 429 rate limits, socket timeouts, connection drops) are automatically retried with exponential backoff. If all retries fail, the result is classified as `infrastructure_error` and **strictly excluded from refusal recall and precision metrics**. An infrastructure timeout must never be conflated with a deliberate agent refusal (`can_answer=False`).
 
 - **Refusal Recall**:
-  $$\text{Refusal Recall} = \frac{\text{True Refusals}}{\text{Total Unanswerable Questions (8)}} = \frac{TR}{8}$$
+  $$\text{Refusal Recall} = \frac{\text{True Refusals}}{\text{Evaluated Unanswerable Questions}} = \frac{TR}{U_{\text{eval}}}$$
 - **Refusal Precision**:
   $$\text{Refusal Precision} = \frac{\text{True Refusals}}{\text{True Refusals} + \text{False Refusals}} = \frac{TR}{TR + FR}$$
 - **Answerable Recall**:
-  $$\text{Answerable Recall} = \frac{\text{Answerable Questions Answered}}{\text{Total Answerable Questions (32)}} = \frac{AA}{32}$$
+  $$\text{Answerable Recall} = \frac{\text{Answerable Questions Answered}}{\text{Evaluated Answerable Questions}} = \frac{AA}{A_{\text{eval}}}$$
 
 If a model adopts a conservative strategy and refuses answerable questions, its Refusal Precision drops immediately toward $20\%$, penalizing the system.

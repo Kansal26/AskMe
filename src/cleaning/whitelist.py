@@ -26,7 +26,7 @@ ALLOWED_OPERATIONS = {
     "flag_outliers",
 }
 
-# High-stakes columns where imputation is disallowed; defaults to 'leave_and_flag'
+# Columns where imputation was historically considered; now all missing values are flag-only
 HIGH_STAKES_COLUMNS = {
     "order_id",
     "customer_id",
@@ -44,14 +44,103 @@ HIGH_STAKES_COLUMNS = {
 }
 
 
-# Columns explicitly designated as low-stakes categorical where mode/constant imputation is permitted
-LOW_STAKES_CATEGORICAL_COLUMNS = {
-    "channel",
-    "city",
-    "category",
-    "brand",
-    "reason",
-}
+def levenshtein_distance(s1: str, s2: str) -> int:
+    """Computes Levenshtein edit distance between two strings."""
+    if len(s1) < len(s2):
+        return levenshtein_distance(s2, s1)
+    if len(s2) == 0:
+        return len(s1)
+    previous_row = list(range(len(s2) + 1))
+    for i, c1 in enumerate(s1):
+        current_row = [i + 1]
+        for j, c2 in enumerate(s2):
+            insertions = previous_row[j + 1] + 1
+            deletions = current_row[j] + 1
+            substitutions = previous_row[j] + (c1 != c2)
+            current_row.append(min(insertions, deletions, substitutions))
+        previous_row = current_row
+    return previous_row[-1]
+
+
+def are_variants(val1: str, val2: str) -> bool:
+    """Checks whether two distinct values differ only by case, whitespace, or small edit-distance."""
+    if val1 == val2:
+        return False
+    s1, s2 = str(val1).strip(), str(val2).strip()
+    if not s1 or not s2:
+        return False
+    # 1. Differ only by case
+    if s1.lower() == s2.lower():
+        return True
+    # 2. Differ only by whitespace (or case + whitespace)
+    w1 = "".join(s1.split()).lower()
+    w2 = "".join(s2.split()).lower()
+    if w1 == w2:
+        return True
+    # 3. Differ only by small edit-distance (typos)
+    if len(w1) >= 4 and len(w2) >= 4 and levenshtein_distance(w1, w2) <= 2:
+        return True
+    return False
+
+
+def get_variant_cluster_values(series: Any) -> set[str]:
+    """Returns the set of unique values in the series that belong to an actual variant cluster.
+
+    A value belongs to a variant cluster if and only if another distinct value in the same
+    series differs from it only by case, whitespace, or small edit-distance.
+    """
+    import pandas as pd
+
+    if not isinstance(series, pd.Series):
+        series = pd.Series(series)
+
+    unique_vals = [str(v) for v in series.dropna().unique() if str(v).strip()]
+    variant_values: set[str] = set()
+
+    for i in range(len(unique_vals)):
+        for j in range(i + 1, len(unique_vals)):
+            v1, v2 = unique_vals[i], unique_vals[j]
+            if are_variants(v1, v2):
+                variant_values.add(v1)
+                variant_values.add(v2)
+
+    return variant_values
+
+
+def validate_variant_evidence(df: Any, step: CleaningStep) -> tuple[bool, str]:
+    """Validates that normalize_case or map_categories has empirical variant cluster evidence in the data.
+
+    Returns (is_valid, rejection_reason).
+    """
+    op = step.operation
+    col = step.column
+    if op not in ("normalize_case", "map_categories"):
+        return True, ""
+
+    if col not in df.columns:
+        return False, f"Column '{col}' does not exist in dataset."
+
+    variant_values = get_variant_cluster_values(df[col])
+
+    if not variant_values:
+        return (
+            False,
+            f"Variant-evidence gate rejected '{op}' on '{col}': no variant cluster evidence exists in the column "
+            f"(all values are distinct and uncontested).",
+        )
+
+    if op == "map_categories":
+        mapping = step.params.get("mapping", {})
+        # Check that at least one mapped source key exists in the column AND belongs to a variant cluster
+        valid_mapped_sources = [k for k in mapping.keys() if str(k) in variant_values and k != mapping[k]]
+        if not valid_mapped_sources:
+            return (
+                False,
+                f"Variant-evidence gate rejected 'map_categories' on '{col}': none of the mapping sources {list(mapping.keys())} "
+                f"belong to an actual variant cluster in the column.",
+            )
+
+    return True, ""
 
 
 def validate_step(step: CleaningStep) -> tuple[bool, str]:
@@ -97,30 +186,14 @@ def validate_step(step: CleaningStep) -> tuple[bool, str]:
 
     if op == "fill_missing":
         strategy = params.get("strategy", "leave_and_flag")
-        allowed_strategies = ("mode", "constant", "leave_and_flag")
-        if strategy not in allowed_strategies:
+        # Governed Policy: All missing values are strictly left and flagged.
+        # Mode and constant imputation are completely disabled across all columns to eliminate guesswork.
+        if strategy != "leave_and_flag":
             return (
                 False,
-                f"fill_missing strategy must be one of {allowed_strategies}, got '{strategy}'",
+                f"Safety violation: fill_missing strategy '{strategy}' is prohibited. "
+                f"All missing values must strictly use 'leave_and_flag' across all columns.",
             )
-        col_lower = col.lower()
-        # High-stakes guard: amounts, IDs, dates, and non-categorical fields must NEVER be imputed
-        if strategy != "leave_and_flag":
-            if col_lower in HIGH_STAKES_COLUMNS:
-                return (
-                    False,
-                    f"Safety violation: High-stakes column '{col}' (amount, ID, or date) cannot be imputed with '{strategy}'. "
-                    f"Must use 'leave_and_flag'.",
-                )
-            if col_lower not in LOW_STAKES_CATEGORICAL_COLUMNS:
-                return (
-                    False,
-                    f"Safety violation: Column '{col}' is not an approved low-stakes categorical field. "
-                    f"Imputation is only permitted for: {sorted(LOW_STAKES_CATEGORICAL_COLUMNS)}. "
-                    f"Must use 'leave_and_flag'.",
-                )
-        if strategy == "constant" and "value" not in params:
-            return False, "fill_missing with strategy='constant' requires 'value' parameter"
         return True, ""
 
     if op == "map_categories":
@@ -143,18 +216,32 @@ def validate_step(step: CleaningStep) -> tuple[bool, str]:
     return False, f"Unknown validation path for operation '{op}'"
 
 
-def filter_valid_steps(steps: list[CleaningStep]) -> tuple[list[CleaningStep], list[str]]:
-    """Filters a list of steps, returning approved steps and a list of rejection reasons."""
+def filter_valid_steps(
+    steps: list[CleaningStep], df: Any = None
+) -> tuple[list[CleaningStep], list[str]]:
+    """Filters a list of steps, returning approved steps and a list of rejection reasons.
+
+    If df is provided, applies the Variant-Evidence Gate to guard against harmful mutations.
+    """
     valid_steps: list[CleaningStep] = []
     rejected_reasons: list[str] = []
 
     for step in steps:
         ok, msg = validate_step(step)
-        if ok:
-            valid_steps.append(step)
-        else:
+        if not ok:
             rejected_reasons.append(
                 f"Step {step.step_id} ({step.operation} on {step.column}): {msg}"
             )
+            continue
+
+        if df is not None:
+            v_ok, v_msg = validate_variant_evidence(df, step)
+            if not v_ok:
+                rejected_reasons.append(
+                    f"Step {step.step_id} ({step.operation} on {step.column}): {v_msg}"
+                )
+                continue
+
+        valid_steps.append(step)
 
     return valid_steps, rejected_reasons

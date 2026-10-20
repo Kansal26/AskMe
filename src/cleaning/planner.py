@@ -15,10 +15,7 @@ from typing import Any
 import pandas as pd
 
 from src.cleaning.schemas import CleaningPlan, CleaningStep
-from src.cleaning.whitelist import (
-    LOW_STAKES_CATEGORICAL_COLUMNS,
-    filter_valid_steps,
-)
+from src.cleaning.whitelist import filter_valid_steps
 from src.common.llm import LLMClient
 
 CLEANING_SYSTEM_PROMPT = """You are an expert Data Engineer assisting in preparing a messy tabular dataset for analytics.
@@ -27,16 +24,16 @@ Your role is strictly to PROPOSE cleaning steps. Deterministic code will execute
 WHITELIST OF APPROVED OPERATIONS (You MUST choose ONLY from this list, using EXACT names):
 1. drop_duplicates: params: {}
 2. strip_whitespace: params: {} (removes leading/trailing and collapses internal repeated spaces)
-3. normalize_case: params: {"mode": "lower" | "upper" | "title"}
+3. normalize_case: params: {"mode": "lower" | "upper" | "title"} (Only permitted if variant evidence exists in the column!)
 4. parse_dates: params: {"flag_ambiguous": true} (converts non-ambiguous formats to ISO YYYY-MM-DD; flags ambiguous DD/MM vs MM/DD like 03/04/2024 without altering)
 5. to_numeric: params: {} (strips currency symbols $, ₹, €, and commas)
-6. fill_missing: params: {"strategy": "leave_and_flag" | "mode" | "constant", "value": ...}
-7. map_categories: params: {"mapping": {"typo_or_variant": "CanonicalName"}}
+6. fill_missing: params: {"strategy": "leave_and_flag"} (FLAGS missing rows in is_missing_<column>; IMPUTATION IS STRICTLY PROHIBITED)
+7. map_categories: params: {"mapping": {"typo_or_variant": "CanonicalName"}} (Only permitted for real variant clusters!)
 8. flag_outliers: params: {"method": "iqr"} (flags anomalous rows; NEVER deletes or caps values)
 
 CRITICAL SAFETY POLICY:
-- For monetary amounts, IDs, dates, and numeric quantities, missing values MUST use strategy "leave_and_flag". Imputation is strictly forbidden for these fields!
-- Imputation (strategy "mode" or "constant") is ONLY allowed for low-stakes categorical columns: channel, city, category, brand, reason.
+- ALL missing values MUST use strategy "leave_and_flag". Mode and constant imputation are strictly prohibited across all columns!
+- normalize_case and map_categories may ONLY be proposed if distinct values in the column differ only by case/whitespace/edit-distance. Never blindly title-case clean columns.
 - Outliers MUST use "flag_outliers". Never delete, winsorize, or cap outlier rows.
 
 Respond strictly with a JSON object conforming to the CleaningPlan schema.
@@ -169,18 +166,16 @@ def generate_rule_based_plan(profile: dict[str, Any]) -> CleaningPlan:
 
         # 8. Missing Values
         if c_prof.get("null_count", 0) > 0:
-            strategy = "mode" if col_name.lower() in LOW_STAKES_CATEGORICAL_COLUMNS else "leave_and_flag"
             steps.append(
                 CleaningStep(
                     step_id=step_id,
                     column=col_name,
                     issue=f"{c_prof['null_count']} null or empty values ({c_prof['null_rate'] * 100:.1f}%)",
                     operation="fill_missing",
-                    params={"strategy": strategy},
-                    confidence=0.90,
+                    params={"strategy": "leave_and_flag"},
+                    confidence=0.95,
                     rationale=(
-                        f"Handle missing values in {col_name} via {strategy} "
-                        f"(amounts, IDs, dates, and non-categorical fields are strictly left and flagged)."
+                        f"Flag missing values in {col_name} via boolean indicator without imputation to guarantee zero data hallucination."
                     ),
                 )
             )
@@ -246,7 +241,7 @@ def generate_llm_plan(
                 temperature=0.0,
             )
             raw_plan: CleaningPlan = response.parsed
-            valid_steps, rejected_reasons = filter_valid_steps(raw_plan.steps)
+            valid_steps, rejected_reasons = filter_valid_steps(raw_plan.steps, df=sample_df)
             valid_plan = CleaningPlan(
                 table_name=table_name,
                 summary=raw_plan.summary,

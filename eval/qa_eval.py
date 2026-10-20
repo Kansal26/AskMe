@@ -56,18 +56,18 @@ def get_git_commit_hash() -> str:
         return "unknown"
 
 
-def _values_match(a: Any, g: Any) -> bool:
+def _values_match(a: Any, g: Any, rel_tol: float = 0.001, abs_tol: float = 0.01) -> bool:
     """Compares two individual values with float tolerance, date normalization, and case insensitivity."""
     if a is None and g is None:
         return True
     if a is None or g is None:
         return False
 
-    # 1. Numeric tolerance
+    # 1. Numeric tolerance (tightened to rel_tol=0.001, abs_tol=0.01)
     try:
         fa = float(a)
         fg = float(g)
-        if math.isclose(fa, fg, abs_tol=0.5, rel_tol=0.015):
+        if math.isclose(fa, fg, abs_tol=abs_tol, rel_tol=rel_tol):
             return True
     except (ValueError, TypeError):
         pass
@@ -119,7 +119,7 @@ def _lenient_match(
     - Evaluates ONLY the columns that the gold query returns (agent may return extra columns).
     - Normalises date/timestamp vs 'YYYY-MM' strings.
     - Ignores row order unless gold has ORDER BY with LIMIT.
-    - Numeric tolerance for floats (rel_tol=0.015, abs_tol=0.5).
+    - Numeric tolerance for floats (rel_tol=0.001, abs_tol=0.01).
     """
     if agent_rows is None or gold_rows is None:
         return False
@@ -186,8 +186,16 @@ def categorize_failure(
     gold_rows: list[dict[str, Any]] | None,
     is_strict: bool,
     is_lenient: bool,
+    is_infra: bool = False,
+    infra_details: str = "",
 ) -> tuple[str, str]:
     """Assigns exactly ONE failure category and explanatory diagnosis to a failing question."""
+    if is_infra:
+        return "infrastructure_error", f"Infrastructure/API Failure: {infra_details}"
+
+    if agent_res is None:
+        return "infrastructure_error", f"No response produced: {infra_details}"
+
     if not agent_res.can_answer and gold_sql is not None:
         return "false_refusal", "Model refused an answerable question."
 
@@ -256,6 +264,8 @@ def run_single_benchmark_pass(
     unanswerable_total = 0
     true_refusals = 0
     failed_refusals = 0
+    answerable_infra_errors = 0
+    unanswerable_infra_errors = 0
 
     for item in gold_suite:
         qid = item["id"]
@@ -267,7 +277,39 @@ def run_single_benchmark_pass(
         strict_tier_stats[difficulty]["total"] += 1
         lenient_tier_stats[difficulty]["total"] += 1
 
-        agent_res = agent.answer_question(question)
+        agent_res = None
+        infra_error_msg = None
+        max_api_retries = 5
+        base_delay = 2.0
+
+        for api_attempt in range(1, max_api_retries + 1):
+            try:
+                agent_res = agent.answer_question(question)
+                break
+            except Exception as e:
+                err_str = str(e).lower()
+                is_infra = any(
+                    k in err_str
+                    for k in [
+                        "429",
+                        "rate_limit",
+                        "ratelimit",
+                        "timeout",
+                        "timed out",
+                        "connection",
+                        "503",
+                        "502",
+                        "504",
+                        "overloaded",
+                    ]
+                )
+                if is_infra and api_attempt < max_api_retries:
+                    sleep_time = base_delay * (2 ** (api_attempt - 1))
+                    print(f"    [API Backoff] Attempt {api_attempt} on {qid} hit '{e}'. Retrying in {sleep_time:.1f}s...")
+                    time.sleep(sleep_time)
+                else:
+                    infra_error_msg = str(e)
+                    break
 
         is_strict_correct = False
         is_lenient_correct = False
@@ -275,7 +317,19 @@ def run_single_benchmark_pass(
         fail_details = ""
         gold_rows = None
 
-        if expected_refusal:
+        if infra_error_msg is not None:
+            # Infrastructure failure (API 429, timeout, network error) - isolated from refusals
+            is_strict_correct = False
+            is_lenient_correct = False
+            fail_category = "infrastructure_error"
+            fail_details = f"Infrastructure/API Failure: {infra_error_msg}"
+            if expected_refusal:
+                unanswerable_total += 1
+                unanswerable_infra_errors += 1
+            else:
+                answerable_total += 1
+                answerable_infra_errors += 1
+        elif expected_refusal:
             unanswerable_total += 1
             if not agent_res.can_answer:
                 is_strict_correct = True
@@ -334,23 +388,32 @@ def run_single_benchmark_pass(
                 "is_correct": is_lenient_correct,  # default is lenient for backward compat
                 "fail_category": fail_category,
                 "fail_details": fail_details,
-                "agent_can_answer": agent_res.can_answer,
-                "agent_sql": agent_res.sql_query,
-                "agent_results_sample": agent_res.sql_results[:3] if agent_res.sql_results else None,
+                "is_infrastructure_error": bool(infra_error_msg),
+                "agent_can_answer": agent_res.can_answer if agent_res else False,
+                "agent_sql": agent_res.sql_query if agent_res else None,
+                "agent_results_sample": agent_res.sql_results[:3] if agent_res and agent_res.sql_results else None,
                 "gold_sql": gold_sql,
                 "gold_results_sample": gold_rows[:3] if gold_rows else None,
-                "attempts_taken": agent_res.attempts_taken,
+                "attempts_taken": agent_res.attempts_taken if agent_res else 0,
             }
         )
 
-    # Refusal metrics
-    refusal_recall = round(true_refusals / unanswerable_total, 4) if unanswerable_total > 0 else 0.0
+    # Refusal metrics - strictly excluding infrastructure errors
+    unanswerable_evaluated = unanswerable_total - unanswerable_infra_errors
+    answerable_evaluated = answerable_total - answerable_infra_errors
+
+    refusal_recall = (
+        round(true_refusals / unanswerable_evaluated, 4) if unanswerable_evaluated > 0 else 0.0
+    )
     refusal_precision = (
         round(true_refusals / (true_refusals + false_refusals), 4)
         if (true_refusals + false_refusals) > 0
         else 0.0
     )
-    answerable_recall = round(answerable_answered / answerable_total, 4) if answerable_total > 0 else 0.0
+    answerable_recall = (
+        round(answerable_answered / answerable_evaluated, 4) if answerable_evaluated > 0 else 0.0
+    )
+    total_infra_errors = answerable_infra_errors + unanswerable_infra_errors
 
     strict_total_correct = sum(s["correct"] for s in strict_tier_stats.values())
     lenient_total_correct = sum(s["correct"] for s in lenient_tier_stats.values())
@@ -367,6 +430,7 @@ def run_single_benchmark_pass(
         "strict_total_correct": strict_total_correct,
         "lenient_total_correct": lenient_total_correct,
         "total_questions": total_questions,
+        "infrastructure_errors": total_infra_errors,
         "strict_tier_accuracy": {
             t: round(s["correct"] / s["total"], 4) if s["total"] > 0 else 0.0
             for t, s in strict_tier_stats.items()
@@ -381,6 +445,9 @@ def run_single_benchmark_pass(
             "false_refusals_on_answerable": false_refusals,
             "failed_refusals_on_unanswerable": failed_refusals,
             "answerable_recall": answerable_recall,
+            "infrastructure_errors": total_infra_errors,
+            "unanswerable_evaluated": unanswerable_evaluated,
+            "answerable_evaluated": answerable_evaluated,
         },
         "results": results_list,
     }
@@ -417,6 +484,7 @@ def run_qa_evaluation() -> tuple[dict[str, Any], Path, Path, Path]:
         ref_precisions = [r["refusal_metrics"]["refusal_precision"] for r in runs]
         ref_recalls = [r["refusal_metrics"]["refusal_recall"] for r in runs]
         ans_recalls = [r["refusal_metrics"]["answerable_recall"] for r in runs]
+        infra_errors = [r.get("infrastructure_errors", 0) for r in runs]
 
         # Per-question pass rates across the 3 runs for both strict and lenient
         strict_passes: dict[str, int] = {item["id"]: 0 for item in gold_suite}
@@ -483,6 +551,10 @@ def run_qa_evaluation() -> tuple[dict[str, Any], Path, Path, Path]:
                     "min": min(ans_recalls),
                     "max": max(ans_recalls),
                     "variance": round(calculate_variance(ans_recalls), 6),
+                },
+                "infrastructure_errors": {
+                    "mean": round(sum(infra_errors) / len(infra_errors), 2),
+                    "total": sum(infra_errors),
                 },
             },
             "strict_question_passes": strict_passes,
@@ -768,6 +840,7 @@ def _build_markdown_summary(payload: dict[str, Any]) -> str:
         f"| **Refusal Recall** | {v1['refusal_metrics']['refusal_recall']['mean'] * 100:.1f}% | {v2['refusal_metrics']['refusal_recall']['mean'] * 100:.1f}% | {v3['refusal_metrics']['refusal_recall']['mean'] * 100:.1f}% | Correctly refusing unanswerable questions (out of 8) |",
         f"| **Refusal Precision** | {v1['refusal_metrics']['refusal_precision']['mean'] * 100:.1f}% | {v2['refusal_metrics']['refusal_precision']['mean'] * 100:.1f}% | {v3['refusal_metrics']['refusal_precision']['mean'] * 100:.1f}% | Penalizes models that falsely refuse answerable questions |",
         f"| **Answerable Recall** | {v1['refusal_metrics']['answerable_recall']['mean'] * 100:.1f}% | {v2['refusal_metrics']['answerable_recall']['mean'] * 100:.1f}% | {v3['refusal_metrics']['answerable_recall']['mean'] * 100:.1f}% | Successfully attempting valid business queries (out of 32) |",
+        f"| **Infrastructure Errors** | {v1['refusal_metrics'].get('infrastructure_errors', {}).get('total', 0)} | {v2['refusal_metrics'].get('infrastructure_errors', {}).get('total', 0)} | {v3['refusal_metrics'].get('infrastructure_errors', {}).get('total', 0)} | API timeouts/429s (isolated from refusal metrics) |",
         "",
         "---",
         "",
@@ -843,6 +916,7 @@ def _build_failure_analysis_report(run_data: dict[str, Any]) -> str:
     ]
 
     category_descriptions = {
+        "infrastructure_error": "Transient API rate limit (429), timeout, or network connection failure.",
         "ambiguity": "Question wording allows multiple valid interpretations or gold SQL requires arbitrary extra columns.",
         "wrong_metric": "Generated SQL used an alternate aggregation or failed to adhere to corporate data dictionary formulas.",
         "failed_refusal": "Model answered an unanswerable question rather than refusing.",

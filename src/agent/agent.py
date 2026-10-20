@@ -173,7 +173,8 @@ class AskBusinessAgent:
                     error_context = f"SQL '{current_sql}' failed with error: {err_msg}. Please correct the query."
 
             except Exception as e:
-                if "rate_limit" in str(e).lower() or "429" in str(e):
+                err_lower = str(e).lower()
+                if any(k in err_lower for k in ["rate_limit", "429", "timeout", "timed out", "connection", "503", "502", "504", "overloaded"]):
                     raise
                 error_context = f"Proposal parsing failed: {e}. Please return valid schema."
 

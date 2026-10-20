@@ -1,7 +1,8 @@
-"""Generalisation Evaluation on an Unseen Public Messy Dataset Schema.
+"""Synthetic Schema Smoke Test (Small Synthetic HR File).
 
-Tests whether the Data Cleaning Pipeline (Profiler, Whitelist Validator, Rule-Based Planner,
-and LLM-Assisted Planner) generalizes robustly to a novel tabular schema (HR/Employee dataset).
+Smoke test verifying that the Data Cleaning Pipeline (Profiler, Whitelist Validator,
+Rule-Based Planner, and LLM-Assisted Planner) runs end-to-end on an unseen tabular schema
+(small synthetic HR/Employee file) without crashing or emitting invalid operations.
 """
 
 from __future__ import annotations
@@ -57,9 +58,9 @@ def create_sample_messy_hr_dataset() -> pd.DataFrame:
 
 
 def run_generalisation_benchmark() -> dict[str, Any]:
-    """Runs Profiling, Whitelist Validation, and Plan Execution across Arm A and Arm B."""
+    """Runs smoke test of Profiling, Whitelist Validation, and Plan Execution on a small synthetic file."""
     print("\n=======================================================")
-    print("RUNNING GENERALISATION TEST ON UNSEEN HR DATASET SCHEMA")
+    print("RUNNING SMOKE TEST ON SMALL SYNTHETIC HR DATASET SCHEMA")
     print("=======================================================")
 
     df_raw = create_sample_messy_hr_dataset()

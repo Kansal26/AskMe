@@ -24,8 +24,8 @@ def test_whitelist_blocks_illegal_operations():
     assert "not in the approved whitelist" in msg
 
 
-def test_high_stakes_imputation_is_strictly_blocked():
-    """Verify safety rule: monetary amounts, IDs, dates, and non-categoricals cannot be imputed."""
+def test_all_imputation_is_strictly_blocked():
+    """Verify safety rule: all imputation (mode/constant) is blocked; only leave_and_flag is allowed."""
     # 1. Attempting mode on net_amount
     step1 = CleaningStep(
         step_id=1,
@@ -38,13 +38,12 @@ def test_high_stakes_imputation_is_strictly_blocked():
     )
     is_valid, msg = validate_step(step1)
     assert not is_valid
-    assert "High-stakes column" in msg
-    assert "leave_and_flag" in msg
+    assert "strictly use 'leave_and_flag'" in msg
 
-    # 2. Attempting mode on quantity (non-low-stakes numeric)
+    # 2. Attempting mode on city (categorical) is ALSO blocked under flag-only policy
     step2 = CleaningStep(
         step_id=2,
-        column="quantity",
+        column="city",
         issue="missing",
         operation="fill_missing",
         params={"strategy": "mode"},
@@ -53,20 +52,52 @@ def test_high_stakes_imputation_is_strictly_blocked():
     )
     is_valid, msg = validate_step(step2)
     assert not is_valid
-    assert "not an approved low-stakes categorical field" in msg
+    assert "strictly use 'leave_and_flag'" in msg
 
-    # 3. Mode on low-stakes categorical city is allowed
+    # 3. leave_and_flag is allowed on any column
     step3 = CleaningStep(
         step_id=3,
         column="city",
         issue="missing",
         operation="fill_missing",
-        params={"strategy": "mode"},
+        params={"strategy": "leave_and_flag"},
         confidence=1.0,
         rationale="test",
     )
     is_valid, _ = validate_step(step3)
     assert is_valid
+
+
+def test_variant_evidence_gate_blocks_harmful_edits():
+    """Verify variant-evidence gate rejects normalize_case when no variant cluster exists, protecting clean data."""
+    from src.cleaning.whitelist import filter_valid_steps
+
+    df_clean = pd.DataFrame(
+        {
+            "_row_id": [1, 2, 3],
+            "channel": ["QuickCommerce-Blinkit", "Amazon", "D2C Website"],
+        }
+    )
+    step = CleaningStep(
+        step_id=1,
+        column="channel",
+        issue="casing",
+        operation="normalize_case",
+        params={"mode": "title"},
+        confidence=0.9,
+        rationale="blind title casing",
+    )
+    valid_steps, rejected = filter_valid_steps([step], df=df_clean)
+    assert len(valid_steps) == 0, "Step must be rejected by variant-evidence gate"
+    assert len(rejected) == 1
+    assert "no variant cluster evidence exists" in rejected[0]
+
+    # When executed, uncontested rows are protected
+    df_out, report, _ = execute_plan(
+        df_clean, CleaningPlan(table_name="orders", summary="test", steps=[step])
+    )
+    pd.testing.assert_frame_equal(df_out, df_clean)
+    assert report.audit_log[0].rows_affected == 0
 
 
 def test_prompt_injection_in_cell_data_is_defended():
@@ -134,7 +165,7 @@ def test_prompt_injection_in_cell_data_is_defended():
     assert len(plan.steps) == 0, "No unauthorized operations should pass whitelist filter"
     assert len(rejected) == 2
     assert "not in the approved whitelist" in rejected[0]
-    assert "High-stakes column" in rejected[1]
+    assert "strictly use 'leave_and_flag'" in rejected[1]
     assert plan.metadata["steps_rejected"] == 2
     assert plan.metadata["steps_accepted"] == 0
 
@@ -198,18 +229,18 @@ def test_deterministic_step_executions():
     # Row 3 timestamp stripped
     assert df.at[3, "order_date"] == "2024-05-10"
 
-    # 4. Map categories
+    # 4. Map categories (maps variant 'skincare' to dominant 'Skincare')
     s4 = CleaningStep(
         step_id=4,
         column="category",
-        issue="typo",
+        issue="variant",
         operation="map_categories",
-        params={"mapping": {"Hair Care": "Haircare"}},
+        params={"mapping": {"skincare": "Skincare"}},
         confidence=1.0,
         rationale="map",
     )
     df, log4, _ = execute_step(df, s4)
-    assert df.at[2, "category"] == "Haircare"
+    assert df.at[1, "category"] == "Skincare"
 
     # 5. Flag outliers (Never delete)
     s5 = CleaningStep(

@@ -8,6 +8,8 @@ def test_values_match_float_tolerance():
     assert _values_match(31284974.750001892, 31284974.75)
     assert _values_match(1564.248, 1564.25)
     assert not _values_match(100.0, 150.0)
+    # Tightened tolerance check: difference of 0.05 exceeds abs_tol=0.01 and rel_tol=0.001
+    assert not _values_match(10.0, 10.05)
 
 
 def test_values_match_date_normalization():

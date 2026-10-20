@@ -114,8 +114,10 @@
 ### `q17`: Average Customer Rating by Brand
 * **Question**: "What is the average customer rating for each brand?"
 * **Intent**: Average review score per product brand.
-* **Gold SQL**: `SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating, COUNT(r.review_id) AS review_count FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.brand ORDER BY avg_rating DESC;`
-* **Ambiguity Risk**: High. Gold query mandates `COUNT(r.review_id) AS review_count` in the output even though the user prompt only asked for the average rating.
+* **Gold SQL (Updated)**: `SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.brand ORDER BY avg_rating DESC;`
+* **Original Gold SQL**: `SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating, COUNT(r.review_id) AS review_count FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.brand ORDER BY avg_rating DESC;`
+* **Reason for Change**: The user question asks: "What is the average customer rating for each brand?". The original Gold SQL arbitrarily included `COUNT(r.review_id) AS review_count`, penalizing correct agents that projected only the requested brand and average rating. Removed `COUNT(r.review_id)` to accurately reflect the business prompt.
+* **Ambiguity Risk**: Low.
 
 ### `q18`: Total Units Sold by Category
 * **Question**: "How many total units were sold in each category?"
@@ -202,8 +204,10 @@
 ### `q31`: Quarterly AOV by Channel
 * **Question**: "What was the quarterly Average Order Value by channel in 2024?"
 * **Intent**: Group by channel and quarter.
-* **Gold SQL**: `SELECT channel, strftime(order_date, '%Y-Q') || ((CAST(strftime(order_date, '%m') AS INTEGER) - 1) / 3 + 1) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY channel, quarter ORDER BY channel, quarter;`
-* **Ambiguity Risk**: High. The manual string formatting `2024-Q1` fails if the LLM uses native DuckDB `quarter()` or `date_trunc('quarter', order_date)`.
+* **Gold SQL (Updated)**: `SELECT channel, year(order_date) || '-Q' || quarter(order_date) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE year(order_date) = 2024 GROUP BY channel, quarter ORDER BY channel, quarter;`
+* **Original Gold SQL**: `SELECT channel, strftime(order_date, '%Y-Q') || ((CAST(strftime(order_date, '%m') AS INTEGER) - 1) / 3 + 1) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY channel, quarter ORDER BY channel, quarter;`
+* **Reason for Change**: Critical DuckDB mathematical bug in original gold SQL. In DuckDB, `/` performs floating-point division; dividing integer months by `3` produced non-integer quarter strings such as `'2024-Q1.3333333333333333'` and `'2024-Q1.6666666666666665'`, creating 12 pseudo-month groups rather than 4 quarters. Replaced with standard canonical DuckDB `quarter(order_date)` and `year(order_date)`.
+* **Ambiguity Risk**: Low.
 
 ### `q32`: Month-over-Month Revenue Growth Rate
 * **Question**: "Calculate the month-over-month revenue growth rate for 2024."

@@ -39,7 +39,7 @@ import pandas as pd  # noqa: E402
 from src.cleaning.executor import execute_plan  # noqa: E402
 from src.cleaning.planner import generate_llm_plan, generate_rule_based_plan  # noqa: E402
 from src.cleaning.profiler import STANDARD_NULL_TOKENS, profile_dataset  # noqa: E402
-from src.cleaning.whitelist import HIGH_STAKES_COLUMNS, LOW_STAKES_CATEGORICAL_COLUMNS  # noqa: E402
+from src.cleaning.whitelist import HIGH_STAKES_COLUMNS  # noqa: E402
 from src.common.llm import LLMClient  # noqa: E402
 
 
