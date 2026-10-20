@@ -119,6 +119,14 @@ def get_metric_definition(term: str) -> dict[str, Any]:
             "sql_example": "SELECT p.name, ROUND(AVG(r.rating), 2) AS avg_stars FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.name;",
             "tables_involved": ["products", "reviews"],
         },
+        "ambiguous dates": {
+            "metric_name": "Ambiguous Order Dates Governance",
+            "aliases": ["is_ambiguous_order_date", "ambiguous date", "data quality flag", "date ambiguity", "ambiguous orders"],
+            "definition": "Flags transactions where order_date had ambiguous day/month representation (day <= 12 and month <= 12). Queries touching order_date must audit whether ambiguous rows are included or excluded.",
+            "formula": "COUNT(CASE WHEN is_ambiguous_order_date THEN 1 END)",
+            "sql_example": "SELECT COUNT(*) FROM orders WHERE is_ambiguous_order_date = TRUE;",
+            "tables_involved": ["orders"],
+        },
     }
 
     # Match exact or alias

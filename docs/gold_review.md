@@ -274,3 +274,31 @@ Below is the definitive, honest audit of the 6 disputed benchmark queries, detai
 | **`q26`** | Show the cumulative running monthly net revenue for 2023. | **Gold SQL Correct** | **Neither** (Type Formatting). Agent used DuckDB native `DATE_TRUNC('month', order_date)` returning a `datetime.date(2023, 1, 1)` object, while Gold used `strftime('%Y-%m')` returning string `'2023-01'`. The numeric sums were identical to the cent. | **No Change to Gold SQL**. Gold SQL is valid. The lenient comparator's date normalizer aligns date objects with `'YYYY-MM'` strings, allowing semantic equivalence. |
 | **`q31`** | What was the quarterly Average Order Value by channel in 2024? | **Gold SQL Wrong** | **Gold Standard Error (Critical DuckDB Math Bug)**. The original Gold query used `/ 3` in DuckDB: `strftime(order_date, '%Y-Q') || ((CAST(strftime(order_date, '%m') AS INTEGER) - 1) / 3 + 1)`. In DuckDB, `/` performs floating-point division, producing decimal quarter names like `'2024-Q1.3333333333333333'` and `'2024-Q1.6666666666666665'`. It grouped orders into 12 pseudo-months rather than 4 quarters! | **Changed Gold SQL**. Updated to use canonical DuckDB functions: `SELECT channel, year(order_date) \|\| '-Q' \|\| quarter(order_date) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE year(order_date) = 2024 GROUP BY channel, quarter ORDER BY channel, quarter;`. |
 | **`q32`** | Calculate the month-over-month revenue growth rate for 2024. | **Gold SQL Correct** | **Model Dialect Gap**. Agent struggled with DuckDB window syntax `LAG(revenue) OVER (ORDER BY month)` when filtering by year. | **No Change to Gold SQL**. Gold SQL correctly expresses the window function calculation. Prompt v3 has been updated with general DuckDB window dialect instructions. |
+
+---
+
+## 6. Stage 3 Data Quality Benchmark Queries (`q41`, `q42`, `q43`)
+
+To rigorously benchmark agent awareness of data-quality audit flags, 3 dedicated queries were integrated into the gold test suite:
+
+### `q41`: Total Count of Ambiguous Order Dates
+* **Question**: "How many total orders carry the ambiguous order date flag?"
+* **Intent**: Count of rows where `is_ambiguous_order_date = TRUE`.
+* **Gold SQL**: `SELECT COUNT(*) AS ambiguous_order_count FROM orders WHERE is_ambiguous_order_date = TRUE;`
+* **Ground-Truth Expected Value**: `393`
+* **Ambiguity Risk**: Low. Models without schema awareness of data quality flags might attempt string parsing on `order_date` instead of querying the governed boolean flag column.
+
+### `q42`: Net Revenue Excluding Ambiguous Dates
+* **Question**: "What is our total net revenue excluding orders with ambiguous dates?"
+* **Intent**: Business calculation requiring explicit exclusion of unverified/ambiguous order dates.
+* **Gold SQL**: `SELECT ROUND(SUM(net_amount), 2) AS clean_net_revenue FROM orders WHERE is_ambiguous_order_date = FALSE;`
+* **Ground-Truth Expected Value**: `30,686,282.75`
+* **Ambiguity Risk**: Medium. Agent must recognize that "excluding orders with ambiguous dates" translates to `WHERE is_ambiguous_order_date = FALSE` rather than a date filter.
+
+### `q43`: Annual Distribution of Ambiguous Order Dates
+* **Question**: "How many ambiguous order date transactions occurred in 2023 versus 2024?"
+* **Intent**: Multi-row aggregation grouping by order year with boolean flag filter.
+* **Gold SQL**: `SELECT year(order_date) AS order_year, COUNT(*) AS ambiguous_orders FROM orders WHERE is_ambiguous_order_date = TRUE GROUP BY order_year ORDER BY order_year ASC;`
+* **Ground-Truth Expected Value**: `[(2023, 196), (2024, 197)]`
+* **Ambiguity Risk**: Low. Standard DuckDB `year(order_date)` extraction grouped with ascending sort.
+

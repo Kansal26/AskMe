@@ -318,5 +318,29 @@
     "question": "What is the legal warranty return policy clause for opened cosmetics?",
     "gold_sql": null,
     "expected_refusal": true
+  },
+  {
+    "id": "q41",
+    "difficulty": "easy",
+    "intent": "Total count of transactions carrying the ambiguous order date data quality flag",
+    "question": "How many total orders carry the ambiguous order date flag?",
+    "gold_sql": "SELECT COUNT(*) AS ambiguous_order_count FROM orders WHERE is_ambiguous_order_date = TRUE;",
+    "expected_refusal": false
+  },
+  {
+    "id": "q42",
+    "difficulty": "medium",
+    "intent": "Total net revenue derived strictly from orders with verified, non-ambiguous order dates",
+    "question": "What is our total net revenue excluding orders with ambiguous dates?",
+    "gold_sql": "SELECT ROUND(SUM(net_amount), 2) AS clean_net_revenue FROM orders WHERE is_ambiguous_order_date = FALSE;",
+    "expected_refusal": false
+  },
+  {
+    "id": "q43",
+    "difficulty": "medium",
+    "intent": "Annual distribution of orders carrying ambiguous order dates across 2023 and 2024",
+    "question": "How many ambiguous order date transactions occurred in 2023 versus 2024?",
+    "gold_sql": "SELECT year(order_date) AS order_year, COUNT(*) AS ambiguous_orders FROM orders WHERE is_ambiguous_order_date = TRUE GROUP BY order_year ORDER BY order_year ASC;",
+    "expected_refusal": false
   }
 ]

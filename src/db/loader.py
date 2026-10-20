@@ -10,6 +10,11 @@ from src.common.config import settings
 from src.db.connection import get_duckdb_connection
 
 CREATE_TABLES_SQL = """
+DROP TABLE IF EXISTS returns;
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS products;
+
 CREATE OR REPLACE TABLE products (
     sku VARCHAR PRIMARY KEY,
     name VARCHAR NOT NULL,
@@ -28,7 +33,8 @@ CREATE OR REPLACE TABLE orders (
     gross_amount DOUBLE NOT NULL,
     discount_amount DOUBLE NOT NULL,
     net_amount DOUBLE NOT NULL,
-    city VARCHAR NOT NULL
+    city VARCHAR NOT NULL,
+    is_ambiguous_order_date BOOLEAN DEFAULT FALSE
 );
 
 CREATE OR REPLACE TABLE returns (
@@ -52,6 +58,7 @@ CREATE INDEX IF NOT EXISTS idx_orders_date ON orders(order_date);
 CREATE INDEX IF NOT EXISTS idx_orders_customer ON orders(customer_id);
 CREATE INDEX IF NOT EXISTS idx_orders_channel ON orders(channel);
 CREATE INDEX IF NOT EXISTS idx_orders_sku ON orders(sku);
+CREATE INDEX IF NOT EXISTS idx_orders_ambig_date ON orders(is_ambiguous_order_date);
 CREATE INDEX IF NOT EXISTS idx_products_brand ON products(brand);
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
 """
@@ -89,8 +96,11 @@ def load_cleaned_data_to_duckdb(
         if "_row_id" in df.columns:
             df = df.drop(columns=["_row_id"])
 
+        if tbl == "orders" and "is_ambiguous_order_date" not in df.columns:
+            df["is_ambiguous_order_date"] = False
+
         con.register(f"df_{tbl}_temp", df)
-        con.execute(f"INSERT INTO {tbl} SELECT * FROM df_{tbl}_temp")
+        con.execute(f"INSERT INTO {tbl} BY NAME SELECT * FROM df_{tbl}_temp")
         con.unregister(f"df_{tbl}_temp")
 
         count = con.execute(f"SELECT COUNT(*) FROM {tbl}").fetchone()[0]

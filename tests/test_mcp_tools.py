@@ -13,6 +13,7 @@ def test_get_schema_returns_all_tables():
     assert "reviews" in schema_str
     assert "mrp" in schema_str
     assert "net_amount" in schema_str
+    assert "is_ambiguous_order_date" in schema_str
 
 
 def test_get_metric_definition_returns_formulas():
@@ -25,6 +26,11 @@ def test_get_metric_definition_returns_formulas():
     res_ret = get_metric_definition("return rate")
     assert res_ret["status"] == "found"
     assert "Return Rate" in res_ret["metric"]["metric_name"]
+
+    res_ambig = get_metric_definition("ambiguous dates")
+    assert res_ambig["status"] == "found"
+    assert "Ambiguous Order Dates Governance" in res_ambig["metric"]["metric_name"]
+    assert "is_ambiguous_order_date" in res_ambig["metric"]["formula"]
 
 
 def test_run_sql_executes_valid_query():

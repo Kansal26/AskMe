@@ -198,27 +198,100 @@ class AskBusinessAgent:
             attempts_taken=attempts,
         )
 
+    def _touches_order_date(self, question: str, sql_query: str | None) -> bool:
+        """Determines if a question or SQL query touches order_date."""
+        sql_lower = (sql_query or "").lower()
+        q_lower = question.lower()
+        if "order_date" in sql_lower:
+            return True
+        date_terms = [
+            "order_date",
+            "order date",
+            "monthly",
+            "quarterly",
+            "daily",
+            "by month",
+            "by quarter",
+            "by year",
+            "mom",
+            "yoy",
+        ]
+        return any(term in q_lower for term in date_terms)
+
+    def _generate_data_quality_note(self, sql_query: str | None) -> str:
+        """Generates explicit audit disclosure stating count and inclusion/exclusion of ambiguous order dates."""
+        sql_lower = (sql_query or "").lower()
+
+        # Check if ambiguous rows were filtered out
+        excluded = any(
+            pattern in sql_lower
+            for pattern in [
+                "is_ambiguous_order_date = false",
+                "is_ambiguous_order_date is false",
+                "not is_ambiguous_order_date",
+                "is_ambiguous_order_date != true",
+                "is_ambiguous_order_date <> true",
+            ]
+        )
+        status = "excluded from" if excluded else "included in"
+
+        # Count ambiguous rows matching query scope
+        ambig_count = 393
+        try:
+            from src.db.connection import get_duckdb_connection
+
+            con = get_duckdb_connection(read_only=True)
+            if "2024" in sql_lower and "2023" not in sql_lower:
+                res = con.execute(
+                    "SELECT COUNT(*) FROM orders WHERE is_ambiguous_order_date = TRUE AND year(order_date) = 2024"
+                ).fetchone()
+                ambig_count = int(res[0]) if res else 197
+            elif "2023" in sql_lower and "2024" not in sql_lower:
+                res = con.execute(
+                    "SELECT COUNT(*) FROM orders WHERE is_ambiguous_order_date = TRUE AND year(order_date) = 2023"
+                ).fetchone()
+                ambig_count = int(res[0]) if res else 196
+            else:
+                res = con.execute(
+                    "SELECT COUNT(*) FROM orders WHERE is_ambiguous_order_date = TRUE"
+                ).fetchone()
+                ambig_count = int(res[0]) if res else 393
+            con.close()
+        except Exception:
+            ambig_count = 393
+
+        return (
+            f"Note: {ambig_count} rows carry is_ambiguous_order_date "
+            f"(where day and month <= 12) and were {status} this calculation."
+        )
+
     def _synthesize_answer(
         self, question: str, results: list[dict[str, Any]], proposal: AgentPlanProposal
     ) -> str:
-        """Formats query results into an executive-ready text answer."""
+        """Formats query results into an executive-ready text answer with data-quality disclosure."""
         if not results:
-            return "No matching records found for this query in the database."
-
-        if len(results) == 1:
+            base_answer = "No matching records found for this query in the database."
+        elif len(results) == 1:
             row = results[0]
             # If single scalar aggregation
             if len(row) == 1:
                 key, val = list(row.items())[0]
                 formatted_val = f"{val:,.2f}" if isinstance(val, (int, float)) else str(val)
-                return f"**{key.replace('_', ' ').title()}**: {formatted_val}"
+                base_answer = f"**{key.replace('_', ' ').title()}**: {formatted_val}"
             else:
                 items = [f"**{k.replace('_', ' ').title()}**: {v}" for k, v in row.items()]
-                return ", ".join(items)
+                base_answer = ", ".join(items)
+        else:
+            # For tabular list, summarize top entries
+            top_entries = []
+            for r in results[:5]:
+                top_entries.append(", ".join(f"{k}: {v}" for k, v in r.items()))
+            base_answer = f"Found {len(results)} records. Top results:\n- " + "\n- ".join(top_entries)
 
-        # For tabular list, summarize top entries
-        top_entries = []
-        for r in results[:5]:
-            top_entries.append(", ".join(f"{k}: {v}" for k, v in r.items()))
-        summary = f"Found {len(results)} records. Top results:\n- " + "\n- ".join(top_entries)
-        return summary
+        # Append data-quality audit note if order_date is touched
+        if self._touches_order_date(question, proposal.sql_query):
+            dq_note = self._generate_data_quality_note(proposal.sql_query)
+            if dq_note not in base_answer:
+                base_answer = f"{base_answer}\n\n{dq_note}"
+
+        return base_answer

@@ -33,6 +33,7 @@ erDiagram
         float discount_amount "Promotional discount applied in INR"
         float net_amount "Net revenue earned: gross_amount - discount_amount"
         string city "Delivery destination city (12 Tier-1/2 Indian cities)"
+        boolean is_ambiguous_order_date "Data quality flag: TRUE if order date was ambiguous (day <= 12 and month <= 12, e.g. 03/04/2024), FALSE otherwise"
     }
 
     returns {
@@ -152,3 +153,29 @@ erDiagram
   HAVING COUNT(r.review_id) >= 5
   ORDER BY avg_rating DESC;
   ```
+
+---
+
+## 3. Data Quality & Audit Governance Rules
+
+### 1. Date Ambiguity Governance (`is_ambiguous_order_date`)
+* **Background**: Tabular datasets ingested from multi-channel distributors frequently mix `DD/MM/YYYY` and `MM/DD/YYYY` date representations. Where both day and month are $\le 12$ (e.g. `03/04/2024`), the date cannot be coerced without guessing. Our data cleaning pipeline standardizes non-ambiguous dates to ISO `YYYY-MM-DD` and flags ambiguous dates with `is_ambiguous_order_date = TRUE` (preserving the original date value intact).
+* **Corporate Audit Invariant**:
+  - Exactly **393 rows** across `orders` carry `is_ambiguous_order_date = TRUE` (196 in 2023, 197 in 2024).
+  - Whenever an analytical query touches `order_date` (e.g. monthly revenue, date ranges, annual cohorts, or time-series breakdowns), the synthesized business answer **must explicitly state how many rows carry `is_ambiguous_order_date` and whether they were included or excluded in the calculation**.
+* **Canonical SQL Query Patterns**:
+  - Audit count of ambiguous orders:
+    ```sql
+    SELECT COUNT(*) AS ambiguous_orders FROM orders WHERE is_ambiguous_order_date = TRUE;
+    ```
+  - Clean-only calculation (excluding ambiguous dates):
+    ```sql
+    SELECT ROUND(SUM(net_amount), 2) AS clean_net_revenue FROM orders WHERE is_ambiguous_order_date = FALSE;
+    ```
+  - Inclusive calculation (standard reporting with audit disclosure note):
+    ```sql
+    SELECT strftime(order_date, '%Y-%m') AS month, ROUND(SUM(net_amount), 2) AS net_revenue
+    FROM orders
+    GROUP BY month ORDER BY month;
+    ```
+
