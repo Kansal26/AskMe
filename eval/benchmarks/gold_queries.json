@@ -132,7 +132,7 @@
     "difficulty": "medium",
     "intent": "Average customer rating by brand",
     "question": "What is the average customer rating for each brand?",
-    "gold_sql": "SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating, COUNT(r.review_id) AS review_count FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.brand ORDER BY avg_rating DESC;",
+    "gold_sql": "SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.brand ORDER BY avg_rating DESC;",
     "expected_refusal": false
   },
   {
@@ -244,7 +244,7 @@
     "difficulty": "hard",
     "intent": "Quarterly AOV comparison across channels",
     "question": "What was the quarterly Average Order Value by channel in 2024?",
-    "gold_sql": "SELECT channel, strftime(order_date, '%Y-Q') || ((CAST(strftime(order_date, '%m') AS INTEGER) - 1) / 3 + 1) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY channel, quarter ORDER BY channel, quarter;",
+    "gold_sql": "SELECT channel, year(order_date) || '-Q' || quarter(order_date) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE year(order_date) = 2024 GROUP BY channel, quarter ORDER BY channel, quarter;",
     "expected_refusal": false
   },
   {

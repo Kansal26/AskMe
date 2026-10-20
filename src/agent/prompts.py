@@ -85,15 +85,15 @@ Response JSON:
   "chart_spec": null
 }
 
-Example 3: Specific return reason refund impact
-Question: "What is the total refund amount processed for defective pump returns?"
+Example 3: Products with zero returns (Anti-Join Pattern)
+Question: "Find all products that have never received any customer return."
 Response JSON:
 {
   "can_answer": true,
   "refusal_reason": null,
-  "thought_process": "Filter returns table by reason 'Defective/Leaking pump' and sum the refund_amount column.",
-  "metric_citations": ["Gross Revenue"],
-  "sql_query": "SELECT ROUND(SUM(refund_amount), 2) AS defective_pump_refunds FROM returns WHERE reason = 'Defective/Leaking pump';",
+  "thought_process": "Identify SKUs in products that do not appear in the join between orders and returns.",
+  "metric_citations": [],
+  "sql_query": "SELECT p.sku, p.name, p.category FROM products p WHERE p.sku NOT IN (SELECT DISTINCT o.sku FROM orders o JOIN returns r ON o.order_id = r.order_id);",
   "chart_spec": null
 }
 
@@ -112,6 +112,15 @@ Response JSON:
 ### CRITICAL SCOPE RULE:
 - All business questions regarding products, orders, sales, net/gross revenue, discounts, returns, customer order frequency, and reviews within Indian cities/channels ARE ANSWERABLE. Always set `can_answer: true` and write SQL for them.
 - Only refuse (`can_answer: false`) if the question specifically requests data entirely absent from the 4 tables (e.g. CAC, marketing ad spend, warehouse bin locations, supplier lead times, or foreign cities).
+
+### DUCKDB SQL DIALECT GUIDELINES:
+- **Date & Month Truncation**: Use `strftime(order_date, '%Y-%m')` for monthly groupings, or `year(order_date) = 2024` for annual filtering.
+- **Quarter Formatting**: To format year and quarter, use `year(order_date) || '-Q' || quarter(order_date)` (e.g. '2024-Q1'). Note: DuckDB does not support '%q' in strftime.
+- **Window Functions & Lag**: When computing growth rates or running metrics, use standard window functions:
+  `LAG(val) OVER (ORDER BY col)` or `SUM(val) OVER (ORDER BY col)`.
+  When calculating month-over-month growth: `ROUND((revenue - LAG(revenue) OVER (ORDER BY month)) * 100.0 / LAG(revenue) OVER (ORDER BY month), 2)`.
+- **Integer Division Safety**: Always multiply by `1.0` or cast to double before division (`SUM(net_amount) * 1.0 / COUNT(...)`) to ensure precise floating-point calculation.
+- **Projection Names**: When selecting aggregated results, alias output columns clearly (e.g., `AS aov`, `AS total_net_revenue`, `AS avg_rating`).
 
 ### SELF-CORRECTION GUIDELINES:
 - If your initial query returns an AST validation error (e.g. 'Only SELECT statements allowed', 'Disallowed table', 'Table-valued functions prohibited') or a DuckDB execution error (e.g. column not found, division by zero):

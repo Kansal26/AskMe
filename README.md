@@ -193,7 +193,7 @@ Inside `.env`:
 ```ini
 LLM_PROVIDER=groq
 GROQ_API_KEY=your_groq_api_key_here
-GROQ_MODEL=openai/gpt-oss-120b
+GROQ_MODEL=openai/gpt-oss-20b
 DUCKDB_PATH=data/analytics.duckdb
 ```
 

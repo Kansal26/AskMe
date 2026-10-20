@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, TypeVar
@@ -217,10 +218,21 @@ class LLMClient:
                     response_format={"type": "json_object"},
                 )
                 return chat_completion.choices[0].message.content or "{}"
-            except RateLimitError:
-                if attempt == 2:
+            except RateLimitError as e:
+                err_str = str(e)
+                wait_sec = 5.0 * (attempt + 1)
+                m_match = re.search(r"try again in (\d+)m([0-9.]+)s", err_str)
+                s_match = re.search(r"try again in ([0-9.]+)s", err_str)
+                if m_match:
+                    wait_sec = int(m_match.group(1)) * 60 + float(m_match.group(2)) + 2.0
+                elif s_match:
+                    wait_sec = float(s_match.group(1)) + 2.0
+
+                if wait_sec <= 120.0 and attempt < 2:
+                    print(f"\n[Groq RateLimit] Sleeping {wait_sec:.1f}s until token bucket frees up...")
+                    time.sleep(wait_sec)
+                else:
                     raise
-                time.sleep(3.0 * (attempt + 1))
             except Exception:
                 if attempt == 2:
                     raise

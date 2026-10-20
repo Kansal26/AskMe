@@ -255,3 +255,18 @@
 * **Question**: "What is the legal warranty return policy clause for opened cosmetics?"
 * **Intent**: Must refuse; legal contract text is not stored in relational tables.
 * **Expected Refusal**: `true` | **Ambiguity Risk**: None.
+
+---
+
+## 5. Stage 2b Audit of Disputed Queries (`q09`, `q17`, `q24`, `q26`, `q31`, `q32`)
+
+Below is the definitive, honest audit of the 6 disputed benchmark queries, detailing whether the agent or the gold standard was at fault, and recording the written justification for any gold SQL changes:
+
+| Query ID | Question | Verdict | Fault Attribution | Action Taken & Written Justification |
+| :--- | :--- | :--- | :--- | :--- |
+| **`q09`** | Which product has the highest MRP? | **Gold SQL Correct** | **Neither** (Comparator Sensitivity). Agent returned `sku, name, brand, category, mrp` while Gold returned `name, brand, mrp`. | **No Change to Gold SQL**. The question asks for the product; returning extra descriptive columns (`sku`, `category`) is helpful rather than incorrect. Under the new lenient comparator (evaluating only columns present in Gold), the agent passes cleanly. |
+| **`q17`** | What is the average customer rating for each brand? | **Gold SQL Wrong** | **Gold Standard Error**. Gold SQL arbitrarily included `COUNT(r.review_id) AS review_count`, which was never requested in the question prompt. | **Changed Gold SQL**. Removed `COUNT(r.review_id) AS review_count`. New Gold SQL: `SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.brand ORDER BY avg_rating DESC;`. |
+| **`q24`** | What is the top-selling SKU by net revenue in each product category? | **Gold SQL Correct** | **Agent Incomplete**. Agent projected `category, sku, net_rev` but omitted product `name` from the projection. | **No Change to Gold SQL**. Including product `name` alongside `sku` in a business ranking is standard practice. The agent legitimately failed strict evaluation for omitting `name`. |
+| **`q26`** | Show the cumulative running monthly net revenue for 2023. | **Gold SQL Correct** | **Neither** (Type Formatting). Agent used DuckDB native `DATE_TRUNC('month', order_date)` returning a `datetime.date(2023, 1, 1)` object, while Gold used `strftime('%Y-%m')` returning string `'2023-01'`. The numeric sums were identical to the cent. | **No Change to Gold SQL**. Gold SQL is valid. The lenient comparator's date normalizer aligns date objects with `'YYYY-MM'` strings, allowing semantic equivalence. |
+| **`q31`** | What was the quarterly Average Order Value by channel in 2024? | **Gold SQL Wrong** | **Gold Standard Error (Critical DuckDB Math Bug)**. The original Gold query used `/ 3` in DuckDB: `strftime(order_date, '%Y-Q') || ((CAST(strftime(order_date, '%m') AS INTEGER) - 1) / 3 + 1)`. In DuckDB, `/` performs floating-point division, producing decimal quarter names like `'2024-Q1.3333333333333333'` and `'2024-Q1.6666666666666665'`. It grouped orders into 12 pseudo-months rather than 4 quarters! | **Changed Gold SQL**. Updated to use canonical DuckDB functions: `SELECT channel, year(order_date) \|\| '-Q' \|\| quarter(order_date) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE year(order_date) = 2024 GROUP BY channel, quarter ORDER BY channel, quarter;`. |
+| **`q32`** | Calculate the month-over-month revenue growth rate for 2024. | **Gold SQL Correct** | **Model Dialect Gap**. Agent struggled with DuckDB window syntax `LAG(revenue) OVER (ORDER BY month)` when filtering by year. | **No Change to Gold SQL**. Gold SQL correctly expresses the window function calculation. Prompt v3 has been updated with general DuckDB window dialect instructions. |

@@ -97,3 +97,49 @@ For business question answering (Phase 2):
    - The root AST expression must be a `Select` query.
    - Explicit table allowlist: only `products`, `orders`, `returns`, and `reviews` can be referenced.
    - Injects mandatory row limits (`LIMIT 100`) to prevent memory exhaustion.
+
+---
+
+## 5. Evaluation Methodology: Dual-Metric SQL Scoring & Comparator Rules
+
+In corporate Text-to-SQL systems, evaluating raw SQL string equality is invalid because multiple syntactically distinct SQL queries produce identical business results (e.g., CTEs vs subqueries, column aliasing, explicit joins vs implicit joins). Therefore, our benchmark executes both the agent-proposed SQL and the Gold standard SQL against the same DuckDB state and evaluates execution result equivalence.
+
+To provide complete evaluation transparency, the benchmark reports **both Strict and Lenient execution accuracy** side by side.
+
+### 5.1 Strict Matching Rules
+A question passes strict matching if and only if:
+1. **Exact Column Match**: The set of column names and total column count returned by the agent must match the Gold SQL projection exactly.
+2. **Exact Row Ordering**: The ordering of rows returned by the agent must match the Gold SQL row-for-row ($r_{\text{agent}}[i] == r_{\text{gold}}[i]$ for all $i$).
+3. **Exact Values**: Values must match exactly, with floating-point values constrained to an absolute tolerance of $10^{-2}$ to prevent floating-point representation artifacts.
+
+### 5.2 Lenient (Semantically Equivalent) Matching Rules
+Strict matching can penalize models that answer the business question correctly but return helpful supplementary context. Lenient matching applies a principled set of mathematical and business equivalence rules applied identically across all prompt arms:
+
+1. **Column Projection Subsetting**:
+   - The comparator evaluates **only the columns that the Gold query returns**.
+   - The agent is permitted to return extra informational columns (e.g., returning `sku, name, brand, category, mrp` when the gold query requested `name, brand, mrp`).
+   - If any column requested by the Gold query is missing from the agent's output, lenient matching fails.
+2. **Date / Timestamp Normalization**:
+   - DuckDB date expressions often return `datetime.date` or `datetime.datetime` objects (e.g., `2023-01-01`), whereas formatted queries return string prefixes (e.g., `'2023-01'`).
+   - All date and datetime values are normalized to ISO string representations. If the gold column expects `'YYYY-MM'`, date values matching the year and month are normalized to `'YYYY-MM'` for comparison.
+3. **Row Ordering Invariants**:
+   - **Ranking Queries (`ORDER BY` + `LIMIT`)**: If the Gold SQL contains both an `ORDER BY` and a `LIMIT` clause (e.g., "Top 3 brands by revenue"), row order is semantically essential and must be strictly preserved.
+   - **Unbounded Grouping Queries**: In standard SQL without `LIMIT`, row ordering is not semantically significant unless specified. For queries without `LIMIT`, row ordering is ignored (evaluated as a multiset / sorted row tuples before comparison).
+4. **Floating-Point Numeric Tolerance**:
+   - Numeric and financial calculations are compared using standard floating-point tolerance:
+     $$\text{math.isclose}(a, b, \text{abs\_tol}=0.02, \text{rel\_tol}=0.001)$$
+     This accommodates minor differences between queries that round before vs. after aggregation.
+5. **Text & NULL Normalization**:
+   - Text strings are stripped of leading/trailing whitespace and compared case-insensitively. NULL and `None` values are matched identically.
+
+### 5.3 Refusal Accounting Metrics
+To prevent models from artificially inflating accuracy by refusing challenging questions ("blanket refusal gaming"), we report:
+
+- **Refusal Recall**:
+  $$\text{Refusal Recall} = \frac{\text{True Refusals}}{\text{Total Unanswerable Questions (8)}} = \frac{TR}{8}$$
+- **Refusal Precision**:
+  $$\text{Refusal Precision} = \frac{\text{True Refusals}}{\text{True Refusals} + \text{False Refusals}} = \frac{TR}{TR + FR}$$
+- **Answerable Recall**:
+  $$\text{Answerable Recall} = \frac{\text{Answerable Questions Answered}}{\text{Total Answerable Questions (32)}} = \frac{AA}{32}$$
+
+If a model adopts a conservative strategy and refuses answerable questions, its Refusal Precision drops immediately toward $20\%$, penalizing the system.
