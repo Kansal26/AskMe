@@ -1,0 +1,945 @@
+{
+  "metadata": {
+    "evaluation_date": "2026-10-20T06:09:14.255944+00:00",
+    "git_commit_hash": "6c0778e",
+    "llm_provider": "groq",
+    "model_name": "openai/gpt-oss-120b",
+    "temperature": 0.0,
+    "prompt_version": "v1.1_strict_safety_whitelist",
+    "caching_used": true,
+    "cache_dir": ".eval_cache",
+    "runs_per_arm": {
+      "arm_a": 1,
+      "arm_b": 3,
+      "arm_c": 1
+    }
+  },
+  "arm_a_rule_based": {
+    "arm_name": "Arm A: Rule-Based Planner (Governed Baseline)",
+    "mode": "rule_based",
+    "provenance": {
+      "steps_proposed": 0,
+      "steps_accepted": 57,
+      "steps_rejected": 0,
+      "rejected_reasons": [],
+      "was_fallback": false,
+      "fallback_reason": null
+    },
+    "overall_metrics": {
+      "total_injected_corruptions": 16869,
+      "total_detected_and_acted": 13794,
+      "total_fixed_correctly": 10027,
+      "total_fixed_incorrectly": 973,
+      "total_left_and_flagged_correctly": 2794,
+      "total_resolved": 12821,
+      "total_missed": 3075,
+      "governed_success_rate": 0.76,
+      "fixed_only_rate": 0.5944,
+      "flagged_only_rate": 0.1656,
+      "fixed_incorrectly_rate": 0.0577,
+      "missed_rate": 0.1823,
+      "detection_recall": 0.8177,
+      "fix_correctness": 0.7269,
+      "clean_cells_evaluated": 209711,
+      "clean_cells_damaged": 0,
+      "false_fix_rate": 0.0
+    },
+    "per_issue_metrics": {
+      "duplicate_row": {
+        "injected": 503,
+        "detected_and_acted": 209,
+        "fixed_correctly": 209,
+        "fixed_incorrectly": 0,
+        "left_and_flagged_correctly": 0,
+        "missed": 294,
+        "governed_success_rate": 0.4155,
+        "fixed_only_rate": 0.4155,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0,
+        "missed_rate": 0.5845
+      },
+      "dirty_whitespace": {
+        "injected": 4665,
+        "detected_and_acted": 4654,
+        "fixed_correctly": 4654,
+        "fixed_incorrectly": 0,
+        "left_and_flagged_correctly": 0,
+        "missed": 11,
+        "governed_success_rate": 0.9976,
+        "fixed_only_rate": 0.9976,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0,
+        "missed_rate": 0.0024
+      },
+      "inconsistent_casing": {
+        "injected": 4665,
+        "detected_and_acted": 1989,
+        "fixed_correctly": 1989,
+        "fixed_incorrectly": 0,
+        "left_and_flagged_correctly": 0,
+        "missed": 2676,
+        "governed_success_rate": 0.4264,
+        "fixed_only_rate": 0.4264,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0,
+        "missed_rate": 0.5736
+      },
+      "category_typo": {
+        "injected": 15,
+        "detected_and_acted": 13,
+        "fixed_correctly": 13,
+        "fixed_incorrectly": 0,
+        "left_and_flagged_correctly": 0,
+        "missed": 2,
+        "governed_success_rate": 0.8667,
+        "fixed_only_rate": 0.8667,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0,
+        "missed_rate": 0.1333
+      },
+      "dirty_numeric": {
+        "injected": 2535,
+        "detected_and_acted": 2445,
+        "fixed_correctly": 2445,
+        "fixed_incorrectly": 0,
+        "left_and_flagged_correctly": 0,
+        "missed": 90,
+        "governed_success_rate": 0.9645,
+        "fixed_only_rate": 0.9645,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0,
+        "missed_rate": 0.0355
+      },
+      "missing_value": {
+        "injected": 3171,
+        "detected_and_acted": 3170,
+        "fixed_correctly": 117,
+        "fixed_incorrectly": 745,
+        "left_and_flagged_correctly": 2308,
+        "missed": 1,
+        "governed_success_rate": 0.7647,
+        "fixed_only_rate": 0.0369,
+        "flagged_only_rate": 0.7278,
+        "fixed_incorrectly_rate": 0.2349,
+        "missed_rate": 0.0003
+      },
+      "mixed_date_format": {
+        "injected": 1275,
+        "detected_and_acted": 1274,
+        "fixed_correctly": 600,
+        "fixed_incorrectly": 188,
+        "left_and_flagged_correctly": 486,
+        "missed": 1,
+        "governed_success_rate": 0.8518,
+        "fixed_only_rate": 0.4706,
+        "flagged_only_rate": 0.3812,
+        "fixed_incorrectly_rate": 0.1475,
+        "missed_rate": 0.0008
+      },
+      "outlier": {
+        "injected": 40,
+        "detected_and_acted": 40,
+        "fixed_correctly": 0,
+        "fixed_incorrectly": 40,
+        "left_and_flagged_correctly": 0,
+        "missed": 0,
+        "governed_success_rate": 0.0,
+        "fixed_only_rate": 0.0,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 1.0,
+        "missed_rate": 0.0
+      }
+    },
+    "top_false_fix_columns": []
+  },
+  "arm_b_llm_assisted": {
+    "arm_name": "Arm B: LLM-Assisted Planner (3 Passes, Deterministic T=0.0)",
+    "num_runs": 3,
+    "is_deterministic": true,
+    "runs": [
+      {
+        "arm_name": "Arm B (Pass 1)",
+        "mode": "llm",
+        "provenance": {
+          "steps_proposed": 13,
+          "steps_accepted": 57,
+          "steps_rejected": 0,
+          "rejected_reasons": [
+            "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback",
+            "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback",
+            "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback"
+          ],
+          "was_fallback": true,
+          "fallback_reason": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kz9heksge36a8gjmdcgkawv2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199401, Requested 4300. Please try again in 26m38.832s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+        },
+        "overall_metrics": {
+          "total_injected_corruptions": 16869,
+          "total_detected_and_acted": 13789,
+          "total_fixed_correctly": 10013,
+          "total_fixed_incorrectly": 976,
+          "total_left_and_flagged_correctly": 2800,
+          "total_resolved": 12813,
+          "total_missed": 3080,
+          "governed_success_rate": 0.7596,
+          "fixed_only_rate": 0.5936,
+          "flagged_only_rate": 0.166,
+          "fixed_incorrectly_rate": 0.0579,
+          "missed_rate": 0.1826,
+          "detection_recall": 0.8174,
+          "fix_correctness": 0.7262,
+          "clean_cells_evaluated": 209711,
+          "clean_cells_damaged": 140,
+          "false_fix_rate": 0.000668
+        },
+        "per_issue_metrics": {
+          "duplicate_row": {
+            "injected": 503,
+            "detected_and_acted": 209,
+            "fixed_correctly": 209,
+            "fixed_incorrectly": 0,
+            "left_and_flagged_correctly": 0,
+            "missed": 294,
+            "governed_success_rate": 0.4155,
+            "fixed_only_rate": 0.4155,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0,
+            "missed_rate": 0.5845
+          },
+          "dirty_whitespace": {
+            "injected": 4665,
+            "detected_and_acted": 4654,
+            "fixed_correctly": 4650,
+            "fixed_incorrectly": 4,
+            "left_and_flagged_correctly": 0,
+            "missed": 11,
+            "governed_success_rate": 0.9968,
+            "fixed_only_rate": 0.9968,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0009,
+            "missed_rate": 0.0024
+          },
+          "inconsistent_casing": {
+            "injected": 4665,
+            "detected_and_acted": 1989,
+            "fixed_correctly": 1985,
+            "fixed_incorrectly": 4,
+            "left_and_flagged_correctly": 0,
+            "missed": 2676,
+            "governed_success_rate": 0.4255,
+            "fixed_only_rate": 0.4255,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0009,
+            "missed_rate": 0.5736
+          },
+          "category_typo": {
+            "injected": 15,
+            "detected_and_acted": 8,
+            "fixed_correctly": 7,
+            "fixed_incorrectly": 1,
+            "left_and_flagged_correctly": 0,
+            "missed": 7,
+            "governed_success_rate": 0.4667,
+            "fixed_only_rate": 0.4667,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0667,
+            "missed_rate": 0.4667
+          },
+          "dirty_numeric": {
+            "injected": 2535,
+            "detected_and_acted": 2445,
+            "fixed_correctly": 2445,
+            "fixed_incorrectly": 0,
+            "left_and_flagged_correctly": 0,
+            "missed": 90,
+            "governed_success_rate": 0.9645,
+            "fixed_only_rate": 0.9645,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0,
+            "missed_rate": 0.0355
+          },
+          "missing_value": {
+            "injected": 3171,
+            "detected_and_acted": 3170,
+            "fixed_correctly": 117,
+            "fixed_incorrectly": 739,
+            "left_and_flagged_correctly": 2314,
+            "missed": 1,
+            "governed_success_rate": 0.7666,
+            "fixed_only_rate": 0.0369,
+            "flagged_only_rate": 0.7297,
+            "fixed_incorrectly_rate": 0.233,
+            "missed_rate": 0.0003
+          },
+          "mixed_date_format": {
+            "injected": 1275,
+            "detected_and_acted": 1274,
+            "fixed_correctly": 600,
+            "fixed_incorrectly": 188,
+            "left_and_flagged_correctly": 486,
+            "missed": 1,
+            "governed_success_rate": 0.8518,
+            "fixed_only_rate": 0.4706,
+            "flagged_only_rate": 0.3812,
+            "fixed_incorrectly_rate": 0.1475,
+            "missed_rate": 0.0008
+          },
+          "outlier": {
+            "injected": 40,
+            "detected_and_acted": 40,
+            "fixed_correctly": 0,
+            "fixed_incorrectly": 40,
+            "left_and_flagged_correctly": 0,
+            "missed": 0,
+            "governed_success_rate": 0.0,
+            "fixed_only_rate": 0.0,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 1.0,
+            "missed_rate": 0.0
+          }
+        },
+        "top_false_fix_columns": [
+          [
+            "products.brand",
+            140
+          ]
+        ],
+        "run_index": 1
+      },
+      {
+        "arm_name": "Arm B (Pass 2)",
+        "mode": "llm",
+        "provenance": {
+          "steps_proposed": 13,
+          "steps_accepted": 57,
+          "steps_rejected": 0,
+          "rejected_reasons": [
+            "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback",
+            "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback",
+            "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback"
+          ],
+          "was_fallback": true,
+          "fallback_reason": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kz9heksge36a8gjmdcgkawv2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199393, Requested 2641. Please try again in 14m38.688s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+        },
+        "overall_metrics": {
+          "total_injected_corruptions": 16869,
+          "total_detected_and_acted": 13789,
+          "total_fixed_correctly": 10013,
+          "total_fixed_incorrectly": 976,
+          "total_left_and_flagged_correctly": 2800,
+          "total_resolved": 12813,
+          "total_missed": 3080,
+          "governed_success_rate": 0.7596,
+          "fixed_only_rate": 0.5936,
+          "flagged_only_rate": 0.166,
+          "fixed_incorrectly_rate": 0.0579,
+          "missed_rate": 0.1826,
+          "detection_recall": 0.8174,
+          "fix_correctness": 0.7262,
+          "clean_cells_evaluated": 209711,
+          "clean_cells_damaged": 140,
+          "false_fix_rate": 0.000668
+        },
+        "per_issue_metrics": {
+          "duplicate_row": {
+            "injected": 503,
+            "detected_and_acted": 209,
+            "fixed_correctly": 209,
+            "fixed_incorrectly": 0,
+            "left_and_flagged_correctly": 0,
+            "missed": 294,
+            "governed_success_rate": 0.4155,
+            "fixed_only_rate": 0.4155,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0,
+            "missed_rate": 0.5845
+          },
+          "dirty_whitespace": {
+            "injected": 4665,
+            "detected_and_acted": 4654,
+            "fixed_correctly": 4650,
+            "fixed_incorrectly": 4,
+            "left_and_flagged_correctly": 0,
+            "missed": 11,
+            "governed_success_rate": 0.9968,
+            "fixed_only_rate": 0.9968,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0009,
+            "missed_rate": 0.0024
+          },
+          "inconsistent_casing": {
+            "injected": 4665,
+            "detected_and_acted": 1989,
+            "fixed_correctly": 1985,
+            "fixed_incorrectly": 4,
+            "left_and_flagged_correctly": 0,
+            "missed": 2676,
+            "governed_success_rate": 0.4255,
+            "fixed_only_rate": 0.4255,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0009,
+            "missed_rate": 0.5736
+          },
+          "category_typo": {
+            "injected": 15,
+            "detected_and_acted": 8,
+            "fixed_correctly": 7,
+            "fixed_incorrectly": 1,
+            "left_and_flagged_correctly": 0,
+            "missed": 7,
+            "governed_success_rate": 0.4667,
+            "fixed_only_rate": 0.4667,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0667,
+            "missed_rate": 0.4667
+          },
+          "dirty_numeric": {
+            "injected": 2535,
+            "detected_and_acted": 2445,
+            "fixed_correctly": 2445,
+            "fixed_incorrectly": 0,
+            "left_and_flagged_correctly": 0,
+            "missed": 90,
+            "governed_success_rate": 0.9645,
+            "fixed_only_rate": 0.9645,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0,
+            "missed_rate": 0.0355
+          },
+          "missing_value": {
+            "injected": 3171,
+            "detected_and_acted": 3170,
+            "fixed_correctly": 117,
+            "fixed_incorrectly": 739,
+            "left_and_flagged_correctly": 2314,
+            "missed": 1,
+            "governed_success_rate": 0.7666,
+            "fixed_only_rate": 0.0369,
+            "flagged_only_rate": 0.7297,
+            "fixed_incorrectly_rate": 0.233,
+            "missed_rate": 0.0003
+          },
+          "mixed_date_format": {
+            "injected": 1275,
+            "detected_and_acted": 1274,
+            "fixed_correctly": 600,
+            "fixed_incorrectly": 188,
+            "left_and_flagged_correctly": 486,
+            "missed": 1,
+            "governed_success_rate": 0.8518,
+            "fixed_only_rate": 0.4706,
+            "flagged_only_rate": 0.3812,
+            "fixed_incorrectly_rate": 0.1475,
+            "missed_rate": 0.0008
+          },
+          "outlier": {
+            "injected": 40,
+            "detected_and_acted": 40,
+            "fixed_correctly": 0,
+            "fixed_incorrectly": 40,
+            "left_and_flagged_correctly": 0,
+            "missed": 0,
+            "governed_success_rate": 0.0,
+            "fixed_only_rate": 0.0,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 1.0,
+            "missed_rate": 0.0
+          }
+        },
+        "top_false_fix_columns": [
+          [
+            "products.brand",
+            140
+          ]
+        ],
+        "run_index": 2
+      },
+      {
+        "arm_name": "Arm B (Pass 3)",
+        "mode": "llm",
+        "provenance": {
+          "steps_proposed": 13,
+          "steps_accepted": 57,
+          "steps_rejected": 0,
+          "rejected_reasons": [
+            "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback",
+            "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback",
+            "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback"
+          ],
+          "was_fallback": true,
+          "fallback_reason": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kz9heksge36a8gjmdcgkawv2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199389, Requested 2600. Please try again in 14m19.248s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+        },
+        "overall_metrics": {
+          "total_injected_corruptions": 16869,
+          "total_detected_and_acted": 13789,
+          "total_fixed_correctly": 10013,
+          "total_fixed_incorrectly": 976,
+          "total_left_and_flagged_correctly": 2800,
+          "total_resolved": 12813,
+          "total_missed": 3080,
+          "governed_success_rate": 0.7596,
+          "fixed_only_rate": 0.5936,
+          "flagged_only_rate": 0.166,
+          "fixed_incorrectly_rate": 0.0579,
+          "missed_rate": 0.1826,
+          "detection_recall": 0.8174,
+          "fix_correctness": 0.7262,
+          "clean_cells_evaluated": 209711,
+          "clean_cells_damaged": 140,
+          "false_fix_rate": 0.000668
+        },
+        "per_issue_metrics": {
+          "duplicate_row": {
+            "injected": 503,
+            "detected_and_acted": 209,
+            "fixed_correctly": 209,
+            "fixed_incorrectly": 0,
+            "left_and_flagged_correctly": 0,
+            "missed": 294,
+            "governed_success_rate": 0.4155,
+            "fixed_only_rate": 0.4155,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0,
+            "missed_rate": 0.5845
+          },
+          "dirty_whitespace": {
+            "injected": 4665,
+            "detected_and_acted": 4654,
+            "fixed_correctly": 4650,
+            "fixed_incorrectly": 4,
+            "left_and_flagged_correctly": 0,
+            "missed": 11,
+            "governed_success_rate": 0.9968,
+            "fixed_only_rate": 0.9968,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0009,
+            "missed_rate": 0.0024
+          },
+          "inconsistent_casing": {
+            "injected": 4665,
+            "detected_and_acted": 1989,
+            "fixed_correctly": 1985,
+            "fixed_incorrectly": 4,
+            "left_and_flagged_correctly": 0,
+            "missed": 2676,
+            "governed_success_rate": 0.4255,
+            "fixed_only_rate": 0.4255,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0009,
+            "missed_rate": 0.5736
+          },
+          "category_typo": {
+            "injected": 15,
+            "detected_and_acted": 8,
+            "fixed_correctly": 7,
+            "fixed_incorrectly": 1,
+            "left_and_flagged_correctly": 0,
+            "missed": 7,
+            "governed_success_rate": 0.4667,
+            "fixed_only_rate": 0.4667,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0667,
+            "missed_rate": 0.4667
+          },
+          "dirty_numeric": {
+            "injected": 2535,
+            "detected_and_acted": 2445,
+            "fixed_correctly": 2445,
+            "fixed_incorrectly": 0,
+            "left_and_flagged_correctly": 0,
+            "missed": 90,
+            "governed_success_rate": 0.9645,
+            "fixed_only_rate": 0.9645,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 0.0,
+            "missed_rate": 0.0355
+          },
+          "missing_value": {
+            "injected": 3171,
+            "detected_and_acted": 3170,
+            "fixed_correctly": 117,
+            "fixed_incorrectly": 739,
+            "left_and_flagged_correctly": 2314,
+            "missed": 1,
+            "governed_success_rate": 0.7666,
+            "fixed_only_rate": 0.0369,
+            "flagged_only_rate": 0.7297,
+            "fixed_incorrectly_rate": 0.233,
+            "missed_rate": 0.0003
+          },
+          "mixed_date_format": {
+            "injected": 1275,
+            "detected_and_acted": 1274,
+            "fixed_correctly": 600,
+            "fixed_incorrectly": 188,
+            "left_and_flagged_correctly": 486,
+            "missed": 1,
+            "governed_success_rate": 0.8518,
+            "fixed_only_rate": 0.4706,
+            "flagged_only_rate": 0.3812,
+            "fixed_incorrectly_rate": 0.1475,
+            "missed_rate": 0.0008
+          },
+          "outlier": {
+            "injected": 40,
+            "detected_and_acted": 40,
+            "fixed_correctly": 0,
+            "fixed_incorrectly": 40,
+            "left_and_flagged_correctly": 0,
+            "missed": 0,
+            "governed_success_rate": 0.0,
+            "fixed_only_rate": 0.0,
+            "flagged_only_rate": 0.0,
+            "fixed_incorrectly_rate": 1.0,
+            "missed_rate": 0.0
+          }
+        },
+        "top_false_fix_columns": [
+          [
+            "products.brand",
+            140
+          ]
+        ],
+        "run_index": 3
+      }
+    ],
+    "governed_success_rate": {
+      "mean": 0.7596,
+      "min": 0.7596,
+      "max": 0.7596
+    },
+    "fixed_only_rate": {
+      "mean": 0.5936,
+      "min": 0.5936,
+      "max": 0.5936
+    },
+    "flagged_only_rate": {
+      "mean": 0.166,
+      "min": 0.166,
+      "max": 0.166
+    },
+    "fixed_incorrectly_rate": {
+      "mean": 0.0579,
+      "min": 0.0579,
+      "max": 0.0579
+    },
+    "missed_rate": {
+      "mean": 0.1826,
+      "min": 0.1826,
+      "max": 0.1826
+    },
+    "false_fix_rate": {
+      "mean": 0.000668,
+      "min": 0.000668,
+      "max": 0.000668
+    },
+    "total_fixed_correctly": {
+      "mean": 10013.0,
+      "min": 10013,
+      "max": 10013
+    },
+    "total_left_and_flagged_correctly": {
+      "mean": 2800.0,
+      "min": 2800,
+      "max": 2800
+    },
+    "representative_run": {
+      "arm_name": "Arm B (Pass 1)",
+      "mode": "llm",
+      "provenance": {
+        "steps_proposed": 13,
+        "steps_accepted": 57,
+        "steps_rejected": 0,
+        "rejected_reasons": [
+          "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback",
+          "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback",
+          "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback"
+        ],
+        "was_fallback": true,
+        "fallback_reason": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kz9heksge36a8gjmdcgkawv2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199401, Requested 4300. Please try again in 26m38.832s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+      },
+      "overall_metrics": {
+        "total_injected_corruptions": 16869,
+        "total_detected_and_acted": 13789,
+        "total_fixed_correctly": 10013,
+        "total_fixed_incorrectly": 976,
+        "total_left_and_flagged_correctly": 2800,
+        "total_resolved": 12813,
+        "total_missed": 3080,
+        "governed_success_rate": 0.7596,
+        "fixed_only_rate": 0.5936,
+        "flagged_only_rate": 0.166,
+        "fixed_incorrectly_rate": 0.0579,
+        "missed_rate": 0.1826,
+        "detection_recall": 0.8174,
+        "fix_correctness": 0.7262,
+        "clean_cells_evaluated": 209711,
+        "clean_cells_damaged": 140,
+        "false_fix_rate": 0.000668
+      },
+      "per_issue_metrics": {
+        "duplicate_row": {
+          "injected": 503,
+          "detected_and_acted": 209,
+          "fixed_correctly": 209,
+          "fixed_incorrectly": 0,
+          "left_and_flagged_correctly": 0,
+          "missed": 294,
+          "governed_success_rate": 0.4155,
+          "fixed_only_rate": 0.4155,
+          "flagged_only_rate": 0.0,
+          "fixed_incorrectly_rate": 0.0,
+          "missed_rate": 0.5845
+        },
+        "dirty_whitespace": {
+          "injected": 4665,
+          "detected_and_acted": 4654,
+          "fixed_correctly": 4650,
+          "fixed_incorrectly": 4,
+          "left_and_flagged_correctly": 0,
+          "missed": 11,
+          "governed_success_rate": 0.9968,
+          "fixed_only_rate": 0.9968,
+          "flagged_only_rate": 0.0,
+          "fixed_incorrectly_rate": 0.0009,
+          "missed_rate": 0.0024
+        },
+        "inconsistent_casing": {
+          "injected": 4665,
+          "detected_and_acted": 1989,
+          "fixed_correctly": 1985,
+          "fixed_incorrectly": 4,
+          "left_and_flagged_correctly": 0,
+          "missed": 2676,
+          "governed_success_rate": 0.4255,
+          "fixed_only_rate": 0.4255,
+          "flagged_only_rate": 0.0,
+          "fixed_incorrectly_rate": 0.0009,
+          "missed_rate": 0.5736
+        },
+        "category_typo": {
+          "injected": 15,
+          "detected_and_acted": 8,
+          "fixed_correctly": 7,
+          "fixed_incorrectly": 1,
+          "left_and_flagged_correctly": 0,
+          "missed": 7,
+          "governed_success_rate": 0.4667,
+          "fixed_only_rate": 0.4667,
+          "flagged_only_rate": 0.0,
+          "fixed_incorrectly_rate": 0.0667,
+          "missed_rate": 0.4667
+        },
+        "dirty_numeric": {
+          "injected": 2535,
+          "detected_and_acted": 2445,
+          "fixed_correctly": 2445,
+          "fixed_incorrectly": 0,
+          "left_and_flagged_correctly": 0,
+          "missed": 90,
+          "governed_success_rate": 0.9645,
+          "fixed_only_rate": 0.9645,
+          "flagged_only_rate": 0.0,
+          "fixed_incorrectly_rate": 0.0,
+          "missed_rate": 0.0355
+        },
+        "missing_value": {
+          "injected": 3171,
+          "detected_and_acted": 3170,
+          "fixed_correctly": 117,
+          "fixed_incorrectly": 739,
+          "left_and_flagged_correctly": 2314,
+          "missed": 1,
+          "governed_success_rate": 0.7666,
+          "fixed_only_rate": 0.0369,
+          "flagged_only_rate": 0.7297,
+          "fixed_incorrectly_rate": 0.233,
+          "missed_rate": 0.0003
+        },
+        "mixed_date_format": {
+          "injected": 1275,
+          "detected_and_acted": 1274,
+          "fixed_correctly": 600,
+          "fixed_incorrectly": 188,
+          "left_and_flagged_correctly": 486,
+          "missed": 1,
+          "governed_success_rate": 0.8518,
+          "fixed_only_rate": 0.4706,
+          "flagged_only_rate": 0.3812,
+          "fixed_incorrectly_rate": 0.1475,
+          "missed_rate": 0.0008
+        },
+        "outlier": {
+          "injected": 40,
+          "detected_and_acted": 40,
+          "fixed_correctly": 0,
+          "fixed_incorrectly": 40,
+          "left_and_flagged_correctly": 0,
+          "missed": 0,
+          "governed_success_rate": 0.0,
+          "fixed_only_rate": 0.0,
+          "flagged_only_rate": 0.0,
+          "fixed_incorrectly_rate": 1.0,
+          "missed_rate": 0.0
+        }
+      },
+      "top_false_fix_columns": [
+        [
+          "products.brand",
+          140
+        ]
+      ],
+      "run_index": 1
+    }
+  },
+  "arm_c_naive_baseline": {
+    "arm_name": "Arm C: Unconstrained Naive Baseline (Blind Title/Strip/Datetime)",
+    "mode": "naive",
+    "provenance": {
+      "steps_proposed": 0,
+      "steps_accepted": 0,
+      "steps_rejected": 0,
+      "rejected_reasons": [],
+      "was_fallback": false,
+      "fallback_reason": null
+    },
+    "overall_metrics": {
+      "total_injected_corruptions": 16869,
+      "total_detected_and_acted": 13728,
+      "total_fixed_correctly": 9084,
+      "total_fixed_incorrectly": 4644,
+      "total_left_and_flagged_correctly": 0,
+      "total_resolved": 9084,
+      "total_missed": 3141,
+      "governed_success_rate": 0.5385,
+      "fixed_only_rate": 0.5385,
+      "flagged_only_rate": 0.0,
+      "fixed_incorrectly_rate": 0.2753,
+      "missed_rate": 0.1862,
+      "detection_recall": 0.8138,
+      "fix_correctness": 0.6617,
+      "clean_cells_evaluated": 209711,
+      "clean_cells_damaged": 6502,
+      "false_fix_rate": 0.031005
+    },
+    "per_issue_metrics": {
+      "duplicate_row": {
+        "injected": 503,
+        "detected_and_acted": 364,
+        "fixed_correctly": 364,
+        "fixed_incorrectly": 0,
+        "left_and_flagged_correctly": 0,
+        "missed": 139,
+        "governed_success_rate": 0.7237,
+        "fixed_only_rate": 0.7237,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0,
+        "missed_rate": 0.2763
+      },
+      "dirty_whitespace": {
+        "injected": 4665,
+        "detected_and_acted": 4563,
+        "fixed_correctly": 4351,
+        "fixed_incorrectly": 212,
+        "left_and_flagged_correctly": 0,
+        "missed": 102,
+        "governed_success_rate": 0.9327,
+        "fixed_only_rate": 0.9327,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0454,
+        "missed_rate": 0.0219
+      },
+      "inconsistent_casing": {
+        "injected": 4665,
+        "detected_and_acted": 1909,
+        "fixed_correctly": 1706,
+        "fixed_incorrectly": 203,
+        "left_and_flagged_correctly": 0,
+        "missed": 2756,
+        "governed_success_rate": 0.3657,
+        "fixed_only_rate": 0.3657,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0435,
+        "missed_rate": 0.5908
+      },
+      "category_typo": {
+        "injected": 15,
+        "detected_and_acted": 8,
+        "fixed_correctly": 7,
+        "fixed_incorrectly": 1,
+        "left_and_flagged_correctly": 0,
+        "missed": 7,
+        "governed_success_rate": 0.4667,
+        "fixed_only_rate": 0.4667,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0667,
+        "missed_rate": 0.4667
+      },
+      "dirty_numeric": {
+        "injected": 2535,
+        "detected_and_acted": 2409,
+        "fixed_correctly": 2409,
+        "fixed_incorrectly": 0,
+        "left_and_flagged_correctly": 0,
+        "missed": 126,
+        "governed_success_rate": 0.9503,
+        "fixed_only_rate": 0.9503,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.0,
+        "missed_rate": 0.0497
+      },
+      "missing_value": {
+        "injected": 3171,
+        "detected_and_acted": 3161,
+        "fixed_correctly": 246,
+        "fixed_incorrectly": 2915,
+        "left_and_flagged_correctly": 0,
+        "missed": 10,
+        "governed_success_rate": 0.0776,
+        "fixed_only_rate": 0.0776,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.9193,
+        "missed_rate": 0.0032
+      },
+      "mixed_date_format": {
+        "injected": 1275,
+        "detected_and_acted": 1274,
+        "fixed_correctly": 1,
+        "fixed_incorrectly": 1273,
+        "left_and_flagged_correctly": 0,
+        "missed": 1,
+        "governed_success_rate": 0.0008,
+        "fixed_only_rate": 0.0008,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 0.9984,
+        "missed_rate": 0.0008
+      },
+      "outlier": {
+        "injected": 40,
+        "detected_and_acted": 40,
+        "fixed_correctly": 0,
+        "fixed_incorrectly": 40,
+        "left_and_flagged_correctly": 0,
+        "missed": 0,
+        "governed_success_rate": 0.0,
+        "fixed_only_rate": 0.0,
+        "flagged_only_rate": 0.0,
+        "fixed_incorrectly_rate": 1.0,
+        "missed_rate": 0.0
+      }
+    },
+    "top_false_fix_columns": [
+      [
+        "orders.channel",
+        6223
+      ],
+      [
+        "products.brand",
+        140
+      ],
+      [
+        "products.name",
+        139
+      ]
+    ]
+  }
+}
