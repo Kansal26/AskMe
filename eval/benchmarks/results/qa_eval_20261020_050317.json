@@ -1,0 +1,3931 @@
+{
+  "metadata": {
+    "evaluation_date": "2026-10-20T05:03:17.041966+00:00",
+    "git_commit_hash": "150d8ce",
+    "llm_provider": "groq",
+    "model_name": "openai/gpt-oss-20b",
+    "temperature": 0.0,
+    "total_questions": 40,
+    "points_per_question": 2.5,
+    "runs_per_arm": 3,
+    "caching_used": true,
+    "cache_dir": ".eval_cache"
+  },
+  "arms": {
+    "v1": {
+      "prompt_version": "v1",
+      "num_runs": 3,
+      "overall_accuracy": {
+        "mean": 0.675,
+        "min": 0.675,
+        "max": 0.675
+      },
+      "tier_accuracy": {
+        "easy": {
+          "mean": 0.9,
+          "min": 0.9,
+          "max": 0.9
+        },
+        "medium": {
+          "mean": 0.6667,
+          "min": 0.6667,
+          "max": 0.6667
+        },
+        "hard": {
+          "mean": 0.3,
+          "min": 0.3,
+          "max": 0.3
+        },
+        "unanswerable": {
+          "mean": 0.875,
+          "min": 0.875,
+          "max": 0.875
+        }
+      },
+      "refusal_metrics": {
+        "refusal_precision": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "refusal_recall": {
+          "mean": 0.875,
+          "min": 0.875,
+          "max": 0.875
+        },
+        "answerable_recall": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        }
+      },
+      "per_question_passes": {
+        "q01": 3,
+        "q02": 3,
+        "q03": 3,
+        "q04": 3,
+        "q05": 3,
+        "q06": 3,
+        "q07": 3,
+        "q08": 3,
+        "q09": 0,
+        "q10": 3,
+        "q11": 3,
+        "q12": 3,
+        "q13": 3,
+        "q14": 0,
+        "q15": 0,
+        "q16": 3,
+        "q17": 0,
+        "q18": 3,
+        "q19": 0,
+        "q20": 3,
+        "q21": 3,
+        "q22": 3,
+        "q23": 3,
+        "q24": 0,
+        "q25": 0,
+        "q26": 0,
+        "q27": 3,
+        "q28": 0,
+        "q29": 0,
+        "q30": 3,
+        "q31": 0,
+        "q32": 0,
+        "q33": 3,
+        "q34": 3,
+        "q35": 3,
+        "q36": 0,
+        "q37": 3,
+        "q38": 3,
+        "q39": 3,
+        "q40": 3
+      },
+      "representative_run": {
+        "run_idx": 1,
+        "prompt_version": "v1",
+        "overall_accuracy": 0.675,
+        "total_correct": 27,
+        "total_questions": 40,
+        "tier_accuracy": {
+          "easy": 0.9,
+          "medium": 0.6667,
+          "hard": 0.3,
+          "unanswerable": 0.875
+        },
+        "refusal_metrics": {
+          "refusal_recall": 0.875,
+          "refusal_precision": 1.0,
+          "false_refusals_on_answerable": 0,
+          "failed_refusals_on_unanswerable": 1,
+          "answerable_recall": 1.0
+        },
+        "results": [
+          {
+            "id": "q01",
+            "difficulty": "easy",
+            "question": "What is our total net revenue?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT SUM(net_amount) AS total_net_revenue FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_net_revenue": 31284974.750001892
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(net_amount), 2) AS total_net_revenue FROM orders;",
+            "gold_results_sample": [
+              {
+                "total_net_revenue": 31284974.75
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q02",
+            "difficulty": "easy",
+            "question": "How many total orders have been placed?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(*) AS total_orders FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_orders": 20000
+              }
+            ],
+            "gold_sql": "SELECT COUNT(DISTINCT order_id) AS total_orders FROM orders;",
+            "gold_results_sample": [
+              {
+                "total_orders": 20000
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q03",
+            "difficulty": "easy",
+            "question": "How many products do we have in each category?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT category, COUNT(*) AS product_count FROM products GROUP BY category LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Fragrance",
+                "product_count": 30
+              },
+              {
+                "category": "Skincare",
+                "product_count": 30
+              },
+              {
+                "category": "Haircare",
+                "product_count": 30
+              }
+            ],
+            "gold_sql": "SELECT category, COUNT(sku) AS product_count FROM products GROUP BY category ORDER BY product_count DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Color Cosmetics",
+                "product_count": 30
+              },
+              {
+                "category": "Haircare",
+                "product_count": 30
+              },
+              {
+                "category": "Fragrance",
+                "product_count": 30
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q04",
+            "difficulty": "easy",
+            "question": "What is the total discount amount given to customers?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT SUM(discount_amount) AS total_discount FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_discount": 2157835.2499998957
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(discount_amount), 2) AS total_discounts FROM orders;",
+            "gold_results_sample": [
+              {
+                "total_discounts": 2157835.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q05",
+            "difficulty": "easy",
+            "question": "What is our overall Average Order Value (AOV)?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT SUM(net_amount) / COUNT(DISTINCT order_id) AS average_order_value FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "average_order_value": 1564.2487375000946
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders;",
+            "gold_results_sample": [
+              {
+                "aov": 1564.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q06",
+            "difficulty": "easy",
+            "question": "How many orders were placed through Amazon?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(DISTINCT order_id) AS amazon_order_count FROM orders WHERE channel = 'Amazon' LIMIT 100",
+            "agent_results_sample": [
+              {
+                "amazon_order_count": 3386
+              }
+            ],
+            "gold_sql": "SELECT COUNT(*) AS amazon_order_count FROM orders WHERE channel = 'Amazon';",
+            "gold_results_sample": [
+              {
+                "amazon_order_count": 3386
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q07",
+            "difficulty": "easy",
+            "question": "What is the total refund amount processed?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT SUM(refund_amount) AS total_refund FROM returns LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_refund": 3084358.2999999993
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(refund_amount), 2) AS total_refunds FROM returns;",
+            "gold_results_sample": [
+              {
+                "total_refunds": 3084358.3
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q08",
+            "difficulty": "easy",
+            "question": "How many 5-star reviews have we received?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(*) AS five_star_reviews FROM reviews WHERE rating = 5 LIMIT 100",
+            "agent_results_sample": [
+              {
+                "five_star_reviews": 1492
+              }
+            ],
+            "gold_sql": "SELECT COUNT(*) AS five_star_count FROM reviews WHERE rating = 5;",
+            "gold_results_sample": [
+              {
+                "five_star_count": 1492
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q09",
+            "difficulty": "easy",
+            "question": "Which product has the highest MRP?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT sku, name, brand, category, mrp FROM products ORDER BY mrp DESC LIMIT 1",
+            "agent_results_sample": [
+              {
+                "sku": "SKU-COL-0005",
+                "name": "GlowBotanica Ultra-Fine Setting Powder (Travel Size)",
+                "brand": "GlowBotanica",
+                "category": "Color Cosmetics",
+                "mrp": 2499.0
+              }
+            ],
+            "gold_sql": "SELECT name, brand, mrp FROM products ORDER BY mrp DESC LIMIT 1;",
+            "gold_results_sample": [
+              {
+                "name": "GlowBotanica Ultra-Fine Setting Powder (Travel Size)",
+                "brand": "GlowBotanica",
+                "mrp": 2499.0
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q10",
+            "difficulty": "easy",
+            "question": "How many unique customers have purchased from us?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(DISTINCT customer_id) AS unique_customers FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "unique_customers": 3416
+              }
+            ],
+            "gold_sql": "SELECT COUNT(DISTINCT customer_id) AS unique_customers FROM orders;",
+            "gold_results_sample": [
+              {
+                "unique_customers": 3416
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q11",
+            "difficulty": "medium",
+            "question": "What is the total net revenue broken down by sales channel?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT channel, SUM(net_amount) AS total_net_revenue FROM orders GROUP BY channel LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "D2C Website",
+                "total_net_revenue": 5216703.699999954
+              },
+              {
+                "channel": "QuickCommerce-Zepto",
+                "total_net_revenue": 5203538.249999955
+              },
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "total_net_revenue": 5363240.049999955
+              }
+            ],
+            "gold_sql": "SELECT channel, ROUND(SUM(net_amount), 2) AS channel_net_revenue FROM orders GROUP BY channel ORDER BY channel_net_revenue DESC;",
+            "gold_results_sample": [
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "channel_net_revenue": 5363240.05
+              },
+              {
+                "channel": "Nykaa",
+                "channel_net_revenue": 5310460.55
+              },
+              {
+                "channel": "D2C Website",
+                "channel_net_revenue": 5216703.7
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q12",
+            "difficulty": "medium",
+            "question": "What is the Average Order Value (AOV) for each city?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT city, ROUND(AVG(net_amount), 2) AS average_order_value FROM orders GROUP BY city ORDER BY city LIMIT 100",
+            "agent_results_sample": [
+              {
+                "city": "Ahmedabad",
+                "average_order_value": 1542.57
+              },
+              {
+                "city": "Bengaluru",
+                "average_order_value": 1534.96
+              },
+              {
+                "city": "Chandigarh",
+                "average_order_value": 1540.02
+              }
+            ],
+            "gold_sql": "SELECT city, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS city_aov FROM orders GROUP BY city ORDER BY city_aov DESC;",
+            "gold_results_sample": [
+              {
+                "city": "Kochi",
+                "city_aov": 1624.98
+              },
+              {
+                "city": "Pune",
+                "city_aov": 1614.56
+              },
+              {
+                "city": "Mumbai",
+                "city_aov": 1612.69
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q13",
+            "difficulty": "medium",
+            "question": "Who are the top 3 brands by net revenue?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.brand, SUM(o.net_amount) AS total_net_revenue FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.brand ORDER BY total_net_revenue DESC LIMIT 3",
+            "agent_results_sample": [
+              {
+                "brand": "LuxeAura",
+                "total_net_revenue": 5807988.499999962
+              },
+              {
+                "brand": "SilkRadiance",
+                "total_net_revenue": 4786263.499999983
+              },
+              {
+                "brand": "GlowBotanica",
+                "total_net_revenue": 4588255.199999975
+              }
+            ],
+            "gold_sql": "SELECT p.brand, ROUND(SUM(o.net_amount), 2) AS brand_revenue FROM orders o JOIN products p ON o.sku = p.sku GROUP BY p.brand ORDER BY brand_revenue DESC LIMIT 3;",
+            "gold_results_sample": [
+              {
+                "brand": "LuxeAura",
+                "brand_revenue": 5807988.5
+              },
+              {
+                "brand": "SilkRadiance",
+                "brand_revenue": 4786263.5
+              },
+              {
+                "brand": "GlowBotanica",
+                "brand_revenue": 4588255.2
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q14",
+            "difficulty": "medium",
+            "question": "What is the return rate percentage for each product category?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "wrong_metric",
+            "fail_details": "Metric calculation formula did not align with corporate governance definition.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH order_counts AS (SELECT p.category, COUNT(DISTINCT o.order_id) AS total_orders FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.category), return_counts AS (SELECT p.category, COUNT(DISTINCT r.order_id) AS total_returns FROM returns AS r JOIN orders AS o ON r.order_id = o.order_id JOIN products AS p ON o.sku = p.sku GROUP BY p.category) SELECT oc.category, oc.total_orders, COALESCE(rc.total_returns, 0) AS total_returns, ROUND(100.0 * COALESCE(rc.total_returns, 0) / oc.total_orders, 2) AS return_rate_percentage FROM order_counts AS oc LEFT JOIN return_counts AS rc ON oc.category = rc.category ORDER BY oc.category LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Bath & Body",
+                "total_orders": 4009,
+                "total_returns": 423,
+                "return_rate_percentage": 10.55
+              },
+              {
+                "category": "Color Cosmetics",
+                "total_orders": 4036,
+                "total_returns": 398,
+                "return_rate_percentage": 9.86
+              },
+              {
+                "category": "Fragrance",
+                "total_orders": 3995,
+                "total_returns": 393,
+                "return_rate_percentage": 9.84
+              }
+            ],
+            "gold_sql": "SELECT p.category, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate_pct FROM orders o JOIN products p ON o.sku = p.sku LEFT JOIN returns r ON o.order_id = r.order_id GROUP BY p.category ORDER BY return_rate_pct DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Bath & Body",
+                "return_rate_pct": 10.55
+              },
+              {
+                "category": "Haircare",
+                "return_rate_pct": 10.03
+              },
+              {
+                "category": "Color Cosmetics",
+                "return_rate_pct": 9.86
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q15",
+            "difficulty": "medium",
+            "question": "Show me monthly net revenue for 2024.",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "date_handling",
+            "fail_details": "Discrepancy in date grouping or formatting logic.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT DATE_TRUNC('MONTH', order_date) AS month, SUM(net_amount) AS net_revenue FROM orders WHERE order_date >= CAST('2024-01-01' AS DATE) AND order_date < CAST('2025-01-01' AS DATE) GROUP BY month ORDER BY month LIMIT 100",
+            "agent_results_sample": [
+              {
+                "month": "2024-01-01 00:00:00",
+                "net_revenue": 1378160.5500000024
+              },
+              {
+                "month": "2024-02-01 00:00:00",
+                "net_revenue": 1255174.4500000034
+              },
+              {
+                "month": "2024-03-01 00:00:00",
+                "net_revenue": 1247003.2500000033
+              }
+            ],
+            "gold_sql": "SELECT strftime(order_date, '%Y-%m') AS month, ROUND(SUM(net_amount), 2) AS monthly_revenue FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY month ORDER BY month ASC;",
+            "gold_results_sample": [
+              {
+                "month": "2024-01",
+                "monthly_revenue": 1378160.55
+              },
+              {
+                "month": "2024-02",
+                "monthly_revenue": 1255174.45
+              },
+              {
+                "month": "2024-03",
+                "monthly_revenue": 1247003.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q16",
+            "difficulty": "medium",
+            "question": "What are the most frequent return reasons and their counts?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT reason, COUNT(*) AS return_count FROM returns GROUP BY reason ORDER BY return_count DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "reason": "Wrong item delivered",
+                "return_count": 419
+              },
+              {
+                "reason": "Allergic reaction",
+                "return_count": 416
+              },
+              {
+                "reason": "Damaged in transit",
+                "return_count": 402
+              }
+            ],
+            "gold_sql": "SELECT reason, COUNT(*) AS count FROM returns GROUP BY reason ORDER BY count DESC;",
+            "gold_results_sample": [
+              {
+                "reason": "Wrong item delivered",
+                "count": 419
+              },
+              {
+                "reason": "Allergic reaction",
+                "count": 416
+              },
+              {
+                "reason": "Damaged in transit",
+                "count": 402
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q17",
+            "difficulty": "medium",
+            "question": "What is the average customer rating for each brand?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.brand, AVG(r.rating) AS avg_rating FROM reviews AS r JOIN products AS p ON r.sku = p.sku GROUP BY p.brand ORDER BY avg_rating DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "brand": "GlowBotanica",
+                "avg_rating": 4.141280353200883
+              },
+              {
+                "brand": "SilkRadiance",
+                "avg_rating": 4.120734908136483
+              },
+              {
+                "brand": "LuxeAura",
+                "avg_rating": 4.075294117647059
+              }
+            ],
+            "gold_sql": "SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating, COUNT(r.review_id) AS review_count FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.brand ORDER BY avg_rating DESC;",
+            "gold_results_sample": [
+              {
+                "brand": "GlowBotanica",
+                "avg_rating": 4.14,
+                "review_count": 453
+              },
+              {
+                "brand": "SilkRadiance",
+                "avg_rating": 4.12,
+                "review_count": 381
+              },
+              {
+                "brand": "LuxeAura",
+                "avg_rating": 4.08,
+                "review_count": 425
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q18",
+            "difficulty": "medium",
+            "question": "How many total units were sold in each category?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.category, SUM(o.quantity) AS total_units FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.category LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Fragrance",
+                "total_units": 6139
+              },
+              {
+                "category": "Skincare",
+                "total_units": 6023
+              },
+              {
+                "category": "Color Cosmetics",
+                "total_units": 6141
+              }
+            ],
+            "gold_sql": "SELECT p.category, SUM(o.quantity) AS total_units FROM orders o JOIN products p ON o.sku = p.sku GROUP BY p.category ORDER BY total_units DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Color Cosmetics",
+                "total_units": 6141
+              },
+              {
+                "category": "Fragrance",
+                "total_units": 6139
+              },
+              {
+                "category": "Bath & Body",
+                "total_units": 6078
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q19",
+            "difficulty": "medium",
+            "question": "What is the combined net revenue from Mumbai and Delhi?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT SUM(net_amount) AS combined_net_revenue FROM orders WHERE city IN ('Mumbai', 'Delhi') LIMIT 100",
+            "agent_results_sample": [
+              {
+                "combined_net_revenue": 5322211.249999958
+              }
+            ],
+            "gold_sql": "SELECT city, ROUND(SUM(net_amount), 2) AS revenue FROM orders WHERE city IN ('Mumbai', 'Delhi') GROUP BY city ORDER BY revenue DESC;",
+            "gold_results_sample": [
+              {
+                "city": "Mumbai",
+                "revenue": 2712538.95
+              },
+              {
+                "city": "Delhi",
+                "revenue": 2609672.3
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q20",
+            "difficulty": "medium",
+            "question": "What is the average discount percentage by channel?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT channel, ROUND(AVG(discount_amount / gross_amount * 100), 2) AS avg_discount_pct FROM orders GROUP BY channel ORDER BY channel LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "Amazon",
+                "avg_discount_pct": 6.5
+              },
+              {
+                "channel": "D2C Website",
+                "avg_discount_pct": 6.35
+              },
+              {
+                "channel": "Flipkart",
+                "avg_discount_pct": 6.63
+              }
+            ],
+            "gold_sql": "SELECT channel, ROUND(AVG(discount_amount * 100.0 / gross_amount), 2) AS avg_discount_pct FROM orders GROUP BY channel ORDER BY avg_discount_pct DESC;",
+            "gold_results_sample": [
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "avg_discount_pct": 6.66
+              },
+              {
+                "channel": "Flipkart",
+                "avg_discount_pct": 6.63
+              },
+              {
+                "channel": "Amazon",
+                "avg_discount_pct": 6.5
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q21",
+            "difficulty": "medium",
+            "question": "How many orders had 3 or more units in QuickCommerce channels?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(*) AS num_orders FROM orders WHERE channel IN ('QuickCommerce-Blinkit', 'QuickCommerce-Zepto') AND quantity >= 3 LIMIT 100",
+            "agent_results_sample": [
+              {
+                "num_orders": 908
+              }
+            ],
+            "gold_sql": "SELECT COUNT(*) AS large_quickcommerce_orders FROM orders WHERE channel IN ('QuickCommerce-Blinkit', 'QuickCommerce-Zepto') AND quantity >= 3;",
+            "gold_results_sample": [
+              {
+                "large_quickcommerce_orders": 908
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q22",
+            "difficulty": "medium",
+            "question": "What is the difference between our gross revenue and net revenue?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT SUM(gross_amount) AS gross_revenue, SUM(net_amount) AS net_revenue, SUM(gross_amount) - SUM(net_amount) AS revenue_difference FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "gross_revenue": 33442810.0,
+                "net_revenue": 31284974.750001892,
+                "revenue_difference": 2157835.2499981076
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(gross_amount), 2) AS gross_revenue, ROUND(SUM(net_amount), 2) AS net_revenue, ROUND(SUM(gross_amount - net_amount), 2) AS total_discount_deductions FROM orders;",
+            "gold_results_sample": [
+              {
+                "gross_revenue": 33442810.0,
+                "net_revenue": 31284974.75,
+                "total_discount_deductions": 2157835.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q23",
+            "difficulty": "hard",
+            "question": "What is our overall repeat customer rate percentage?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT (COUNT(DISTINCT CASE WHEN order_count > 1 THEN customer_id END) * 100.0 / COUNT(DISTINCT customer_id)) AS repeat_customer_rate_percentage FROM (SELECT customer_id, COUNT(*) AS order_count FROM orders GROUP BY customer_id) AS customer_orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "repeat_customer_rate_percentage": 90.98360655737704
+              }
+            ],
+            "gold_sql": "WITH cust_orders AS (SELECT customer_id, COUNT(DISTINCT order_id) AS order_cnt FROM orders GROUP BY customer_id) SELECT ROUND(COUNT(CASE WHEN order_cnt >= 2 THEN 1 END) * 100.0 / COUNT(*), 2) AS repeat_customer_rate_pct FROM cust_orders;",
+            "gold_results_sample": [
+              {
+                "repeat_customer_rate_pct": 90.98
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q24",
+            "difficulty": "hard",
+            "question": "What is the top-selling SKU by net revenue in each product category?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "wrong_metric",
+            "fail_details": "Metric calculation formula did not align with corporate governance definition.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH revenue_per_sku AS (SELECT p.category, o.sku, SUM(o.net_amount) AS net_revenue FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.category, o.sku), ranked AS (SELECT category, sku, net_revenue, ROW_NUMBER() OVER (PARTITION BY category ORDER BY net_revenue DESC) AS rn FROM revenue_per_sku) SELECT category, sku, net_revenue FROM ranked WHERE rn = 1 ORDER BY category LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Bath & Body",
+                "sku": "SKU-BAT-0103",
+                "net_revenue": 472061.0999999998
+              },
+              {
+                "category": "Color Cosmetics",
+                "sku": "SKU-COL-0040",
+                "net_revenue": 503798.3999999999
+              },
+              {
+                "category": "Fragrance",
+                "sku": "SKU-FRA-0129",
+                "net_revenue": 444555.89999999985
+              }
+            ],
+            "gold_sql": "WITH sku_rev AS (SELECT p.category, o.sku, p.name, ROUND(SUM(o.net_amount), 2) AS revenue, ROW_NUMBER() OVER (PARTITION BY p.category ORDER BY SUM(o.net_amount) DESC) AS rank FROM orders o JOIN products p ON o.sku = p.sku GROUP BY p.category, o.sku, p.name) SELECT category, sku, name, revenue FROM sku_rev WHERE rank = 1 ORDER BY revenue DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Haircare",
+                "sku": "SKU-HAI-0027",
+                "name": "SilkRadiance Biotin Anti-Hairfall Mask (Travel Size)",
+                "revenue": 542907.75
+              },
+              {
+                "category": "Color Cosmetics",
+                "sku": "SKU-COL-0040",
+                "name": "LuxeAura Peach Blossom Powder Blush (Original)",
+                "revenue": 503798.4
+              },
+              {
+                "category": "Skincare",
+                "sku": "SKU-SKI-0146",
+                "name": "BotanicalBliss Niacinamide 10% Blemish Toner (Mini)",
+                "revenue": 495176.85
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q25",
+            "difficulty": "hard",
+            "question": "What is the return rate percentage for each sales channel?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "wrong_metric",
+            "fail_details": "Metric calculation formula did not align with corporate governance definition.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT o.channel, COUNT(DISTINCT o.order_id) AS total_orders, COUNT(DISTINCT r.return_id) AS total_returns, ROUND(100.0 * COUNT(DISTINCT r.return_id) / COUNT(DISTINCT o.order_id), 2) AS return_rate_pct FROM orders AS o LEFT JOIN returns AS r ON o.order_id = r.order_id GROUP BY o.channel ORDER BY return_rate_pct DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "Amazon",
+                "total_orders": 3386,
+                "total_returns": 355,
+                "return_rate_pct": 10.48
+              },
+              {
+                "channel": "D2C Website",
+                "total_orders": 3303,
+                "total_returns": 330,
+                "return_rate_pct": 9.99
+              },
+              {
+                "channel": "QuickCommerce-Zepto",
+                "total_orders": 3330,
+                "total_returns": 332,
+                "return_rate_pct": 9.97
+              }
+            ],
+            "gold_sql": "SELECT o.channel, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate_pct FROM orders o LEFT JOIN returns r ON o.order_id = r.order_id GROUP BY o.channel ORDER BY return_rate_pct DESC;",
+            "gold_results_sample": [
+              {
+                "channel": "Amazon",
+                "return_rate_pct": 10.48
+              },
+              {
+                "channel": "D2C Website",
+                "return_rate_pct": 9.99
+              },
+              {
+                "channel": "QuickCommerce-Zepto",
+                "return_rate_pct": 9.97
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q26",
+            "difficulty": "hard",
+            "question": "Show the cumulative running monthly net revenue for 2023.",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "date_handling",
+            "fail_details": "Discrepancy in date grouping or formatting logic.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT DATE_TRUNC('MONTH', order_date) AS month, SUM(net_amount) AS monthly_net, SUM(SUM(net_amount)) OVER (ORDER BY DATE_TRUNC('MONTH', order_date)) AS cumulative_net FROM orders WHERE YEAR(order_date) = 2023 GROUP BY month ORDER BY month LIMIT 100",
+            "agent_results_sample": [
+              {
+                "month": "2023-01-01 00:00:00",
+                "monthly_net": 1266469.3500000013,
+                "cumulative_net": 1266469.3500000013
+              },
+              {
+                "month": "2023-02-01 00:00:00",
+                "monthly_net": 1205395.9500000004,
+                "cumulative_net": 2471865.3000000017
+              },
+              {
+                "month": "2023-03-01 00:00:00",
+                "monthly_net": 1373817.1500000036,
+                "cumulative_net": 3845682.4500000053
+              }
+            ],
+            "gold_sql": "WITH monthly AS (SELECT strftime(order_date, '%Y-%m') AS month, SUM(net_amount) AS revenue FROM orders WHERE strftime(order_date, '%Y') = '2023' GROUP BY month) SELECT month, ROUND(revenue, 2) AS monthly_revenue, ROUND(SUM(revenue) OVER (ORDER BY month), 2) AS cumulative_revenue FROM monthly ORDER BY month;",
+            "gold_results_sample": [
+              {
+                "month": "2023-01",
+                "monthly_revenue": 1266469.35,
+                "cumulative_revenue": 1266469.35
+              },
+              {
+                "month": "2023-02",
+                "monthly_revenue": 1205395.95,
+                "cumulative_revenue": 2471865.3
+              },
+              {
+                "month": "2023-03",
+                "monthly_revenue": 1373817.15,
+                "cumulative_revenue": 3845682.45
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q27",
+            "difficulty": "hard",
+            "question": "How many high-value customers have spent more than 15,000 INR in total?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(*) AS high_value_customer_count FROM (SELECT customer_id, SUM(net_amount) AS total_spent FROM orders GROUP BY customer_id HAVING SUM(net_amount) > 15000) AS subquery LIMIT 100",
+            "agent_results_sample": [
+              {
+                "high_value_customer_count": 660
+              }
+            ],
+            "gold_sql": "WITH customer_spend AS (SELECT customer_id, SUM(net_amount) AS total_spend FROM orders GROUP BY customer_id) SELECT COUNT(*) AS high_value_customer_count FROM customer_spend WHERE total_spend > 15000;",
+            "gold_results_sample": [
+              {
+                "high_value_customer_count": 660
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q28",
+            "difficulty": "hard",
+            "question": "Which brand has the highest return rate percentage?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "wrong_metric",
+            "fail_details": "Metric calculation formula did not align with corporate governance definition.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.brand, COUNT(DISTINCT o.order_id) AS total_orders, COUNT(DISTINCT r.return_id) AS total_returns, ROUND((CAST(COUNT(DISTINCT r.return_id) AS DOUBLE) / COUNT(DISTINCT o.order_id)) * 100, 2) AS return_rate_pct FROM orders AS o JOIN products AS p ON o.sku = p.sku LEFT JOIN returns AS r ON r.order_id = o.order_id GROUP BY p.brand ORDER BY return_rate_pct DESC LIMIT 1",
+            "agent_results_sample": [
+              {
+                "brand": "AuraBotanics",
+                "total_orders": 2476,
+                "total_returns": 262,
+                "return_rate_pct": 10.58
+              }
+            ],
+            "gold_sql": "SELECT p.brand, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS brand_return_rate FROM orders o JOIN products p ON o.sku = p.sku LEFT JOIN returns r ON o.order_id = r.order_id GROUP BY p.brand ORDER BY brand_return_rate DESC LIMIT 1;",
+            "gold_results_sample": [
+              {
+                "brand": "AuraBotanics",
+                "brand_return_rate": 10.58
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q29",
+            "difficulty": "hard",
+            "question": "What is the average review rating of our top 5 most returned products?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH top5 AS (SELECT o.sku, COUNT(*) AS return_count FROM returns AS r JOIN orders AS o ON r.order_id = o.order_id GROUP BY o.sku ORDER BY return_count DESC LIMIT 5) SELECT AVG(r.rating) AS avg_rating FROM reviews AS r JOIN top5 AS t ON r.sku = t.sku LIMIT 100",
+            "agent_results_sample": [
+              {
+                "avg_rating": 4.121212121212121
+              }
+            ],
+            "gold_sql": "WITH top_returned AS (SELECT o.sku, COUNT(r.return_id) AS ret_cnt FROM orders o JOIN returns r ON o.order_id = r.order_id GROUP BY o.sku ORDER BY ret_cnt DESC LIMIT 5) SELECT tr.sku, p.name, tr.ret_cnt, ROUND(AVG(rev.rating), 2) AS avg_rating FROM top_returned tr JOIN products p ON tr.sku = p.sku LEFT JOIN reviews rev ON tr.sku = rev.sku GROUP BY tr.sku, p.name, tr.ret_cnt ORDER BY tr.ret_cnt DESC;",
+            "gold_results_sample": [
+              {
+                "sku": "SKU-FRA-0064",
+                "name": "GlowBotanica Saffron & Cardamom Noir (Refill Pack)",
+                "ret_cnt": 23,
+                "avg_rating": 4.38
+              },
+              {
+                "sku": "SKU-HAI-0142",
+                "name": "AuraBotanics Onion & Fenugreek Hair Oil (Intense)",
+                "ret_cnt": 21,
+                "avg_rating": 4.15
+              },
+              {
+                "sku": "SKU-SKI-0036",
+                "name": "VelvetPetal Niacinamide 10% Blemish Toner (Refill Pack)",
+                "ret_cnt": 21,
+                "avg_rating": 4.33
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q30",
+            "difficulty": "hard",
+            "question": "List our top 5 most frequent customers with their order count and total spend.",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT customer_id, COUNT(order_id) AS order_count, SUM(net_amount) AS total_spend FROM orders GROUP BY customer_id ORDER BY order_count DESC, total_spend DESC LIMIT 5",
+            "agent_results_sample": [
+              {
+                "customer_id": "CUST-00621",
+                "order_count": 26,
+                "total_spend": 47489.3
+              },
+              {
+                "customer_id": "CUST-00082",
+                "order_count": 26,
+                "total_spend": 46633.950000000004
+              },
+              {
+                "customer_id": "CUST-00623",
+                "order_count": 26,
+                "total_spend": 41682.350000000006
+              }
+            ],
+            "gold_sql": "SELECT customer_id, COUNT(DISTINCT order_id) AS total_orders, ROUND(SUM(net_amount), 2) AS total_spend FROM orders GROUP BY customer_id ORDER BY total_orders DESC, total_spend DESC LIMIT 5;",
+            "gold_results_sample": [
+              {
+                "customer_id": "CUST-00621",
+                "total_orders": 26,
+                "total_spend": 47489.3
+              },
+              {
+                "customer_id": "CUST-00082",
+                "total_orders": 26,
+                "total_spend": 46633.95
+              },
+              {
+                "customer_id": "CUST-00623",
+                "total_orders": 26,
+                "total_spend": 41682.35
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q31",
+            "difficulty": "hard",
+            "question": "What was the quarterly Average Order Value by channel in 2024?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT channel, EXTRACT(QUARTER FROM order_date) AS quarter, ROUND(AVG(net_amount), 2) AS avg_order_value FROM orders WHERE order_date >= CAST('2024-01-01' AS DATE) AND order_date < CAST('2025-01-01' AS DATE) GROUP BY channel, quarter ORDER BY channel, quarter LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "Amazon",
+                "quarter": 1,
+                "avg_order_value": 1525.25
+              },
+              {
+                "channel": "Amazon",
+                "quarter": 2,
+                "avg_order_value": 1611.33
+              },
+              {
+                "channel": "Amazon",
+                "quarter": 3,
+                "avg_order_value": 1521.25
+              }
+            ],
+            "gold_sql": "SELECT channel, strftime(order_date, '%Y-Q') || ((CAST(strftime(order_date, '%m') AS INTEGER) - 1) / 3 + 1) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY channel, quarter ORDER BY channel, quarter;",
+            "gold_results_sample": [
+              {
+                "channel": "Amazon",
+                "quarter": "2024-Q1.0",
+                "aov": 1500.27
+              },
+              {
+                "channel": "Amazon",
+                "quarter": "2024-Q1.3333333333333333",
+                "aov": 1566.54
+              },
+              {
+                "channel": "Amazon",
+                "quarter": "2024-Q1.6666666666666665",
+                "aov": 1511.04
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q32",
+            "difficulty": "hard",
+            "question": "Calculate the month-over-month revenue growth rate for 2024.",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "date_handling",
+            "fail_details": "Discrepancy in date grouping or formatting logic.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH monthly_rev AS (SELECT DATE_TRUNC('MONTH', order_date) AS month, SUM(net_amount) AS revenue FROM orders WHERE EXTRACT(YEAR FROM order_date) = 2024 GROUP BY month ORDER BY month) SELECT month, revenue, ROUND((revenue - LAG(revenue) OVER (ORDER BY month)) / NULLIF(LAG(revenue) OVER (ORDER BY month), 0) * 100, 2) AS growth_rate_percent FROM monthly_rev LIMIT 100",
+            "agent_results_sample": [
+              {
+                "month": "2024-01-01 00:00:00",
+                "revenue": 1378160.5500000024,
+                "growth_rate_percent": null
+              },
+              {
+                "month": "2024-02-01 00:00:00",
+                "revenue": 1255174.4500000034,
+                "growth_rate_percent": -8.92
+              },
+              {
+                "month": "2024-03-01 00:00:00",
+                "revenue": 1247003.2500000033,
+                "growth_rate_percent": -0.65
+              }
+            ],
+            "gold_sql": "WITH m_rev AS (SELECT strftime(order_date, '%Y-%m') AS month, SUM(net_amount) AS revenue FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY month) SELECT month, ROUND(revenue, 2) AS revenue, ROUND((revenue - LAG(revenue) OVER (ORDER BY month)) * 100.0 / LAG(revenue) OVER (ORDER BY month), 2) AS mom_growth_pct FROM m_rev ORDER BY month;",
+            "gold_results_sample": [
+              {
+                "month": "2024-01",
+                "revenue": 1378160.55,
+                "mom_growth_pct": null
+              },
+              {
+                "month": "2024-02",
+                "revenue": 1255174.45,
+                "mom_growth_pct": -8.92
+              },
+              {
+                "month": "2024-03",
+                "revenue": 1247003.25,
+                "mom_growth_pct": -0.65
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q33",
+            "difficulty": "unanswerable",
+            "question": "What was our customer acquisition cost (CAC) for Instagram marketing campaigns in 2024?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q34",
+            "difficulty": "unanswerable",
+            "question": "How many orders were shipped to customers in London and Paris?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q35",
+            "difficulty": "unanswerable",
+            "question": "What is the current remaining warehouse inventory stock for SKU-SKI-0001?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q36",
+            "difficulty": "unanswerable",
+            "question": "What are our competitor's prices for hyaluronic acid serum on Nykaa?",
+            "expected_refusal": true,
+            "is_correct": false,
+            "fail_category": "failed_refusal",
+            "fail_details": "Model generated SQL instead of refusing unanswerable query.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.sku, p.name, ROUND(AVG(o.net_amount / o.quantity), 2) AS avg_price_per_unit FROM products AS p JOIN orders AS o ON p.sku = o.sku WHERE o.channel = 'Nykaa' AND LOWER(p.name) LIKE '%hyaluronic acid serum%' GROUP BY p.sku, p.name ORDER BY avg_price_per_unit ASC LIMIT 100",
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q37",
+            "difficulty": "unanswerable",
+            "question": "What was the average delivery time in minutes for QuickCommerce-Blinkit orders?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q38",
+            "difficulty": "unanswerable",
+            "question": "What is the average salary of employees in our digital marketing department?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q39",
+            "difficulty": "unanswerable",
+            "question": "Which supplier provided the organic rosemary oil for our haircare line?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q40",
+            "difficulty": "unanswerable",
+            "question": "What is the legal warranty return policy clause for opened cosmetics?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          }
+        ]
+      }
+    },
+    "v2": {
+      "prompt_version": "v2",
+      "num_runs": 3,
+      "overall_accuracy": {
+        "mean": 0.65,
+        "min": 0.65,
+        "max": 0.65
+      },
+      "tier_accuracy": {
+        "easy": {
+          "mean": 0.7,
+          "min": 0.7,
+          "max": 0.7
+        },
+        "medium": {
+          "mean": 0.5833,
+          "min": 0.5833,
+          "max": 0.5833
+        },
+        "hard": {
+          "mean": 0.4,
+          "min": 0.4,
+          "max": 0.4
+        },
+        "unanswerable": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        }
+      },
+      "refusal_metrics": {
+        "refusal_precision": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "refusal_recall": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "answerable_recall": {
+          "mean": 0.9688,
+          "min": 0.9688,
+          "max": 0.9688
+        }
+      },
+      "per_question_passes": {
+        "q01": 0,
+        "q02": 3,
+        "q03": 3,
+        "q04": 3,
+        "q05": 3,
+        "q06": 0,
+        "q07": 3,
+        "q08": 3,
+        "q09": 0,
+        "q10": 3,
+        "q11": 3,
+        "q12": 3,
+        "q13": 3,
+        "q14": 3,
+        "q15": 0,
+        "q16": 3,
+        "q17": 0,
+        "q18": 3,
+        "q19": 0,
+        "q20": 0,
+        "q21": 3,
+        "q22": 0,
+        "q23": 0,
+        "q24": 0,
+        "q25": 3,
+        "q26": 0,
+        "q27": 3,
+        "q28": 3,
+        "q29": 0,
+        "q30": 3,
+        "q31": 0,
+        "q32": 0,
+        "q33": 3,
+        "q34": 3,
+        "q35": 3,
+        "q36": 3,
+        "q37": 3,
+        "q38": 3,
+        "q39": 3,
+        "q40": 3
+      },
+      "representative_run": {
+        "run_idx": 1,
+        "prompt_version": "v2",
+        "overall_accuracy": 0.65,
+        "total_correct": 26,
+        "total_questions": 40,
+        "tier_accuracy": {
+          "easy": 0.7,
+          "medium": 0.5833,
+          "hard": 0.4,
+          "unanswerable": 1.0
+        },
+        "refusal_metrics": {
+          "refusal_recall": 1.0,
+          "refusal_precision": 1.0,
+          "false_refusals_on_answerable": 0,
+          "failed_refusals_on_unanswerable": 0,
+          "answerable_recall": 0.9688
+        },
+        "results": [
+          {
+            "id": "q01",
+            "difficulty": "easy",
+            "question": "What is our total net revenue?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "wrong_metric",
+            "fail_details": "Metric calculation formula did not align with corporate governance definition.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT 'Total Net Revenue' AS metric, SUM(net_amount) AS value FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "metric": "Total Net Revenue",
+                "value": 31284974.750001892
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(net_amount), 2) AS total_net_revenue FROM orders;",
+            "gold_results_sample": [
+              {
+                "total_net_revenue": 31284974.75
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q02",
+            "difficulty": "easy",
+            "question": "How many total orders have been placed?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(DISTINCT order_id) AS total_orders FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_orders": 20000
+              }
+            ],
+            "gold_sql": "SELECT COUNT(DISTINCT order_id) AS total_orders FROM orders;",
+            "gold_results_sample": [
+              {
+                "total_orders": 20000
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q03",
+            "difficulty": "easy",
+            "question": "How many products do we have in each category?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT category, COUNT(*) AS product_count FROM products GROUP BY category LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Fragrance",
+                "product_count": 30
+              },
+              {
+                "category": "Bath & Body",
+                "product_count": 30
+              },
+              {
+                "category": "Skincare",
+                "product_count": 30
+              }
+            ],
+            "gold_sql": "SELECT category, COUNT(sku) AS product_count FROM products GROUP BY category ORDER BY product_count DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Fragrance",
+                "product_count": 30
+              },
+              {
+                "category": "Haircare",
+                "product_count": 30
+              },
+              {
+                "category": "Color Cosmetics",
+                "product_count": 30
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q04",
+            "difficulty": "easy",
+            "question": "What is the total discount amount given to customers?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT SUM(discount_amount) AS total_discount FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_discount": 2157835.2499998957
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(discount_amount), 2) AS total_discounts FROM orders;",
+            "gold_results_sample": [
+              {
+                "total_discounts": 2157835.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q05",
+            "difficulty": "easy",
+            "question": "What is our overall Average Order Value (AOV)?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS overall_aov FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "overall_aov": 1564.25
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders;",
+            "gold_results_sample": [
+              {
+                "aov": 1564.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q06",
+            "difficulty": "easy",
+            "question": "How many orders were placed through Amazon?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "other",
+            "fail_details": "Execution result mismatch.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT channel, COUNT(DISTINCT order_id) AS order_count FROM orders WHERE channel = 'Amazon' GROUP BY channel LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "Amazon",
+                "order_count": 3386
+              }
+            ],
+            "gold_sql": "SELECT COUNT(*) AS amazon_order_count FROM orders WHERE channel = 'Amazon';",
+            "gold_results_sample": [
+              {
+                "amazon_order_count": 3386
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q07",
+            "difficulty": "easy",
+            "question": "What is the total refund amount processed?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT SUM(refund_amount) AS total_refund FROM returns LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_refund": 3084358.2999999993
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(refund_amount), 2) AS total_refunds FROM returns;",
+            "gold_results_sample": [
+              {
+                "total_refunds": 3084358.3
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q08",
+            "difficulty": "easy",
+            "question": "How many 5-star reviews have we received?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(*) AS five_star_reviews FROM reviews WHERE rating = 5 LIMIT 100",
+            "agent_results_sample": [
+              {
+                "five_star_reviews": 1492
+              }
+            ],
+            "gold_sql": "SELECT COUNT(*) AS five_star_count FROM reviews WHERE rating = 5;",
+            "gold_results_sample": [
+              {
+                "five_star_count": 1492
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q09",
+            "difficulty": "easy",
+            "question": "Which product has the highest MRP?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT sku, name, brand, category, mrp FROM products ORDER BY mrp DESC LIMIT 1",
+            "agent_results_sample": [
+              {
+                "sku": "SKU-COL-0005",
+                "name": "GlowBotanica Ultra-Fine Setting Powder (Travel Size)",
+                "brand": "GlowBotanica",
+                "category": "Color Cosmetics",
+                "mrp": 2499.0
+              }
+            ],
+            "gold_sql": "SELECT name, brand, mrp FROM products ORDER BY mrp DESC LIMIT 1;",
+            "gold_results_sample": [
+              {
+                "name": "GlowBotanica Ultra-Fine Setting Powder (Travel Size)",
+                "brand": "GlowBotanica",
+                "mrp": 2499.0
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q10",
+            "difficulty": "easy",
+            "question": "How many unique customers have purchased from us?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(DISTINCT customer_id) AS unique_customers FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "unique_customers": 3416
+              }
+            ],
+            "gold_sql": "SELECT COUNT(DISTINCT customer_id) AS unique_customers FROM orders;",
+            "gold_results_sample": [
+              {
+                "unique_customers": 3416
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q11",
+            "difficulty": "medium",
+            "question": "What is the total net revenue broken down by sales channel?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT channel, SUM(net_amount) AS net_revenue FROM orders GROUP BY channel ORDER BY net_revenue DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "net_revenue": 5363240.049999955
+              },
+              {
+                "channel": "Nykaa",
+                "net_revenue": 5310460.549999958
+              },
+              {
+                "channel": "D2C Website",
+                "net_revenue": 5216703.699999954
+              }
+            ],
+            "gold_sql": "SELECT channel, ROUND(SUM(net_amount), 2) AS channel_net_revenue FROM orders GROUP BY channel ORDER BY channel_net_revenue DESC;",
+            "gold_results_sample": [
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "channel_net_revenue": 5363240.05
+              },
+              {
+                "channel": "Nykaa",
+                "channel_net_revenue": 5310460.55
+              },
+              {
+                "channel": "D2C Website",
+                "channel_net_revenue": 5216703.7
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q12",
+            "difficulty": "medium",
+            "question": "What is the Average Order Value (AOV) for each city?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT city, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders GROUP BY city ORDER BY aov DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "city": "Kochi",
+                "aov": 1624.98
+              },
+              {
+                "city": "Pune",
+                "aov": 1614.56
+              },
+              {
+                "city": "Mumbai",
+                "aov": 1612.69
+              }
+            ],
+            "gold_sql": "SELECT city, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS city_aov FROM orders GROUP BY city ORDER BY city_aov DESC;",
+            "gold_results_sample": [
+              {
+                "city": "Kochi",
+                "city_aov": 1624.98
+              },
+              {
+                "city": "Pune",
+                "city_aov": 1614.56
+              },
+              {
+                "city": "Mumbai",
+                "city_aov": 1612.69
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q13",
+            "difficulty": "medium",
+            "question": "Who are the top 3 brands by net revenue?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.brand, SUM(o.net_amount) AS net_revenue FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.brand ORDER BY net_revenue DESC LIMIT 3",
+            "agent_results_sample": [
+              {
+                "brand": "LuxeAura",
+                "net_revenue": 5807988.499999962
+              },
+              {
+                "brand": "SilkRadiance",
+                "net_revenue": 4786263.499999983
+              },
+              {
+                "brand": "GlowBotanica",
+                "net_revenue": 4588255.199999975
+              }
+            ],
+            "gold_sql": "SELECT p.brand, ROUND(SUM(o.net_amount), 2) AS brand_revenue FROM orders o JOIN products p ON o.sku = p.sku GROUP BY p.brand ORDER BY brand_revenue DESC LIMIT 3;",
+            "gold_results_sample": [
+              {
+                "brand": "LuxeAura",
+                "brand_revenue": 5807988.5
+              },
+              {
+                "brand": "SilkRadiance",
+                "brand_revenue": 4786263.5
+              },
+              {
+                "brand": "GlowBotanica",
+                "brand_revenue": 4588255.2
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q14",
+            "difficulty": "medium",
+            "question": "What is the return rate percentage for each product category?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.category, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate FROM orders AS o JOIN products AS p ON o.sku = p.sku LEFT JOIN returns AS r ON o.order_id = r.order_id GROUP BY p.category ORDER BY return_rate DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Bath & Body",
+                "return_rate": 10.55
+              },
+              {
+                "category": "Haircare",
+                "return_rate": 10.03
+              },
+              {
+                "category": "Color Cosmetics",
+                "return_rate": 9.86
+              }
+            ],
+            "gold_sql": "SELECT p.category, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate_pct FROM orders o JOIN products p ON o.sku = p.sku LEFT JOIN returns r ON o.order_id = r.order_id GROUP BY p.category ORDER BY return_rate_pct DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Bath & Body",
+                "return_rate_pct": 10.55
+              },
+              {
+                "category": "Haircare",
+                "return_rate_pct": 10.03
+              },
+              {
+                "category": "Color Cosmetics",
+                "return_rate_pct": 9.86
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q15",
+            "difficulty": "medium",
+            "question": "Show me monthly net revenue for 2024.",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "date_handling",
+            "fail_details": "Discrepancy in date grouping or formatting logic.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT DATE_TRUNC('MONTH', order_date) AS month, SUM(net_amount) AS net_revenue FROM orders WHERE order_date >= '2024-01-01' AND order_date < '2025-01-01' GROUP BY month ORDER BY month LIMIT 100",
+            "agent_results_sample": [
+              {
+                "month": "2024-01-01 00:00:00",
+                "net_revenue": 1378160.5500000024
+              },
+              {
+                "month": "2024-02-01 00:00:00",
+                "net_revenue": 1255174.4500000034
+              },
+              {
+                "month": "2024-03-01 00:00:00",
+                "net_revenue": 1247003.2500000033
+              }
+            ],
+            "gold_sql": "SELECT strftime(order_date, '%Y-%m') AS month, ROUND(SUM(net_amount), 2) AS monthly_revenue FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY month ORDER BY month ASC;",
+            "gold_results_sample": [
+              {
+                "month": "2024-01",
+                "monthly_revenue": 1378160.55
+              },
+              {
+                "month": "2024-02",
+                "monthly_revenue": 1255174.45
+              },
+              {
+                "month": "2024-03",
+                "monthly_revenue": 1247003.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q16",
+            "difficulty": "medium",
+            "question": "What are the most frequent return reasons and their counts?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT reason, COUNT(*) AS count FROM returns GROUP BY reason ORDER BY count DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "reason": "Wrong item delivered",
+                "count": 419
+              },
+              {
+                "reason": "Allergic reaction",
+                "count": 416
+              },
+              {
+                "reason": "Damaged in transit",
+                "count": 402
+              }
+            ],
+            "gold_sql": "SELECT reason, COUNT(*) AS count FROM returns GROUP BY reason ORDER BY count DESC;",
+            "gold_results_sample": [
+              {
+                "reason": "Wrong item delivered",
+                "count": 419
+              },
+              {
+                "reason": "Allergic reaction",
+                "count": 416
+              },
+              {
+                "reason": "Damaged in transit",
+                "count": 402
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q17",
+            "difficulty": "medium",
+            "question": "What is the average customer rating for each brand?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating FROM reviews AS r JOIN products AS p ON r.sku = p.sku GROUP BY p.brand ORDER BY avg_rating DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "brand": "GlowBotanica",
+                "avg_rating": 4.14
+              },
+              {
+                "brand": "SilkRadiance",
+                "avg_rating": 4.12
+              },
+              {
+                "brand": "LuxeAura",
+                "avg_rating": 4.08
+              }
+            ],
+            "gold_sql": "SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating, COUNT(r.review_id) AS review_count FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.brand ORDER BY avg_rating DESC;",
+            "gold_results_sample": [
+              {
+                "brand": "GlowBotanica",
+                "avg_rating": 4.14,
+                "review_count": 453
+              },
+              {
+                "brand": "SilkRadiance",
+                "avg_rating": 4.12,
+                "review_count": 381
+              },
+              {
+                "brand": "LuxeAura",
+                "avg_rating": 4.08,
+                "review_count": 425
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q18",
+            "difficulty": "medium",
+            "question": "How many total units were sold in each category?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.category, SUM(o.quantity) AS total_units_sold FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.category ORDER BY total_units_sold DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Color Cosmetics",
+                "total_units_sold": 6141
+              },
+              {
+                "category": "Fragrance",
+                "total_units_sold": 6139
+              },
+              {
+                "category": "Bath & Body",
+                "total_units_sold": 6078
+              }
+            ],
+            "gold_sql": "SELECT p.category, SUM(o.quantity) AS total_units FROM orders o JOIN products p ON o.sku = p.sku GROUP BY p.category ORDER BY total_units DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Color Cosmetics",
+                "total_units": 6141
+              },
+              {
+                "category": "Fragrance",
+                "total_units": 6139
+              },
+              {
+                "category": "Bath & Body",
+                "total_units": 6078
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q19",
+            "difficulty": "medium",
+            "question": "What is the combined net revenue from Mumbai and Delhi?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT SUM(net_amount) AS combined_net_revenue FROM orders WHERE city IN ('Mumbai', 'Delhi') LIMIT 100",
+            "agent_results_sample": [
+              {
+                "combined_net_revenue": 5322211.249999958
+              }
+            ],
+            "gold_sql": "SELECT city, ROUND(SUM(net_amount), 2) AS revenue FROM orders WHERE city IN ('Mumbai', 'Delhi') GROUP BY city ORDER BY revenue DESC;",
+            "gold_results_sample": [
+              {
+                "city": "Mumbai",
+                "revenue": 2712538.95
+              },
+              {
+                "city": "Delhi",
+                "revenue": 2609672.3
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q20",
+            "difficulty": "medium",
+            "question": "What is the average discount percentage by channel?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "wrong_metric",
+            "fail_details": "Metric calculation formula did not align with corporate governance definition.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT channel, ROUND(SUM(discount_amount) / SUM(gross_amount) * 100, 2) AS avg_discount_pct FROM orders GROUP BY channel LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "Amazon",
+                "avg_discount_pct": 6.46
+              },
+              {
+                "channel": "Nykaa",
+                "avg_discount_pct": 6.13
+              },
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "avg_discount_pct": 6.68
+              }
+            ],
+            "gold_sql": "SELECT channel, ROUND(AVG(discount_amount * 100.0 / gross_amount), 2) AS avg_discount_pct FROM orders GROUP BY channel ORDER BY avg_discount_pct DESC;",
+            "gold_results_sample": [
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "avg_discount_pct": 6.66
+              },
+              {
+                "channel": "Flipkart",
+                "avg_discount_pct": 6.63
+              },
+              {
+                "channel": "Amazon",
+                "avg_discount_pct": 6.5
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q21",
+            "difficulty": "medium",
+            "question": "How many orders had 3 or more units in QuickCommerce channels?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(*) AS orders_with_3_or_more_units FROM (SELECT order_id, SUM(quantity) AS total_qty FROM orders WHERE channel IN ('QuickCommerce-Blinkit', 'QuickCommerce-Zepto') GROUP BY order_id HAVING total_qty >= 3) AS sub LIMIT 100",
+            "agent_results_sample": [
+              {
+                "orders_with_3_or_more_units": 908
+              }
+            ],
+            "gold_sql": "SELECT COUNT(*) AS large_quickcommerce_orders FROM orders WHERE channel IN ('QuickCommerce-Blinkit', 'QuickCommerce-Zepto') AND quantity >= 3;",
+            "gold_results_sample": [
+              {
+                "large_quickcommerce_orders": 908
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q22",
+            "difficulty": "medium",
+            "question": "What is the difference between our gross revenue and net revenue?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "syntax_or_parser_error",
+            "fail_details": "SQL execution error: SQL 'SELECT 'Gross Revenue' AS metric, SUM(gross_amount) AS amount FROM orders\nU",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT 'Gross Revenue' AS metric, SUM(gross_amount) AS amount FROM orders\nUNION ALL\nSELECT 'Net Revenue', SUM(net_amount) FROM orders\nUNION ALL\nSELECT 'Discounts', SUM(discount_amount) FROM orders;",
+            "agent_results_sample": null,
+            "gold_sql": "SELECT ROUND(SUM(gross_amount), 2) AS gross_revenue, ROUND(SUM(net_amount), 2) AS net_revenue, ROUND(SUM(gross_amount - net_amount), 2) AS total_discount_deductions FROM orders;",
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q23",
+            "difficulty": "hard",
+            "question": "What is our overall repeat customer rate percentage?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "wrong_metric",
+            "fail_details": "Metric calculation formula did not align with corporate governance definition.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH c AS (SELECT customer_id, COUNT(DISTINCT order_id) AS cnt FROM orders GROUP BY customer_id) SELECT 'Repeat Customer Rate (%)' AS Metric, ROUND(COUNT(CASE WHEN cnt >= 2 THEN 1 END) * 100.0 / COUNT(*), 2) AS Value FROM c LIMIT 100",
+            "agent_results_sample": [
+              {
+                "Metric": "Repeat Customer Rate (%)",
+                "Value": 90.98
+              }
+            ],
+            "gold_sql": "WITH cust_orders AS (SELECT customer_id, COUNT(DISTINCT order_id) AS order_cnt FROM orders GROUP BY customer_id) SELECT ROUND(COUNT(CASE WHEN order_cnt >= 2 THEN 1 END) * 100.0 / COUNT(*), 2) AS repeat_customer_rate_pct FROM cust_orders;",
+            "gold_results_sample": [
+              {
+                "repeat_customer_rate_pct": 90.98
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q24",
+            "difficulty": "hard",
+            "question": "What is the top-selling SKU by net revenue in each product category?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "wrong_metric",
+            "fail_details": "Metric calculation formula did not align with corporate governance definition.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH revenue_by_sku AS (SELECT p.category, o.sku, SUM(o.net_amount) AS net_revenue FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.category, o.sku), ranked AS (SELECT category, sku, net_revenue, ROW_NUMBER() OVER (PARTITION BY category ORDER BY net_revenue DESC) AS rn FROM revenue_by_sku) SELECT category, sku, net_revenue FROM ranked WHERE rn = 1 ORDER BY category LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Bath & Body",
+                "sku": "SKU-BAT-0103",
+                "net_revenue": 472061.0999999998
+              },
+              {
+                "category": "Color Cosmetics",
+                "sku": "SKU-COL-0040",
+                "net_revenue": 503798.3999999999
+              },
+              {
+                "category": "Fragrance",
+                "sku": "SKU-FRA-0129",
+                "net_revenue": 444555.89999999985
+              }
+            ],
+            "gold_sql": "WITH sku_rev AS (SELECT p.category, o.sku, p.name, ROUND(SUM(o.net_amount), 2) AS revenue, ROW_NUMBER() OVER (PARTITION BY p.category ORDER BY SUM(o.net_amount) DESC) AS rank FROM orders o JOIN products p ON o.sku = p.sku GROUP BY p.category, o.sku, p.name) SELECT category, sku, name, revenue FROM sku_rev WHERE rank = 1 ORDER BY revenue DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Haircare",
+                "sku": "SKU-HAI-0027",
+                "name": "SilkRadiance Biotin Anti-Hairfall Mask (Travel Size)",
+                "revenue": 542907.75
+              },
+              {
+                "category": "Color Cosmetics",
+                "sku": "SKU-COL-0040",
+                "name": "LuxeAura Peach Blossom Powder Blush (Original)",
+                "revenue": 503798.4
+              },
+              {
+                "category": "Skincare",
+                "sku": "SKU-SKI-0146",
+                "name": "BotanicalBliss Niacinamide 10% Blemish Toner (Mini)",
+                "revenue": 495176.85
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q25",
+            "difficulty": "hard",
+            "question": "What is the return rate percentage for each sales channel?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT o.channel, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate_pct FROM orders AS o LEFT JOIN returns AS r ON o.order_id = r.order_id GROUP BY o.channel LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "Amazon",
+                "return_rate_pct": 10.48
+              },
+              {
+                "channel": "Nykaa",
+                "return_rate_pct": 9.95
+              },
+              {
+                "channel": "D2C Website",
+                "return_rate_pct": 9.99
+              }
+            ],
+            "gold_sql": "SELECT o.channel, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate_pct FROM orders o LEFT JOIN returns r ON o.order_id = r.order_id GROUP BY o.channel ORDER BY return_rate_pct DESC;",
+            "gold_results_sample": [
+              {
+                "channel": "Amazon",
+                "return_rate_pct": 10.48
+              },
+              {
+                "channel": "D2C Website",
+                "return_rate_pct": 9.99
+              },
+              {
+                "channel": "QuickCommerce-Zepto",
+                "return_rate_pct": 9.97
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q26",
+            "difficulty": "hard",
+            "question": "Show the cumulative running monthly net revenue for 2023.",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "date_handling",
+            "fail_details": "Discrepancy in date grouping or formatting logic.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT month, cumulative_net_revenue FROM (SELECT DATE_TRUNC('MONTH', order_date) AS month, SUM(net_amount) AS monthly_net, SUM(SUM(net_amount)) OVER (ORDER BY DATE_TRUNC('MONTH', order_date)) AS cumulative_net_revenue FROM orders WHERE order_date BETWEEN CAST('2023-01-01' AS DATE) AND CAST('2023-12-31' AS DATE) GROUP BY month) AS t ORDER BY month LIMIT 100",
+            "agent_results_sample": [
+              {
+                "month": "2023-01-01 00:00:00",
+                "cumulative_net_revenue": 1266469.3500000013
+              },
+              {
+                "month": "2023-02-01 00:00:00",
+                "cumulative_net_revenue": 2471865.3000000017
+              },
+              {
+                "month": "2023-03-01 00:00:00",
+                "cumulative_net_revenue": 3845682.4500000053
+              }
+            ],
+            "gold_sql": "WITH monthly AS (SELECT strftime(order_date, '%Y-%m') AS month, SUM(net_amount) AS revenue FROM orders WHERE strftime(order_date, '%Y') = '2023' GROUP BY month) SELECT month, ROUND(revenue, 2) AS monthly_revenue, ROUND(SUM(revenue) OVER (ORDER BY month), 2) AS cumulative_revenue FROM monthly ORDER BY month;",
+            "gold_results_sample": [
+              {
+                "month": "2023-01",
+                "monthly_revenue": 1266469.35,
+                "cumulative_revenue": 1266469.35
+              },
+              {
+                "month": "2023-02",
+                "monthly_revenue": 1205395.95,
+                "cumulative_revenue": 2471865.3
+              },
+              {
+                "month": "2023-03",
+                "monthly_revenue": 1373817.15,
+                "cumulative_revenue": 3845682.45
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q27",
+            "difficulty": "hard",
+            "question": "How many high-value customers have spent more than 15,000 INR in total?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(*) AS high_value_customer_count FROM (SELECT customer_id, SUM(net_amount) AS total_spent FROM orders GROUP BY customer_id HAVING SUM(net_amount) > 15000) AS sub LIMIT 100",
+            "agent_results_sample": [
+              {
+                "high_value_customer_count": 660
+              }
+            ],
+            "gold_sql": "WITH customer_spend AS (SELECT customer_id, SUM(net_amount) AS total_spend FROM orders GROUP BY customer_id) SELECT COUNT(*) AS high_value_customer_count FROM customer_spend WHERE total_spend > 15000;",
+            "gold_results_sample": [
+              {
+                "high_value_customer_count": 660
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q28",
+            "difficulty": "hard",
+            "question": "Which brand has the highest return rate percentage?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.brand, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate_pct FROM orders AS o JOIN products AS p ON o.sku = p.sku LEFT JOIN returns AS r ON o.order_id = r.order_id GROUP BY p.brand ORDER BY return_rate_pct DESC LIMIT 1",
+            "agent_results_sample": [
+              {
+                "brand": "AuraBotanics",
+                "return_rate_pct": 10.58
+              }
+            ],
+            "gold_sql": "SELECT p.brand, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS brand_return_rate FROM orders o JOIN products p ON o.sku = p.sku LEFT JOIN returns r ON o.order_id = r.order_id GROUP BY p.brand ORDER BY brand_return_rate DESC LIMIT 1;",
+            "gold_results_sample": [
+              {
+                "brand": "AuraBotanics",
+                "brand_return_rate": 10.58
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q29",
+            "difficulty": "hard",
+            "question": "What is the average review rating of our top 5 most returned products?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH top5 AS (SELECT o.sku, COUNT(r.return_id) AS return_count FROM orders AS o JOIN returns AS r ON o.order_id = r.order_id GROUP BY o.sku ORDER BY return_count DESC LIMIT 5) SELECT ROUND(AVG(r.rating), 2) AS avg_rating FROM reviews AS r JOIN top5 AS t ON r.sku = t.sku LIMIT 100",
+            "agent_results_sample": [
+              {
+                "avg_rating": 4.16
+              }
+            ],
+            "gold_sql": "WITH top_returned AS (SELECT o.sku, COUNT(r.return_id) AS ret_cnt FROM orders o JOIN returns r ON o.order_id = r.order_id GROUP BY o.sku ORDER BY ret_cnt DESC LIMIT 5) SELECT tr.sku, p.name, tr.ret_cnt, ROUND(AVG(rev.rating), 2) AS avg_rating FROM top_returned tr JOIN products p ON tr.sku = p.sku LEFT JOIN reviews rev ON tr.sku = rev.sku GROUP BY tr.sku, p.name, tr.ret_cnt ORDER BY tr.ret_cnt DESC;",
+            "gold_results_sample": [
+              {
+                "sku": "SKU-FRA-0064",
+                "name": "GlowBotanica Saffron & Cardamom Noir (Refill Pack)",
+                "ret_cnt": 23,
+                "avg_rating": 4.38
+              },
+              {
+                "sku": "SKU-SKI-0036",
+                "name": "VelvetPetal Niacinamide 10% Blemish Toner (Refill Pack)",
+                "ret_cnt": 21,
+                "avg_rating": 4.33
+              },
+              {
+                "sku": "SKU-SKI-0141",
+                "name": "DermaBloom Retinol 0.5% Night Recovery Oil (Original)",
+                "ret_cnt": 21,
+                "avg_rating": 3.88
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q30",
+            "difficulty": "hard",
+            "question": "List our top 5 most frequent customers with their order count and total spend.",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT customer_id, COUNT(DISTINCT order_id) AS order_count, SUM(net_amount) AS total_spend FROM orders GROUP BY customer_id ORDER BY order_count DESC, total_spend DESC LIMIT 5",
+            "agent_results_sample": [
+              {
+                "customer_id": "CUST-00621",
+                "order_count": 26,
+                "total_spend": 47489.3
+              },
+              {
+                "customer_id": "CUST-00082",
+                "order_count": 26,
+                "total_spend": 46633.950000000004
+              },
+              {
+                "customer_id": "CUST-00623",
+                "order_count": 26,
+                "total_spend": 41682.350000000006
+              }
+            ],
+            "gold_sql": "SELECT customer_id, COUNT(DISTINCT order_id) AS total_orders, ROUND(SUM(net_amount), 2) AS total_spend FROM orders GROUP BY customer_id ORDER BY total_orders DESC, total_spend DESC LIMIT 5;",
+            "gold_results_sample": [
+              {
+                "customer_id": "CUST-00621",
+                "total_orders": 26,
+                "total_spend": 47489.3
+              },
+              {
+                "customer_id": "CUST-00082",
+                "total_orders": 26,
+                "total_spend": 46633.95
+              },
+              {
+                "customer_id": "CUST-00623",
+                "total_orders": 26,
+                "total_spend": 41682.35
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q31",
+            "difficulty": "hard",
+            "question": "What was the quarterly Average Order Value by channel in 2024?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT channel, DATE_TRUNC('QUARTER', order_date) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE order_date >= '2024-01-01' AND order_date < '2025-01-01' GROUP BY channel, quarter ORDER BY quarter, channel LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "Amazon",
+                "quarter": "2024-01-01 00:00:00",
+                "aov": 1525.25
+              },
+              {
+                "channel": "D2C Website",
+                "quarter": "2024-01-01 00:00:00",
+                "aov": 1513.25
+              },
+              {
+                "channel": "Flipkart",
+                "quarter": "2024-01-01 00:00:00",
+                "aov": 1524.49
+              }
+            ],
+            "gold_sql": "SELECT channel, strftime(order_date, '%Y-Q') || ((CAST(strftime(order_date, '%m') AS INTEGER) - 1) / 3 + 1) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY channel, quarter ORDER BY channel, quarter;",
+            "gold_results_sample": [
+              {
+                "channel": "Amazon",
+                "quarter": "2024-Q1.0",
+                "aov": 1500.27
+              },
+              {
+                "channel": "Amazon",
+                "quarter": "2024-Q1.3333333333333333",
+                "aov": 1566.54
+              },
+              {
+                "channel": "Amazon",
+                "quarter": "2024-Q1.6666666666666665",
+                "aov": 1511.04
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q32",
+            "difficulty": "hard",
+            "question": "Calculate the month-over-month revenue growth rate for 2024.",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "date_handling",
+            "fail_details": "Discrepancy in date grouping or formatting logic.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH monthly AS (SELECT MONTH(order_date) AS month, SUM(net_amount) AS net_revenue FROM orders WHERE YEAR(order_date) = 2024 GROUP BY month) SELECT month, net_revenue, ROUND((net_revenue - LAG(net_revenue) OVER (ORDER BY month)) / NULLIF(LAG(net_revenue) OVER (ORDER BY month), 0) * 100, 2) AS mom_growth_pct FROM monthly ORDER BY month LIMIT 100",
+            "agent_results_sample": [
+              {
+                "month": 1,
+                "net_revenue": 1378160.5500000024,
+                "mom_growth_pct": null
+              },
+              {
+                "month": 2,
+                "net_revenue": 1255174.4500000034,
+                "mom_growth_pct": -8.92
+              },
+              {
+                "month": 3,
+                "net_revenue": 1247003.2500000033,
+                "mom_growth_pct": -0.65
+              }
+            ],
+            "gold_sql": "WITH m_rev AS (SELECT strftime(order_date, '%Y-%m') AS month, SUM(net_amount) AS revenue FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY month) SELECT month, ROUND(revenue, 2) AS revenue, ROUND((revenue - LAG(revenue) OVER (ORDER BY month)) * 100.0 / LAG(revenue) OVER (ORDER BY month), 2) AS mom_growth_pct FROM m_rev ORDER BY month;",
+            "gold_results_sample": [
+              {
+                "month": "2024-01",
+                "revenue": 1378160.55,
+                "mom_growth_pct": null
+              },
+              {
+                "month": "2024-02",
+                "revenue": 1255174.45,
+                "mom_growth_pct": -8.92
+              },
+              {
+                "month": "2024-03",
+                "revenue": 1247003.25,
+                "mom_growth_pct": -0.65
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q33",
+            "difficulty": "unanswerable",
+            "question": "What was our customer acquisition cost (CAC) for Instagram marketing campaigns in 2024?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q34",
+            "difficulty": "unanswerable",
+            "question": "How many orders were shipped to customers in London and Paris?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q35",
+            "difficulty": "unanswerable",
+            "question": "What is the current remaining warehouse inventory stock for SKU-SKI-0001?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q36",
+            "difficulty": "unanswerable",
+            "question": "What are our competitor's prices for hyaluronic acid serum on Nykaa?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q37",
+            "difficulty": "unanswerable",
+            "question": "What was the average delivery time in minutes for QuickCommerce-Blinkit orders?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q38",
+            "difficulty": "unanswerable",
+            "question": "What is the average salary of employees in our digital marketing department?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q39",
+            "difficulty": "unanswerable",
+            "question": "Which supplier provided the organic rosemary oil for our haircare line?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q40",
+            "difficulty": "unanswerable",
+            "question": "What is the legal warranty return policy clause for opened cosmetics?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          }
+        ]
+      }
+    },
+    "v3": {
+      "prompt_version": "v3",
+      "num_runs": 3,
+      "overall_accuracy": {
+        "mean": 0.8083,
+        "min": 0.8,
+        "max": 0.825
+      },
+      "tier_accuracy": {
+        "easy": {
+          "mean": 0.8333,
+          "min": 0.8,
+          "max": 0.9
+        },
+        "medium": {
+          "mean": 0.9167,
+          "min": 0.9167,
+          "max": 0.9167
+        },
+        "hard": {
+          "mean": 0.5,
+          "min": 0.5,
+          "max": 0.5
+        },
+        "unanswerable": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        }
+      },
+      "refusal_metrics": {
+        "refusal_precision": {
+          "mean": 0.7515,
+          "min": 0.7273,
+          "max": 0.8
+        },
+        "refusal_recall": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "answerable_recall": {
+          "mean": 0.9166,
+          "min": 0.9062,
+          "max": 0.9375
+        }
+      },
+      "per_question_passes": {
+        "q01": 3,
+        "q02": 3,
+        "q03": 3,
+        "q04": 3,
+        "q05": 3,
+        "q06": 3,
+        "q07": 1,
+        "q08": 3,
+        "q09": 0,
+        "q10": 3,
+        "q11": 3,
+        "q12": 3,
+        "q13": 3,
+        "q14": 3,
+        "q15": 3,
+        "q16": 3,
+        "q17": 0,
+        "q18": 3,
+        "q19": 3,
+        "q20": 3,
+        "q21": 3,
+        "q22": 3,
+        "q23": 3,
+        "q24": 0,
+        "q25": 3,
+        "q26": 0,
+        "q27": 3,
+        "q28": 3,
+        "q29": 0,
+        "q30": 3,
+        "q31": 0,
+        "q32": 0,
+        "q33": 3,
+        "q34": 3,
+        "q35": 3,
+        "q36": 3,
+        "q37": 3,
+        "q38": 3,
+        "q39": 3,
+        "q40": 3
+      },
+      "representative_run": {
+        "run_idx": 1,
+        "prompt_version": "v3",
+        "overall_accuracy": 0.825,
+        "total_correct": 33,
+        "total_questions": 40,
+        "tier_accuracy": {
+          "easy": 0.9,
+          "medium": 0.9167,
+          "hard": 0.5,
+          "unanswerable": 1.0
+        },
+        "refusal_metrics": {
+          "refusal_recall": 1.0,
+          "refusal_precision": 0.8,
+          "false_refusals_on_answerable": 2,
+          "failed_refusals_on_unanswerable": 0,
+          "answerable_recall": 0.9375
+        },
+        "results": [
+          {
+            "id": "q01",
+            "difficulty": "easy",
+            "question": "What is our total net revenue?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT ROUND(SUM(net_amount), 2) AS total_net_revenue FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_net_revenue": 31284974.75
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(net_amount), 2) AS total_net_revenue FROM orders;",
+            "gold_results_sample": [
+              {
+                "total_net_revenue": 31284974.75
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q02",
+            "difficulty": "easy",
+            "question": "How many total orders have been placed?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(DISTINCT order_id) AS total_orders FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_orders": 20000
+              }
+            ],
+            "gold_sql": "SELECT COUNT(DISTINCT order_id) AS total_orders FROM orders;",
+            "gold_results_sample": [
+              {
+                "total_orders": 20000
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q03",
+            "difficulty": "easy",
+            "question": "How many products do we have in each category?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT category, COUNT(*) AS product_count FROM products GROUP BY category LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Fragrance",
+                "product_count": 30
+              },
+              {
+                "category": "Skincare",
+                "product_count": 30
+              },
+              {
+                "category": "Color Cosmetics",
+                "product_count": 30
+              }
+            ],
+            "gold_sql": "SELECT category, COUNT(sku) AS product_count FROM products GROUP BY category ORDER BY product_count DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Color Cosmetics",
+                "product_count": 30
+              },
+              {
+                "category": "Skincare",
+                "product_count": 30
+              },
+              {
+                "category": "Haircare",
+                "product_count": 30
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q04",
+            "difficulty": "easy",
+            "question": "What is the total discount amount given to customers?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT ROUND(SUM(discount_amount), 2) AS total_discount FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_discount": 2157835.25
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(discount_amount), 2) AS total_discounts FROM orders;",
+            "gold_results_sample": [
+              {
+                "total_discounts": 2157835.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q05",
+            "difficulty": "easy",
+            "question": "What is our overall Average Order Value (AOV)?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS average_order_value FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "average_order_value": 1564.25
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders;",
+            "gold_results_sample": [
+              {
+                "aov": 1564.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q06",
+            "difficulty": "easy",
+            "question": "How many orders were placed through Amazon?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(DISTINCT order_id) AS amazon_order_count FROM orders WHERE channel = 'Amazon' LIMIT 100",
+            "agent_results_sample": [
+              {
+                "amazon_order_count": 3386
+              }
+            ],
+            "gold_sql": "SELECT COUNT(*) AS amazon_order_count FROM orders WHERE channel = 'Amazon';",
+            "gold_results_sample": [
+              {
+                "amazon_order_count": 3386
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q07",
+            "difficulty": "easy",
+            "question": "What is the total refund amount processed?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT ROUND(SUM(refund_amount), 2) AS total_refund FROM returns LIMIT 100",
+            "agent_results_sample": [
+              {
+                "total_refund": 3084358.3
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(refund_amount), 2) AS total_refunds FROM returns;",
+            "gold_results_sample": [
+              {
+                "total_refunds": 3084358.3
+              }
+            ],
+            "attempts_taken": 2
+          },
+          {
+            "id": "q08",
+            "difficulty": "easy",
+            "question": "How many 5-star reviews have we received?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(*) AS five_star_reviews FROM reviews WHERE rating = 5 LIMIT 100",
+            "agent_results_sample": [
+              {
+                "five_star_reviews": 1492
+              }
+            ],
+            "gold_sql": "SELECT COUNT(*) AS five_star_count FROM reviews WHERE rating = 5;",
+            "gold_results_sample": [
+              {
+                "five_star_count": 1492
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q09",
+            "difficulty": "easy",
+            "question": "Which product has the highest MRP?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT sku, name, brand, category, mrp FROM products ORDER BY mrp DESC LIMIT 1",
+            "agent_results_sample": [
+              {
+                "sku": "SKU-COL-0005",
+                "name": "GlowBotanica Ultra-Fine Setting Powder (Travel Size)",
+                "brand": "GlowBotanica",
+                "category": "Color Cosmetics",
+                "mrp": 2499.0
+              }
+            ],
+            "gold_sql": "SELECT name, brand, mrp FROM products ORDER BY mrp DESC LIMIT 1;",
+            "gold_results_sample": [
+              {
+                "name": "GlowBotanica Ultra-Fine Setting Powder (Travel Size)",
+                "brand": "GlowBotanica",
+                "mrp": 2499.0
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q10",
+            "difficulty": "easy",
+            "question": "How many unique customers have purchased from us?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(DISTINCT customer_id) AS unique_customers FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "unique_customers": 3416
+              }
+            ],
+            "gold_sql": "SELECT COUNT(DISTINCT customer_id) AS unique_customers FROM orders;",
+            "gold_results_sample": [
+              {
+                "unique_customers": 3416
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q11",
+            "difficulty": "medium",
+            "question": "What is the total net revenue broken down by sales channel?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT channel, ROUND(SUM(net_amount), 2) AS net_revenue FROM orders GROUP BY channel ORDER BY net_revenue DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "net_revenue": 5363240.05
+              },
+              {
+                "channel": "Nykaa",
+                "net_revenue": 5310460.55
+              },
+              {
+                "channel": "D2C Website",
+                "net_revenue": 5216703.7
+              }
+            ],
+            "gold_sql": "SELECT channel, ROUND(SUM(net_amount), 2) AS channel_net_revenue FROM orders GROUP BY channel ORDER BY channel_net_revenue DESC;",
+            "gold_results_sample": [
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "channel_net_revenue": 5363240.05
+              },
+              {
+                "channel": "Nykaa",
+                "channel_net_revenue": 5310460.55
+              },
+              {
+                "channel": "D2C Website",
+                "channel_net_revenue": 5216703.7
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q12",
+            "difficulty": "medium",
+            "question": "What is the Average Order Value (AOV) for each city?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT city, ROUND(SUM(net_amount) / COUNT(DISTINCT order_id), 2) AS aov FROM orders GROUP BY city LIMIT 100",
+            "agent_results_sample": [
+              {
+                "city": "Delhi",
+                "aov": 1534.2
+              },
+              {
+                "city": "Chennai",
+                "aov": 1562.97
+              },
+              {
+                "city": "Hyderabad",
+                "aov": 1558.61
+              }
+            ],
+            "gold_sql": "SELECT city, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS city_aov FROM orders GROUP BY city ORDER BY city_aov DESC;",
+            "gold_results_sample": [
+              {
+                "city": "Kochi",
+                "city_aov": 1624.98
+              },
+              {
+                "city": "Pune",
+                "city_aov": 1614.56
+              },
+              {
+                "city": "Mumbai",
+                "city_aov": 1612.69
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q13",
+            "difficulty": "medium",
+            "question": "Who are the top 3 brands by net revenue?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.brand, ROUND(SUM(o.net_amount), 2) AS net_revenue FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.brand ORDER BY net_revenue DESC LIMIT 3",
+            "agent_results_sample": [
+              {
+                "brand": "LuxeAura",
+                "net_revenue": 5807988.5
+              },
+              {
+                "brand": "SilkRadiance",
+                "net_revenue": 4786263.5
+              },
+              {
+                "brand": "GlowBotanica",
+                "net_revenue": 4588255.2
+              }
+            ],
+            "gold_sql": "SELECT p.brand, ROUND(SUM(o.net_amount), 2) AS brand_revenue FROM orders o JOIN products p ON o.sku = p.sku GROUP BY p.brand ORDER BY brand_revenue DESC LIMIT 3;",
+            "gold_results_sample": [
+              {
+                "brand": "LuxeAura",
+                "brand_revenue": 5807988.5
+              },
+              {
+                "brand": "SilkRadiance",
+                "brand_revenue": 4786263.5
+              },
+              {
+                "brand": "GlowBotanica",
+                "brand_revenue": 4588255.2
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q14",
+            "difficulty": "medium",
+            "question": "What is the return rate percentage for each product category?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.category, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate FROM orders AS o JOIN products AS p ON o.sku = p.sku LEFT JOIN returns AS r ON o.order_id = r.order_id GROUP BY p.category ORDER BY return_rate DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Bath & Body",
+                "return_rate": 10.55
+              },
+              {
+                "category": "Haircare",
+                "return_rate": 10.03
+              },
+              {
+                "category": "Color Cosmetics",
+                "return_rate": 9.86
+              }
+            ],
+            "gold_sql": "SELECT p.category, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate_pct FROM orders o JOIN products p ON o.sku = p.sku LEFT JOIN returns r ON o.order_id = r.order_id GROUP BY p.category ORDER BY return_rate_pct DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Bath & Body",
+                "return_rate_pct": 10.55
+              },
+              {
+                "category": "Haircare",
+                "return_rate_pct": 10.03
+              },
+              {
+                "category": "Color Cosmetics",
+                "return_rate_pct": 9.86
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q15",
+            "difficulty": "medium",
+            "question": "Show me monthly net revenue for 2024.",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT STRFTIME(order_date, '%Y-%m') AS month, ROUND(SUM(net_amount), 2) AS net_revenue FROM orders WHERE order_date >= '2024-01-01' AND order_date <= '2024-12-31' GROUP BY month ORDER BY month LIMIT 100",
+            "agent_results_sample": [
+              {
+                "month": "2024-01",
+                "net_revenue": 1378160.55
+              },
+              {
+                "month": "2024-02",
+                "net_revenue": 1255174.45
+              },
+              {
+                "month": "2024-03",
+                "net_revenue": 1247003.25
+              }
+            ],
+            "gold_sql": "SELECT strftime(order_date, '%Y-%m') AS month, ROUND(SUM(net_amount), 2) AS monthly_revenue FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY month ORDER BY month ASC;",
+            "gold_results_sample": [
+              {
+                "month": "2024-01",
+                "monthly_revenue": 1378160.55
+              },
+              {
+                "month": "2024-02",
+                "monthly_revenue": 1255174.45
+              },
+              {
+                "month": "2024-03",
+                "monthly_revenue": 1247003.25
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q16",
+            "difficulty": "medium",
+            "question": "What are the most frequent return reasons and their counts?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT reason, COUNT(*) AS return_count FROM returns GROUP BY reason ORDER BY return_count DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "reason": "Wrong item delivered",
+                "return_count": 419
+              },
+              {
+                "reason": "Allergic reaction",
+                "return_count": 416
+              },
+              {
+                "reason": "Damaged in transit",
+                "return_count": 402
+              }
+            ],
+            "gold_sql": "SELECT reason, COUNT(*) AS count FROM returns GROUP BY reason ORDER BY count DESC;",
+            "gold_results_sample": [
+              {
+                "reason": "Wrong item delivered",
+                "count": 419
+              },
+              {
+                "reason": "Allergic reaction",
+                "count": 416
+              },
+              {
+                "reason": "Damaged in transit",
+                "count": 402
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q17",
+            "difficulty": "medium",
+            "question": "What is the average customer rating for each brand?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating FROM reviews AS r JOIN products AS p ON r.sku = p.sku GROUP BY p.brand ORDER BY avg_rating DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "brand": "GlowBotanica",
+                "avg_rating": 4.14
+              },
+              {
+                "brand": "SilkRadiance",
+                "avg_rating": 4.12
+              },
+              {
+                "brand": "LuxeAura",
+                "avg_rating": 4.08
+              }
+            ],
+            "gold_sql": "SELECT p.brand, ROUND(AVG(r.rating), 2) AS avg_rating, COUNT(r.review_id) AS review_count FROM products p JOIN reviews r ON p.sku = r.sku GROUP BY p.brand ORDER BY avg_rating DESC;",
+            "gold_results_sample": [
+              {
+                "brand": "GlowBotanica",
+                "avg_rating": 4.14,
+                "review_count": 453
+              },
+              {
+                "brand": "SilkRadiance",
+                "avg_rating": 4.12,
+                "review_count": 381
+              },
+              {
+                "brand": "LuxeAura",
+                "avg_rating": 4.08,
+                "review_count": 425
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q18",
+            "difficulty": "medium",
+            "question": "How many total units were sold in each category?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.category, SUM(o.quantity) AS total_units FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.category ORDER BY total_units DESC LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Color Cosmetics",
+                "total_units": 6141
+              },
+              {
+                "category": "Fragrance",
+                "total_units": 6139
+              },
+              {
+                "category": "Bath & Body",
+                "total_units": 6078
+              }
+            ],
+            "gold_sql": "SELECT p.category, SUM(o.quantity) AS total_units FROM orders o JOIN products p ON o.sku = p.sku GROUP BY p.category ORDER BY total_units DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Color Cosmetics",
+                "total_units": 6141
+              },
+              {
+                "category": "Fragrance",
+                "total_units": 6139
+              },
+              {
+                "category": "Bath & Body",
+                "total_units": 6078
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q19",
+            "difficulty": "medium",
+            "question": "What is the combined net revenue from Mumbai and Delhi?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT city, SUM(net_amount) AS net_revenue FROM orders WHERE city IN ('Mumbai', 'Delhi') GROUP BY city LIMIT 100",
+            "agent_results_sample": [
+              {
+                "city": "Delhi",
+                "net_revenue": 2609672.300000003
+              },
+              {
+                "city": "Mumbai",
+                "net_revenue": 2712538.9499999997
+              }
+            ],
+            "gold_sql": "SELECT city, ROUND(SUM(net_amount), 2) AS revenue FROM orders WHERE city IN ('Mumbai', 'Delhi') GROUP BY city ORDER BY revenue DESC;",
+            "gold_results_sample": [
+              {
+                "city": "Mumbai",
+                "revenue": 2712538.95
+              },
+              {
+                "city": "Delhi",
+                "revenue": 2609672.3
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q20",
+            "difficulty": "medium",
+            "question": "What is the average discount percentage by channel?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT channel, ROUND(AVG(discount_amount / gross_amount * 100), 2) AS avg_discount_pct FROM orders GROUP BY channel LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "Amazon",
+                "avg_discount_pct": 6.5
+              },
+              {
+                "channel": "Nykaa",
+                "avg_discount_pct": 6.3
+              },
+              {
+                "channel": "QuickCommerce-Zepto",
+                "avg_discount_pct": 6.42
+              }
+            ],
+            "gold_sql": "SELECT channel, ROUND(AVG(discount_amount * 100.0 / gross_amount), 2) AS avg_discount_pct FROM orders GROUP BY channel ORDER BY avg_discount_pct DESC;",
+            "gold_results_sample": [
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "avg_discount_pct": 6.66
+              },
+              {
+                "channel": "Flipkart",
+                "avg_discount_pct": 6.63
+              },
+              {
+                "channel": "Amazon",
+                "avg_discount_pct": 6.5
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q21",
+            "difficulty": "medium",
+            "question": "How many orders had 3 or more units in QuickCommerce channels?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(DISTINCT order_id) AS orders_with_3_or_more_units FROM orders WHERE channel IN ('QuickCommerce-Blinkit', 'QuickCommerce-Zepto') AND quantity >= 3 LIMIT 100",
+            "agent_results_sample": [
+              {
+                "orders_with_3_or_more_units": 908
+              }
+            ],
+            "gold_sql": "SELECT COUNT(*) AS large_quickcommerce_orders FROM orders WHERE channel IN ('QuickCommerce-Blinkit', 'QuickCommerce-Zepto') AND quantity >= 3;",
+            "gold_results_sample": [
+              {
+                "large_quickcommerce_orders": 908
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q22",
+            "difficulty": "medium",
+            "question": "What is the difference between our gross revenue and net revenue?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT ROUND(SUM(gross_amount), 2) AS gross_revenue, ROUND(SUM(net_amount), 2) AS net_revenue, ROUND(SUM(gross_amount) - SUM(net_amount), 2) AS revenue_difference FROM orders LIMIT 100",
+            "agent_results_sample": [
+              {
+                "gross_revenue": 33442810.0,
+                "net_revenue": 31284974.75,
+                "revenue_difference": 2157835.25
+              }
+            ],
+            "gold_sql": "SELECT ROUND(SUM(gross_amount), 2) AS gross_revenue, ROUND(SUM(net_amount), 2) AS net_revenue, ROUND(SUM(gross_amount - net_amount), 2) AS total_discount_deductions FROM orders;",
+            "gold_results_sample": [
+              {
+                "gross_revenue": 33442810.0,
+                "net_revenue": 31284974.75,
+                "total_discount_deductions": 2157835.25
+              }
+            ],
+            "attempts_taken": 2
+          },
+          {
+            "id": "q23",
+            "difficulty": "hard",
+            "question": "What is our overall repeat customer rate percentage?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "WITH c AS (SELECT customer_id, COUNT(DISTINCT order_id) AS cnt FROM orders GROUP BY customer_id) SELECT ROUND(COUNT(CASE WHEN cnt >= 2 THEN 1 END) * 100.0 / COUNT(*), 2) AS repeat_customer_rate FROM c LIMIT 100",
+            "agent_results_sample": [
+              {
+                "repeat_customer_rate": 90.98
+              }
+            ],
+            "gold_sql": "WITH cust_orders AS (SELECT customer_id, COUNT(DISTINCT order_id) AS order_cnt FROM orders GROUP BY customer_id) SELECT ROUND(COUNT(CASE WHEN order_cnt >= 2 THEN 1 END) * 100.0 / COUNT(*), 2) AS repeat_customer_rate_pct FROM cust_orders;",
+            "gold_results_sample": [
+              {
+                "repeat_customer_rate_pct": 90.98
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q24",
+            "difficulty": "hard",
+            "question": "What is the top-selling SKU by net revenue in each product category?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "wrong_metric",
+            "fail_details": "Metric calculation formula did not align with corporate governance definition.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH revenue AS (SELECT p.category, o.sku, ROUND(SUM(o.net_amount), 2) AS net_rev FROM orders AS o JOIN products AS p ON o.sku = p.sku GROUP BY p.category, o.sku) SELECT category, sku, net_rev FROM (SELECT category, sku, net_rev, ROW_NUMBER() OVER (PARTITION BY category ORDER BY net_rev DESC) AS rn FROM revenue) AS t WHERE rn = 1 ORDER BY category LIMIT 100",
+            "agent_results_sample": [
+              {
+                "category": "Bath & Body",
+                "sku": "SKU-BAT-0103",
+                "net_rev": 472061.1
+              },
+              {
+                "category": "Color Cosmetics",
+                "sku": "SKU-COL-0040",
+                "net_rev": 503798.4
+              },
+              {
+                "category": "Fragrance",
+                "sku": "SKU-FRA-0129",
+                "net_rev": 444555.9
+              }
+            ],
+            "gold_sql": "WITH sku_rev AS (SELECT p.category, o.sku, p.name, ROUND(SUM(o.net_amount), 2) AS revenue, ROW_NUMBER() OVER (PARTITION BY p.category ORDER BY SUM(o.net_amount) DESC) AS rank FROM orders o JOIN products p ON o.sku = p.sku GROUP BY p.category, o.sku, p.name) SELECT category, sku, name, revenue FROM sku_rev WHERE rank = 1 ORDER BY revenue DESC;",
+            "gold_results_sample": [
+              {
+                "category": "Haircare",
+                "sku": "SKU-HAI-0027",
+                "name": "SilkRadiance Biotin Anti-Hairfall Mask (Travel Size)",
+                "revenue": 542907.75
+              },
+              {
+                "category": "Color Cosmetics",
+                "sku": "SKU-COL-0040",
+                "name": "LuxeAura Peach Blossom Powder Blush (Original)",
+                "revenue": 503798.4
+              },
+              {
+                "category": "Skincare",
+                "sku": "SKU-SKI-0146",
+                "name": "BotanicalBliss Niacinamide 10% Blemish Toner (Mini)",
+                "revenue": 495176.85
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q25",
+            "difficulty": "hard",
+            "question": "What is the return rate percentage for each sales channel?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT o.channel, ROUND(COUNT(DISTINCT CASE WHEN NOT r.order_id IS NULL THEN o.order_id END) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate FROM orders AS o LEFT JOIN returns AS r ON o.order_id = r.order_id GROUP BY o.channel LIMIT 100",
+            "agent_results_sample": [
+              {
+                "channel": "Amazon",
+                "return_rate": 10.48
+              },
+              {
+                "channel": "Nykaa",
+                "return_rate": 9.95
+              },
+              {
+                "channel": "QuickCommerce-Blinkit",
+                "return_rate": 9.85
+              }
+            ],
+            "gold_sql": "SELECT o.channel, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate_pct FROM orders o LEFT JOIN returns r ON o.order_id = r.order_id GROUP BY o.channel ORDER BY return_rate_pct DESC;",
+            "gold_results_sample": [
+              {
+                "channel": "Amazon",
+                "return_rate_pct": 10.48
+              },
+              {
+                "channel": "D2C Website",
+                "return_rate_pct": 9.99
+              },
+              {
+                "channel": "QuickCommerce-Zepto",
+                "return_rate_pct": 9.97
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q26",
+            "difficulty": "hard",
+            "question": "Show the cumulative running monthly net revenue for 2023.",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "date_handling",
+            "fail_details": "Discrepancy in date grouping or formatting logic.",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT month, month_net, SUM(month_net) OVER (ORDER BY month) AS cumulative_net FROM (SELECT CAST(DATE_TRUNC('MONTH', order_date) AS DATE) AS month, SUM(net_amount) AS month_net FROM orders WHERE STRFTIME(order_date, '%Y') = '2023' GROUP BY month) AS sub ORDER BY month LIMIT 100",
+            "agent_results_sample": [
+              {
+                "month": "2023-01-01",
+                "month_net": 1266469.3500000013,
+                "cumulative_net": 1266469.3500000013
+              },
+              {
+                "month": "2023-02-01",
+                "month_net": 1205395.9500000004,
+                "cumulative_net": 2471865.3000000017
+              },
+              {
+                "month": "2023-03-01",
+                "month_net": 1373817.1500000036,
+                "cumulative_net": 3845682.4500000053
+              }
+            ],
+            "gold_sql": "WITH monthly AS (SELECT strftime(order_date, '%Y-%m') AS month, SUM(net_amount) AS revenue FROM orders WHERE strftime(order_date, '%Y') = '2023' GROUP BY month) SELECT month, ROUND(revenue, 2) AS monthly_revenue, ROUND(SUM(revenue) OVER (ORDER BY month), 2) AS cumulative_revenue FROM monthly ORDER BY month;",
+            "gold_results_sample": [
+              {
+                "month": "2023-01",
+                "monthly_revenue": 1266469.35,
+                "cumulative_revenue": 1266469.35
+              },
+              {
+                "month": "2023-02",
+                "monthly_revenue": 1205395.95,
+                "cumulative_revenue": 2471865.3
+              },
+              {
+                "month": "2023-03",
+                "monthly_revenue": 1373817.15,
+                "cumulative_revenue": 3845682.45
+              }
+            ],
+            "attempts_taken": 2
+          },
+          {
+            "id": "q27",
+            "difficulty": "hard",
+            "question": "How many high-value customers have spent more than 15,000 INR in total?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT COUNT(*) AS high_value_customer_count FROM (SELECT customer_id, SUM(net_amount) AS total_spent FROM orders GROUP BY customer_id HAVING SUM(net_amount) > 15000) AS sub LIMIT 100",
+            "agent_results_sample": [
+              {
+                "high_value_customer_count": 660
+              }
+            ],
+            "gold_sql": "WITH customer_spend AS (SELECT customer_id, SUM(net_amount) AS total_spend FROM orders GROUP BY customer_id) SELECT COUNT(*) AS high_value_customer_count FROM customer_spend WHERE total_spend > 15000;",
+            "gold_results_sample": [
+              {
+                "high_value_customer_count": 660
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q28",
+            "difficulty": "hard",
+            "question": "Which brand has the highest return rate percentage?",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT p.brand, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS return_rate FROM orders AS o JOIN products AS p ON o.sku = p.sku LEFT JOIN returns AS r ON o.order_id = r.order_id GROUP BY p.brand ORDER BY return_rate DESC LIMIT 1",
+            "agent_results_sample": [
+              {
+                "brand": "AuraBotanics",
+                "return_rate": 10.58
+              }
+            ],
+            "gold_sql": "SELECT p.brand, ROUND(COUNT(DISTINCT r.order_id) * 100.0 / COUNT(DISTINCT o.order_id), 2) AS brand_return_rate FROM orders o JOIN products p ON o.sku = p.sku LEFT JOIN returns r ON o.order_id = r.order_id GROUP BY p.brand ORDER BY brand_return_rate DESC LIMIT 1;",
+            "gold_results_sample": [
+              {
+                "brand": "AuraBotanics",
+                "brand_return_rate": 10.58
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q29",
+            "difficulty": "hard",
+            "question": "What is the average review rating of our top 5 most returned products?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "ambiguity",
+            "fail_details": "Question wording has multiple valid interpretations or gold SQL requires arbitrary extra columns.",
+            "agent_can_answer": true,
+            "agent_sql": "WITH return_counts AS (SELECT o.sku, COUNT(*) AS return_count FROM returns AS ret JOIN orders AS o ON ret.order_id = o.order_id GROUP BY o.sku ORDER BY return_count DESC LIMIT 5) SELECT ROUND(AVG(r.rating), 2) AS avg_rating FROM reviews AS r JOIN return_counts AS rc ON r.sku = rc.sku LIMIT 100",
+            "agent_results_sample": [
+              {
+                "avg_rating": 4.16
+              }
+            ],
+            "gold_sql": "WITH top_returned AS (SELECT o.sku, COUNT(r.return_id) AS ret_cnt FROM orders o JOIN returns r ON o.order_id = r.order_id GROUP BY o.sku ORDER BY ret_cnt DESC LIMIT 5) SELECT tr.sku, p.name, tr.ret_cnt, ROUND(AVG(rev.rating), 2) AS avg_rating FROM top_returned tr JOIN products p ON tr.sku = p.sku LEFT JOIN reviews rev ON tr.sku = rev.sku GROUP BY tr.sku, p.name, tr.ret_cnt ORDER BY tr.ret_cnt DESC;",
+            "gold_results_sample": [
+              {
+                "sku": "SKU-FRA-0064",
+                "name": "GlowBotanica Saffron & Cardamom Noir (Refill Pack)",
+                "ret_cnt": 23,
+                "avg_rating": 4.38
+              },
+              {
+                "sku": "SKU-SKI-0141",
+                "name": "DermaBloom Retinol 0.5% Night Recovery Oil (Original)",
+                "ret_cnt": 21,
+                "avg_rating": 3.88
+              },
+              {
+                "sku": "SKU-HAI-0142",
+                "name": "AuraBotanics Onion & Fenugreek Hair Oil (Intense)",
+                "ret_cnt": 21,
+                "avg_rating": 4.15
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q30",
+            "difficulty": "hard",
+            "question": "List our top 5 most frequent customers with their order count and total spend.",
+            "expected_refusal": false,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": true,
+            "agent_sql": "SELECT customer_id, COUNT(DISTINCT order_id) AS order_count, ROUND(SUM(net_amount), 2) AS total_spend FROM orders GROUP BY customer_id ORDER BY order_count DESC, total_spend DESC LIMIT 5",
+            "agent_results_sample": [
+              {
+                "customer_id": "CUST-00621",
+                "order_count": 26,
+                "total_spend": 47489.3
+              },
+              {
+                "customer_id": "CUST-00082",
+                "order_count": 26,
+                "total_spend": 46633.95
+              },
+              {
+                "customer_id": "CUST-00623",
+                "order_count": 26,
+                "total_spend": 41682.35
+              }
+            ],
+            "gold_sql": "SELECT customer_id, COUNT(DISTINCT order_id) AS total_orders, ROUND(SUM(net_amount), 2) AS total_spend FROM orders GROUP BY customer_id ORDER BY total_orders DESC, total_spend DESC LIMIT 5;",
+            "gold_results_sample": [
+              {
+                "customer_id": "CUST-00621",
+                "total_orders": 26,
+                "total_spend": 47489.3
+              },
+              {
+                "customer_id": "CUST-00082",
+                "total_orders": 26,
+                "total_spend": 46633.95
+              },
+              {
+                "customer_id": "CUST-00623",
+                "total_orders": 26,
+                "total_spend": 41682.35
+              }
+            ],
+            "attempts_taken": 1
+          },
+          {
+            "id": "q31",
+            "difficulty": "hard",
+            "question": "What was the quarterly Average Order Value by channel in 2024?",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "false_refusal",
+            "fail_details": "Falsely refused answerable question: Failed to produce a valid SQL query after 3 self-correction attempts.",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": "SELECT channel, strftime(order_date, '%Y-Q') || ((CAST(strftime(order_date, '%m') AS INTEGER) - 1) / 3 + 1) AS quarter, ROUND(SUM(net_amount) * 1.0 / COUNT(DISTINCT order_id), 2) AS aov FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY channel, quarter ORDER BY channel, quarter;",
+            "gold_results_sample": null,
+            "attempts_taken": 3
+          },
+          {
+            "id": "q32",
+            "difficulty": "hard",
+            "question": "Calculate the month-over-month revenue growth rate for 2024.",
+            "expected_refusal": false,
+            "is_correct": false,
+            "fail_category": "false_refusal",
+            "fail_details": "Falsely refused answerable question: Failed to produce a valid SQL query after 3 self-correction attempts.",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": "WITH m_rev AS (SELECT strftime(order_date, '%Y-%m') AS month, SUM(net_amount) AS revenue FROM orders WHERE strftime(order_date, '%Y') = '2024' GROUP BY month) SELECT month, ROUND(revenue, 2) AS revenue, ROUND((revenue - LAG(revenue) OVER (ORDER BY month)) * 100.0 / LAG(revenue) OVER (ORDER BY month), 2) AS mom_growth_pct FROM m_rev ORDER BY month;",
+            "gold_results_sample": null,
+            "attempts_taken": 3
+          },
+          {
+            "id": "q33",
+            "difficulty": "unanswerable",
+            "question": "What was our customer acquisition cost (CAC) for Instagram marketing campaigns in 2024?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 3
+          },
+          {
+            "id": "q34",
+            "difficulty": "unanswerable",
+            "question": "How many orders were shipped to customers in London and Paris?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 1
+          },
+          {
+            "id": "q35",
+            "difficulty": "unanswerable",
+            "question": "What is the current remaining warehouse inventory stock for SKU-SKI-0001?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 3
+          },
+          {
+            "id": "q36",
+            "difficulty": "unanswerable",
+            "question": "What are our competitor's prices for hyaluronic acid serum on Nykaa?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 3
+          },
+          {
+            "id": "q37",
+            "difficulty": "unanswerable",
+            "question": "What was the average delivery time in minutes for QuickCommerce-Blinkit orders?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 3
+          },
+          {
+            "id": "q38",
+            "difficulty": "unanswerable",
+            "question": "What is the average salary of employees in our digital marketing department?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 3
+          },
+          {
+            "id": "q39",
+            "difficulty": "unanswerable",
+            "question": "Which supplier provided the organic rosemary oil for our haircare line?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 3
+          },
+          {
+            "id": "q40",
+            "difficulty": "unanswerable",
+            "question": "What is the legal warranty return policy clause for opened cosmetics?",
+            "expected_refusal": true,
+            "is_correct": true,
+            "fail_category": null,
+            "fail_details": "",
+            "agent_can_answer": false,
+            "agent_sql": null,
+            "agent_results_sample": null,
+            "gold_sql": null,
+            "gold_results_sample": null,
+            "attempts_taken": 3
+          }
+        ]
+      }
+    }
+  }
+}

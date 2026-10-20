@@ -193,7 +193,9 @@ class LLMClient:
         self, prompt: str, system_instruction: str, schema: type[T], temperature: float
     ) -> str:
         """Invokes official Groq SDK with JSON mode."""
-        from groq import Groq
+        import time
+
+        from groq import Groq, RateLimitError
 
         client = Groq(api_key=self.api_key)
         # Instruct schema in system prompt
@@ -203,13 +205,24 @@ class LLMClient:
             f"You MUST respond ONLY with valid JSON conforming to this schema:\n{schema_json}"
         )
 
-        chat_completion = client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": enhanced_system},
-                {"role": "user", "content": prompt},
-            ],
-            model=self.model,
-            temperature=temperature,
-            response_format={"type": "json_object"},
-        )
-        return chat_completion.choices[0].message.content or "{}"
+        for attempt in range(3):
+            try:
+                chat_completion = client.chat.completions.create(
+                    messages=[
+                        {"role": "system", "content": enhanced_system},
+                        {"role": "user", "content": prompt},
+                    ],
+                    model=self.model,
+                    temperature=temperature,
+                    response_format={"type": "json_object"},
+                )
+                return chat_completion.choices[0].message.content or "{}"
+            except RateLimitError:
+                if attempt == 2:
+                    raise
+                time.sleep(3.0 * (attempt + 1))
+            except Exception:
+                if attempt == 2:
+                    raise
+                time.sleep(1.0)
+        return "{}"

@@ -14,7 +14,11 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-from src.agent.prompts import PROMPT_V1_BASELINE, PROMPT_V2_ENRICHED
+from src.agent.prompts import (
+    PROMPT_V1_SCHEMA_ONLY,
+    PROMPT_V2_GOVERNED,
+    PROMPT_V3_FEWSHOT_AND_CORRECTION,
+)
 from src.common.llm import LLMClient
 from src.mcp_server import tools
 
@@ -69,23 +73,28 @@ class AskBusinessAgent:
 
     def __init__(
         self,
-        prompt_version: Literal["v1", "v2"] = "v2",
+        prompt_version: Literal["v1", "v2", "v3"] = "v3",
         client: LLMClient | None = None,
         max_retries: int = 3,
     ) -> None:
         self.prompt_version = prompt_version
-        self.system_prompt = (
-            PROMPT_V2_ENRICHED if prompt_version == "v2" else PROMPT_V1_BASELINE
-        )
+        if prompt_version == "v1":
+            self.system_prompt = PROMPT_V1_SCHEMA_ONLY
+            self.max_retries = 1  # Baseline is single-pass without self-correction
+        elif prompt_version == "v2":
+            self.system_prompt = PROMPT_V2_GOVERNED
+            self.max_retries = 1  # Governed ablation without self-correction
+        else:
+            self.system_prompt = PROMPT_V3_FEWSHOT_AND_CORRECTION
+            self.max_retries = max_retries  # Governed + worked examples + self-correction retry loop
+
         self.client = client or LLMClient()
-        self.max_retries = max_retries
 
     def answer_question(self, question: str) -> AgentResponse:
         """Executes the agent tool-calling and self-correction loop to answer a question."""
-        # 1. Metric Definition Lookup (in-process MCP tool)
+        # 1. Metric Definition Lookup (in-process MCP tool for governed arms v2 and v3)
         metric_context = ""
-        if self.prompt_version == "v2":
-            # Check for key metric words
+        if self.prompt_version in ("v2", "v3"):
             for term in ["aov", "net revenue", "gross revenue", "return rate", "repeat customer", "rating"]:
                 if term in question.lower():
                     metric_def = tools.get_metric_definition(term)
@@ -168,8 +177,16 @@ class AskBusinessAgent:
 
         # If retries exhausted
         return AgentResponse(
-            can_answer=False,
-            refusal_reason=f"Failed to produce a valid SQL query after {self.max_retries} self-correction attempts.",
+            can_answer=True if current_sql else False,
+            refusal_reason=(
+                None
+                if current_sql
+                else (
+                    proposal.refusal_reason
+                    if proposal
+                    else f"Failed to produce a valid SQL query after {self.max_retries} self-correction attempts."
+                )
+            ),
             thought_process=proposal.thought_process if proposal else "Self-correction exhausted.",
             metric_citations=proposal.metric_citations if proposal else [],
             sql_query=current_sql,
