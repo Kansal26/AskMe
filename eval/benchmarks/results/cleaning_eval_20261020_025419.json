@@ -1,0 +1,171 @@
+{
+  "metadata": {
+    "evaluation_date": "2026-10-20T02:54:19.325374+00:00",
+    "llm_provider": "gemini",
+    "model_name": "gemini-2.5-flash",
+    "temperature": 0.0,
+    "prompt_version": "v1.0_structured_whitelist",
+    "caching_used": true,
+    "cache_dir": ".eval_cache"
+  },
+  "arm_a_rule_based": {
+    "arm_name": "Arm A: Rule-Based Planner (Baseline)",
+    "overall_metrics": {
+      "total_injected_corruptions": 16869,
+      "total_detected_and_acted": 13308,
+      "total_fixed_correctly": 12140,
+      "detection_recall": 0.7889,
+      "detection_precision": 1.0,
+      "fix_correctness": 0.9122,
+      "clean_cells_evaluated": 209711,
+      "clean_cells_damaged": 0,
+      "false_fix_rate": 0.0
+    },
+    "per_issue_metrics": {
+      "duplicate_row": {
+        "injected": 503,
+        "detected_and_acted": 209,
+        "fixed_correctly": 209,
+        "detection_recall": 0.4155,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "dirty_whitespace": {
+        "injected": 4665,
+        "detected_and_acted": 4654,
+        "fixed_correctly": 4654,
+        "detection_recall": 0.9976,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "inconsistent_casing": {
+        "injected": 4665,
+        "detected_and_acted": 1989,
+        "fixed_correctly": 1989,
+        "detection_recall": 0.4264,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "category_typo": {
+        "injected": 15,
+        "detected_and_acted": 13,
+        "fixed_correctly": 13,
+        "detection_recall": 0.8667,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "dirty_numeric": {
+        "injected": 2535,
+        "detected_and_acted": 2445,
+        "fixed_correctly": 2445,
+        "detection_recall": 0.9645,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "missing_value": {
+        "injected": 3171,
+        "detected_and_acted": 3170,
+        "fixed_correctly": 2190,
+        "detection_recall": 0.9997,
+        "fix_correctness": 0.6909,
+        "precision": 1.0
+      },
+      "mixed_date_format": {
+        "injected": 1275,
+        "detected_and_acted": 788,
+        "fixed_correctly": 600,
+        "detection_recall": 0.618,
+        "fix_correctness": 0.7614,
+        "precision": 1.0
+      },
+      "outlier": {
+        "injected": 40,
+        "detected_and_acted": 40,
+        "fixed_correctly": 40,
+        "detection_recall": 1.0,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      }
+    }
+  },
+  "arm_b_llm_assisted": {
+    "arm_name": "Arm B: LLM-Assisted Planner",
+    "overall_metrics": {
+      "total_injected_corruptions": 16869,
+      "total_detected_and_acted": 13308,
+      "total_fixed_correctly": 12140,
+      "detection_recall": 0.7889,
+      "detection_precision": 1.0,
+      "fix_correctness": 0.9122,
+      "clean_cells_evaluated": 209711,
+      "clean_cells_damaged": 0,
+      "false_fix_rate": 0.0
+    },
+    "per_issue_metrics": {
+      "duplicate_row": {
+        "injected": 503,
+        "detected_and_acted": 209,
+        "fixed_correctly": 209,
+        "detection_recall": 0.4155,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "dirty_whitespace": {
+        "injected": 4665,
+        "detected_and_acted": 4654,
+        "fixed_correctly": 4654,
+        "detection_recall": 0.9976,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "inconsistent_casing": {
+        "injected": 4665,
+        "detected_and_acted": 1989,
+        "fixed_correctly": 1989,
+        "detection_recall": 0.4264,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "category_typo": {
+        "injected": 15,
+        "detected_and_acted": 13,
+        "fixed_correctly": 13,
+        "detection_recall": 0.8667,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "dirty_numeric": {
+        "injected": 2535,
+        "detected_and_acted": 2445,
+        "fixed_correctly": 2445,
+        "detection_recall": 0.9645,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      },
+      "missing_value": {
+        "injected": 3171,
+        "detected_and_acted": 3170,
+        "fixed_correctly": 2190,
+        "detection_recall": 0.9997,
+        "fix_correctness": 0.6909,
+        "precision": 1.0
+      },
+      "mixed_date_format": {
+        "injected": 1275,
+        "detected_and_acted": 788,
+        "fixed_correctly": 600,
+        "detection_recall": 0.618,
+        "fix_correctness": 0.7614,
+        "precision": 1.0
+      },
+      "outlier": {
+        "injected": 40,
+        "detected_and_acted": 40,
+        "fixed_correctly": 40,
+        "detection_recall": 1.0,
+        "fix_correctness": 1.0,
+        "precision": 1.0
+      }
+    }
+  }
+}

@@ -91,15 +91,17 @@ def inject_corruptions(
             new_row = dict(orig_row)
             new_row["_row_id"] = next_row_id
 
-            manifest.append({
-                "_row_id": next_row_id,
-                "table": table_name,
-                "column": "_row",
-                "issue_type": "duplicate_row",
-                "original_value": None,
-                "corrupted_value": f"duplicate_of_row_{orig_row_id}",
-                "details": {"original_row_id": orig_row_id},
-            })
+            manifest.append(
+                {
+                    "_row_id": next_row_id,
+                    "table": table_name,
+                    "column": "_row",
+                    "issue_type": "duplicate_row",
+                    "original_value": None,
+                    "corrupted_value": f"duplicate_of_row_{orig_row_id}",
+                    "details": {"original_row_id": orig_row_id},
+                }
+            )
 
             dupe_rows.append(new_row)
             next_row_id += 1
@@ -112,16 +114,20 @@ def inject_corruptions(
         # 2. Inconsistent Casing & Dirty Whitespace (Categorical columns)
         # -------------------------------------------------------------
         excluded = (
-            "_row_id", "order_id", "sku", "return_id",
-            "review_id", "customer_id", "review_text",
+            "_row_id",
+            "order_id",
+            "sku",
+            "return_id",
+            "review_id",
+            "customer_id",
+            "review_text",
         )
         text_cols = [c for c in df.columns if c not in excluded and df[c].dtype == object]
 
         for col in text_cols:
             # 2a. Whitespace corruption (~3%)
             available_ws = [
-                i for i in range(len(df))
-                if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
+                i for i in range(len(df)) if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
             ]
             k_ws = min(len(available_ws), max(2, int(len(df) * 0.03)))
             ws_indices = rng.sample(available_ws, k=k_ws)
@@ -141,21 +147,22 @@ def inject_corruptions(
                     corrupted = "   ".join(parts) if len(parts) > 1 else f"  {val}  "
 
                 corrupted_cells.add((row_id, col))
-                manifest.append({
-                    "_row_id": row_id,
-                    "table": table_name,
-                    "column": col,
-                    "issue_type": "dirty_whitespace",
-                    "original_value": val,
-                    "corrupted_value": corrupted,
-                    "details": {"style": ws_style},
-                })
+                manifest.append(
+                    {
+                        "_row_id": row_id,
+                        "table": table_name,
+                        "column": col,
+                        "issue_type": "dirty_whitespace",
+                        "original_value": val,
+                        "corrupted_value": corrupted,
+                        "details": {"style": ws_style},
+                    }
+                )
                 df.at[idx, col] = corrupted
 
             # 2b. Inconsistent Casing (~3%)
             available_case = [
-                i for i in range(len(df))
-                if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
+                i for i in range(len(df)) if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
             ]
             k_case = min(len(available_case), max(2, int(len(df) * 0.03)))
             case_indices = rng.sample(available_case, k=k_case)
@@ -167,15 +174,17 @@ def inject_corruptions(
                 corrupted = val.upper() if casing_style == "upper" else val.lower()
 
                 corrupted_cells.add((row_id, col))
-                manifest.append({
-                    "_row_id": row_id,
-                    "table": table_name,
-                    "column": col,
-                    "issue_type": "inconsistent_casing",
-                    "original_value": val,
-                    "corrupted_value": corrupted,
-                    "details": {"style": casing_style},
-                })
+                manifest.append(
+                    {
+                        "_row_id": row_id,
+                        "table": table_name,
+                        "column": col,
+                        "issue_type": "inconsistent_casing",
+                        "original_value": val,
+                        "corrupted_value": corrupted,
+                        "details": {"style": casing_style},
+                    }
+                )
                 df.at[idx, col] = corrupted
 
         # -------------------------------------------------------------
@@ -183,7 +192,8 @@ def inject_corruptions(
         # -------------------------------------------------------------
         if table_name == "products" and "category" in df.columns:
             available_cat = [
-                i for i in range(len(df))
+                i
+                for i in range(len(df))
                 if (int(df.at[i, "_row_id"]), "category") not in corrupted_cells
             ]
             k_cat = min(len(available_cat), max(5, int(len(df) * 0.10)))
@@ -195,15 +205,17 @@ def inject_corruptions(
                 if orig_cat in CATEGORY_VARIANTS:
                     corrupted = rng.choice(CATEGORY_VARIANTS[orig_cat])
                     corrupted_cells.add((row_id, "category"))
-                    manifest.append({
-                        "_row_id": row_id,
-                        "table": table_name,
-                        "column": "category",
-                        "issue_type": "category_typo",
-                        "original_value": orig_cat,
-                        "corrupted_value": corrupted,
-                        "details": {"target_canonical": orig_cat},
-                    })
+                    manifest.append(
+                        {
+                            "_row_id": row_id,
+                            "table": table_name,
+                            "column": "category",
+                            "issue_type": "category_typo",
+                            "original_value": orig_cat,
+                            "corrupted_value": corrupted,
+                            "details": {"target_canonical": orig_cat},
+                        }
+                    )
                     df.at[idx, "category"] = corrupted
 
         # -------------------------------------------------------------
@@ -212,8 +224,7 @@ def inject_corruptions(
         date_cols = [c for c in df.columns if "date" in c]
         for col in date_cols:
             available_dates = [
-                i for i in range(len(df))
-                if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
+                i for i in range(len(df)) if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
             ]
             k_date = min(len(available_dates), max(5, int(len(df) * 0.05)))
             date_indices = rng.sample(available_dates, k=k_date)
@@ -228,7 +239,7 @@ def inject_corruptions(
                     continue
 
                 m_int, d_int = int(month), int(day)
-                is_ambiguous = (m_int <= 12 and d_int <= 12 and m_int != d_int)
+                is_ambiguous = m_int <= 12 and d_int <= 12 and m_int != d_int
 
                 if is_ambiguous:
                     # Ambiguous: 03/04/2024 (could be March 4 or April 3)
@@ -250,28 +261,30 @@ def inject_corruptions(
                         details = "timestamp"
 
                 corrupted_cells.add((row_id, col))
-                manifest.append({
-                    "_row_id": row_id,
-                    "table": table_name,
-                    "column": col,
-                    "issue_type": "mixed_date_format",
-                    "original_value": orig_date_str,
-                    "corrupted_value": corrupted,
-                    "details": {"is_ambiguous": is_ambiguous, "format_style": details},
-                })
+                manifest.append(
+                    {
+                        "_row_id": row_id,
+                        "table": table_name,
+                        "column": col,
+                        "issue_type": "mixed_date_format",
+                        "original_value": orig_date_str,
+                        "corrupted_value": corrupted,
+                        "details": {"is_ambiguous": is_ambiguous, "format_style": details},
+                    }
+                )
                 df.at[idx, col] = corrupted
 
         # -------------------------------------------------------------
         # 5. Dirty Numeric Formats (currency symbols, commas, strings)
         # -------------------------------------------------------------
         numeric_cols = [
-            c for c in df.columns
+            c
+            for c in df.columns
             if c in ("mrp", "gross_amount", "discount_amount", "net_amount", "refund_amount")
         ]
         for col in numeric_cols:
             available_num = [
-                i for i in range(len(df))
-                if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
+                i for i in range(len(df)) if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
             ]
             k_num = min(len(available_num), max(5, int(len(df) * 0.04)))
             num_indices = rng.sample(available_num, k=k_num)
@@ -290,28 +303,30 @@ def inject_corruptions(
                     corrupted = f"  {orig_val}  "
 
                 corrupted_cells.add((row_id, col))
-                manifest.append({
-                    "_row_id": row_id,
-                    "table": table_name,
-                    "column": col,
-                    "issue_type": "dirty_numeric",
-                    "original_value": orig_val,
-                    "corrupted_value": corrupted,
-                    "details": {"style": style},
-                })
+                manifest.append(
+                    {
+                        "_row_id": row_id,
+                        "table": table_name,
+                        "column": col,
+                        "issue_type": "dirty_numeric",
+                        "original_value": orig_val,
+                        "corrupted_value": corrupted,
+                        "details": {"style": style},
+                    }
+                )
                 df.at[idx, col] = corrupted
 
         # -------------------------------------------------------------
         # 6. Missing Values (MCAR)
         # -------------------------------------------------------------
         nullable_cols = [
-            c for c in df.columns
+            c
+            for c in df.columns
             if c not in ("_row_id", "order_id", "sku", "return_id", "review_id", "customer_id")
         ]
         for col in nullable_cols:
             available_miss = [
-                i for i in range(len(df))
-                if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
+                i for i in range(len(df)) if (int(df.at[i, "_row_id"]), col) not in corrupted_cells
             ]
             k_miss = min(len(available_miss), max(2, int(len(df) * 0.02)))
             miss_indices = rng.sample(available_miss, k=k_miss)
@@ -322,15 +337,17 @@ def inject_corruptions(
                 corrupted = None if rng.random() > 0.3 else ""
 
                 corrupted_cells.add((row_id, col))
-                manifest.append({
-                    "_row_id": row_id,
-                    "table": table_name,
-                    "column": col,
-                    "issue_type": "missing_value",
-                    "original_value": orig_val,
-                    "corrupted_value": corrupted,
-                    "details": {"is_empty_string": corrupted == ""},
-                })
+                manifest.append(
+                    {
+                        "_row_id": row_id,
+                        "table": table_name,
+                        "column": col,
+                        "issue_type": "missing_value",
+                        "original_value": orig_val,
+                        "corrupted_value": corrupted,
+                        "details": {"is_empty_string": corrupted == ""},
+                    }
+                )
                 df.at[idx, col] = corrupted
 
         # -------------------------------------------------------------
@@ -338,7 +355,8 @@ def inject_corruptions(
         # -------------------------------------------------------------
         if table_name == "orders" and "quantity" in df.columns:
             available_out = [
-                i for i in range(len(df))
+                i
+                for i in range(len(df))
                 if (int(df.at[i, "_row_id"]), "quantity") not in corrupted_cells
                 and df.at[i, "quantity"] not in (None, "")
             ]
@@ -351,15 +369,17 @@ def inject_corruptions(
                 corrupted_q = rng.choice([99, 500, 999])
 
                 corrupted_cells.add((row_id, "quantity"))
-                manifest.append({
-                    "_row_id": row_id,
-                    "table": table_name,
-                    "column": "quantity",
-                    "issue_type": "outlier",
-                    "original_value": orig_q,
-                    "corrupted_value": corrupted_q,
-                    "details": {"metric": "extreme_quantity"},
-                })
+                manifest.append(
+                    {
+                        "_row_id": row_id,
+                        "table": table_name,
+                        "column": "quantity",
+                        "issue_type": "outlier",
+                        "original_value": orig_q,
+                        "corrupted_value": corrupted_q,
+                        "details": {"metric": "extreme_quantity"},
+                    }
+                )
                 df.at[idx, "quantity"] = corrupted_q
 
         messy_datasets[table_name] = df

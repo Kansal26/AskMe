@@ -1,6 +1,5 @@
 """Unit tests for Phase 0: Synthetic Data Generation and Ground-Truth Corruption."""
 
-
 import pandas as pd
 
 from src.data_gen.corrupter import inject_corruptions
@@ -16,7 +15,7 @@ def test_clean_data_shapes_and_columns():
     datasets = generate_clean_dataset(
         seed=42,
         num_products=150,
-        num_orders=2000,   # test with scaled subset for fast unit testing
+        num_orders=2000,  # test with scaled subset for fast unit testing
         num_returns=200,
         num_reviews=300,
     )
@@ -34,8 +33,16 @@ def test_clean_data_shapes_and_columns():
     # Check orders
     assert len(df_o) == 2000
     expected_order_cols = {
-        "order_id", "customer_id", "order_date", "sku", "channel",
-        "quantity", "gross_amount", "discount_amount", "net_amount", "city",
+        "order_id",
+        "customer_id",
+        "order_date",
+        "sku",
+        "channel",
+        "quantity",
+        "gross_amount",
+        "discount_amount",
+        "net_amount",
+        "city",
     }
     assert expected_order_cols.issubset(set(df_o.columns))
     assert set(df_o["channel"]).issubset(set(CHANNELS))
@@ -108,7 +115,8 @@ def test_corruption_injection_and_manifest():
 
     # Verify ambiguous date tracking
     ambiguous_dates = [
-        m for m in manifest
+        m
+        for m in manifest
         if m["issue_type"] == "mixed_date_format"
         and m.get("details", {}).get("is_ambiguous") is True
     ]

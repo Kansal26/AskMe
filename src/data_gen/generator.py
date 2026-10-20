@@ -185,13 +185,15 @@ def generate_clean_dataset(
         mrp = rng.choice(mrp_tiers)
 
         sku = f"SKU-{cat[:3].upper()}-{sku_counter:04d}"
-        products_data.append({
-            "sku": sku,
-            "name": product_name,
-            "brand": brand,
-            "category": cat,
-            "mrp": float(mrp),
-        })
+        products_data.append(
+            {
+                "sku": sku,
+                "name": product_name,
+                "brand": brand,
+                "category": cat,
+                "mrp": float(mrp),
+            }
+        )
         sku_counter += 1
 
     df_products = pd.DataFrame(products_data)
@@ -230,18 +232,20 @@ def generate_clean_dataset(
 
         city = rng.choice(CITIES)
 
-        orders_data.append({
-            "order_id": order_id,
-            "customer_id": cust_id,
-            "order_date": order_date.strftime("%Y-%m-%d"),
-            "sku": sku,
-            "channel": channel,
-            "quantity": quantity,
-            "gross_amount": gross_amount,
-            "discount_amount": discount_amount,
-            "net_amount": net_amount,
-            "city": city,
-        })
+        orders_data.append(
+            {
+                "order_id": order_id,
+                "customer_id": cust_id,
+                "order_date": order_date.strftime("%Y-%m-%d"),
+                "sku": sku,
+                "channel": channel,
+                "quantity": quantity,
+                "gross_amount": gross_amount,
+                "discount_amount": discount_amount,
+                "net_amount": net_amount,
+                "city": city,
+            }
+        )
 
     # Sort orders chronologically
     orders_data.sort(key=lambda x: x["order_date"])
@@ -263,13 +267,15 @@ def generate_clean_dataset(
         # Full or partial refund
         refund_amount = order_row["net_amount"]
 
-        returns_data.append({
-            "return_id": f"RET-{ret_counter:06d}",
-            "order_id": order_row["order_id"],
-            "return_date": return_date.strftime("%Y-%m-%d"),
-            "reason": reason,
-            "refund_amount": float(refund_amount),
-        })
+        returns_data.append(
+            {
+                "return_id": f"RET-{ret_counter:06d}",
+                "order_id": order_row["order_id"],
+                "return_date": return_date.strftime("%Y-%m-%d"),
+                "reason": reason,
+                "refund_amount": float(refund_amount),
+            }
+        )
         ret_counter += 1
 
     df_returns = pd.DataFrame(returns_data)
@@ -291,13 +297,15 @@ def generate_clean_dataset(
         rev_day = rng.randint(0, total_days)
         review_date = start_date + datetime.timedelta(days=rev_day)
 
-        reviews_data.append({
-            "review_id": review_id,
-            "sku": sku,
-            "rating": rating,
-            "review_text": text,
-            "review_date": review_date.strftime("%Y-%m-%d"),
-        })
+        reviews_data.append(
+            {
+                "review_id": review_id,
+                "sku": sku,
+                "rating": rating,
+                "review_text": text,
+                "review_date": review_date.strftime("%Y-%m-%d"),
+            }
+        )
 
     reviews_data.sort(key=lambda x: x["review_date"])
     df_reviews = pd.DataFrame(reviews_data)
