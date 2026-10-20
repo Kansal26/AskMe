@@ -26,7 +26,7 @@ class Settings(BaseSettings):
 
     # Groq
     groq_api_key: str = ""
-    groq_model: str = "llama-3.3-70b-versatile"
+    groq_model: str = "openai/gpt-oss-120b"
 
     # DuckDB
     duckdb_path: Path = Path("data/analytics.duckdb")
