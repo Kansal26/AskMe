@@ -15,22 +15,29 @@ from typing import Any
 import pandas as pd
 
 from src.cleaning.schemas import CleaningPlan, CleaningStep
-from src.cleaning.whitelist import HIGH_STAKES_COLUMNS, filter_valid_steps
+from src.cleaning.whitelist import (
+    LOW_STAKES_CATEGORICAL_COLUMNS,
+    filter_valid_steps,
+)
 from src.common.llm import LLMClient
 
 CLEANING_SYSTEM_PROMPT = """You are an expert Data Engineer assisting in preparing a messy tabular dataset for analytics.
 Your role is strictly to PROPOSE cleaning steps. Deterministic code will execute the approved steps.
 
-WHITELIST OF APPROVED OPERATIONS (You MUST choose ONLY from this list):
+WHITELIST OF APPROVED OPERATIONS (You MUST choose ONLY from this list, using EXACT names):
 1. drop_duplicates: params: {}
-2. strip_whitespace: params: {} (removes leading/trailing/multiple internal spaces)
+2. strip_whitespace: params: {} (removes leading/trailing and collapses internal repeated spaces)
 3. normalize_case: params: {"mode": "lower" | "upper" | "title"}
-4. parse_dates: params: {"flag_ambiguous": true} (converts to ISO YYYY-MM-DD and flags ambiguous formats like 03/04/2024 for human confirmation)
-5. to_numeric: params: {} (strips currency symbols $, ₹, €, and thousand commas)
-6. fill_missing: params: {"strategy": "median" | "mode" | "constant" | "leave_and_flag", "value": ...}
-   CRITICAL SAFETY RULE: For monetary amounts, IDs, and dates, you MUST use "leave_and_flag". Never impute high-stakes columns!
+4. parse_dates: params: {"flag_ambiguous": true} (converts non-ambiguous formats to ISO YYYY-MM-DD; flags ambiguous DD/MM vs MM/DD like 03/04/2024 without altering)
+5. to_numeric: params: {} (strips currency symbols $, ₹, €, and commas)
+6. fill_missing: params: {"strategy": "leave_and_flag" | "mode" | "constant", "value": ...}
 7. map_categories: params: {"mapping": {"typo_or_variant": "CanonicalName"}}
-8. flag_outliers: params: {"method": "iqr"} (flags anomalous rows; NEVER deletes them)
+8. flag_outliers: params: {"method": "iqr"} (flags anomalous rows; NEVER deletes or caps values)
+
+CRITICAL SAFETY POLICY:
+- For monetary amounts, IDs, dates, and numeric quantities, missing values MUST use strategy "leave_and_flag". Imputation is strictly forbidden for these fields!
+- Imputation (strategy "mode" or "constant") is ONLY allowed for low-stakes categorical columns: channel, city, category, brand, reason.
+- Outliers MUST use "flag_outliers". Never delete, winsorize, or cap outlier rows.
 
 Respond strictly with a JSON object conforming to the CleaningPlan schema.
 """
@@ -162,7 +169,7 @@ def generate_rule_based_plan(profile: dict[str, Any]) -> CleaningPlan:
 
         # 8. Missing Values
         if c_prof.get("null_count", 0) > 0:
-            strategy = "leave_and_flag" if col_name.lower() in HIGH_STAKES_COLUMNS else "mode"
+            strategy = "mode" if col_name.lower() in LOW_STAKES_CATEGORICAL_COLUMNS else "leave_and_flag"
             steps.append(
                 CleaningStep(
                     step_id=step_id,
@@ -173,7 +180,7 @@ def generate_rule_based_plan(profile: dict[str, Any]) -> CleaningPlan:
                     confidence=0.90,
                     rationale=(
                         f"Handle missing values in {col_name} via {strategy} "
-                        f"(high-stakes columns are never imputed)."
+                        f"(amounts, IDs, dates, and non-categorical fields are strictly left and flagged)."
                     ),
                 )
             )
@@ -183,6 +190,15 @@ def generate_rule_based_plan(profile: dict[str, Any]) -> CleaningPlan:
         table_name=table_name,
         summary=f"Rule-based plan: identified {len(steps)} deterministic cleaning steps.",
         steps=steps,
+        metadata={
+            "planner_type": "rule_based",
+            "was_fallback": False,
+            "fallback_reason": None,
+            "steps_proposed_by_llm": 0,
+            "steps_accepted": len(steps),
+            "steps_rejected": 0,
+            "rejected_reasons": [],
+        },
     )
 
 
@@ -235,6 +251,15 @@ def generate_llm_plan(
                 table_name=table_name,
                 summary=raw_plan.summary,
                 steps=valid_steps,
+                metadata={
+                    "planner_type": "llm",
+                    "was_fallback": False,
+                    "fallback_reason": None,
+                    "steps_proposed_by_llm": len(raw_plan.steps),
+                    "steps_accepted": len(valid_steps),
+                    "steps_rejected": len(rejected_reasons),
+                    "rejected_reasons": rejected_reasons,
+                },
             )
             return valid_plan, rejected_reasons
         except Exception as e:
@@ -246,4 +271,15 @@ def generate_llm_plan(
     fallback.summary = (
         f"[Fallback to Rule-Based Planner after LLM error: {last_error[:100]}] {fallback.summary}"
     )
+    fallback.metadata = {
+        "planner_type": "llm_fallback_to_rule_based",
+        "was_fallback": True,
+        "fallback_reason": last_error,
+        "steps_proposed_by_llm": 0,
+        "steps_accepted": len(fallback.steps),
+        "steps_rejected": 0,
+        "rejected_reasons": [
+            f"LLM generation failed ({last_error[:80]}), applied rule-based fallback"
+        ],
+    }
     return fallback, [f"LLM generation failed ({last_error[:80]}), applied rule-based fallback"]

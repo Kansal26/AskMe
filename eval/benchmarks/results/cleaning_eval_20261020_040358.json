@@ -1,0 +1,618 @@
+{
+  "metadata": {
+    "evaluation_date": "2026-10-20T04:03:58.212252+00:00",
+    "git_commit_hash": "220e136",
+    "llm_provider": "groq",
+    "model_name": "openai/gpt-oss-120b",
+    "temperature": 0.0,
+    "prompt_version": "v1.1_strict_safety_whitelist",
+    "caching_used": true,
+    "cache_dir": ".eval_cache",
+    "runs_per_arm": {
+      "arm_a": 1,
+      "arm_b": 3,
+      "arm_c": 1
+    }
+  },
+  "arm_a_rule_based": {
+    "arm_name": "Arm A: Rule-Based Planner (Governed Baseline)",
+    "mode": "rule_based",
+    "provenance": {
+      "steps_proposed": 0,
+      "steps_accepted": 57,
+      "steps_rejected": 0,
+      "rejected_reasons": [],
+      "was_fallback": false,
+      "fallback_reason": null
+    },
+    "overall_metrics": {
+      "total_injected_corruptions": 16869,
+      "total_detected_and_acted": 13261,
+      "total_fixed_correctly": 10027,
+      "total_left_and_flagged_correctly": 2301,
+      "total_resolved": 12328,
+      "total_missed": 3796,
+      "governed_success_rate": 0.7308,
+      "detection_recall": 0.7861,
+      "fix_correctness": 0.7561,
+      "clean_cells_evaluated": 209711,
+      "clean_cells_damaged": 0,
+      "false_fix_rate": 0.0
+    },
+    "per_issue_metrics": {
+      "duplicate_row": {
+        "injected": 503,
+        "detected_and_acted": 209,
+        "fixed_correctly": 209,
+        "left_and_flagged_correctly": 0,
+        "missed": 294,
+        "success_rate": 0.4155
+      },
+      "dirty_whitespace": {
+        "injected": 4665,
+        "detected_and_acted": 4654,
+        "fixed_correctly": 4654,
+        "left_and_flagged_correctly": 0,
+        "missed": 11,
+        "success_rate": 0.9976
+      },
+      "inconsistent_casing": {
+        "injected": 4665,
+        "detected_and_acted": 1989,
+        "fixed_correctly": 1989,
+        "left_and_flagged_correctly": 0,
+        "missed": 2676,
+        "success_rate": 0.4264
+      },
+      "category_typo": {
+        "injected": 15,
+        "detected_and_acted": 13,
+        "fixed_correctly": 13,
+        "left_and_flagged_correctly": 0,
+        "missed": 2,
+        "success_rate": 0.8667
+      },
+      "dirty_numeric": {
+        "injected": 2535,
+        "detected_and_acted": 2445,
+        "fixed_correctly": 2445,
+        "left_and_flagged_correctly": 0,
+        "missed": 90,
+        "success_rate": 0.9645
+      },
+      "missing_value": {
+        "injected": 3171,
+        "detected_and_acted": 2637,
+        "fixed_correctly": 117,
+        "left_and_flagged_correctly": 1775,
+        "missed": 534,
+        "success_rate": 0.5967
+      },
+      "mixed_date_format": {
+        "injected": 1275,
+        "detected_and_acted": 1274,
+        "fixed_correctly": 600,
+        "left_and_flagged_correctly": 486,
+        "missed": 189,
+        "success_rate": 0.8518
+      },
+      "outlier": {
+        "injected": 40,
+        "detected_and_acted": 40,
+        "fixed_correctly": 0,
+        "left_and_flagged_correctly": 40,
+        "missed": 0,
+        "success_rate": 1.0
+      }
+    },
+    "top_false_fix_columns": []
+  },
+  "arm_b_llm_assisted": {
+    "arm_name": "Arm B: LLM-Assisted Planner (3 Runs Aggregated)",
+    "num_runs": 3,
+    "runs": [
+      {
+        "arm_name": "Arm B (Run 1)",
+        "mode": "llm",
+        "provenance": {
+          "steps_proposed": 47,
+          "steps_accepted": 47,
+          "steps_rejected": 0,
+          "rejected_reasons": [],
+          "was_fallback": false,
+          "fallback_reason": null
+        },
+        "overall_metrics": {
+          "total_injected_corruptions": 16869,
+          "total_detected_and_acted": 11431,
+          "total_fixed_correctly": 9357,
+          "total_left_and_flagged_correctly": 1854,
+          "total_resolved": 11211,
+          "total_missed": 5626,
+          "governed_success_rate": 0.6646,
+          "detection_recall": 0.6776,
+          "fix_correctness": 0.8186,
+          "clean_cells_evaluated": 209711,
+          "clean_cells_damaged": 0,
+          "false_fix_rate": 0.0
+        },
+        "per_issue_metrics": {
+          "duplicate_row": {
+            "injected": 503,
+            "detected_and_acted": 209,
+            "fixed_correctly": 209,
+            "left_and_flagged_correctly": 0,
+            "missed": 294,
+            "success_rate": 0.4155
+          },
+          "dirty_whitespace": {
+            "injected": 4665,
+            "detected_and_acted": 4654,
+            "fixed_correctly": 4654,
+            "left_and_flagged_correctly": 0,
+            "missed": 11,
+            "success_rate": 0.9976
+          },
+          "inconsistent_casing": {
+            "injected": 4665,
+            "detected_and_acted": 1989,
+            "fixed_correctly": 1989,
+            "left_and_flagged_correctly": 0,
+            "missed": 2676,
+            "success_rate": 0.4264
+          },
+          "category_typo": {
+            "injected": 15,
+            "detected_and_acted": 11,
+            "fixed_correctly": 11,
+            "left_and_flagged_correctly": 0,
+            "missed": 4,
+            "success_rate": 0.7333
+          },
+          "dirty_numeric": {
+            "injected": 2535,
+            "detected_and_acted": 1886,
+            "fixed_correctly": 1886,
+            "left_and_flagged_correctly": 0,
+            "missed": 649,
+            "success_rate": 0.744
+          },
+          "missing_value": {
+            "injected": 3171,
+            "detected_and_acted": 1408,
+            "fixed_correctly": 8,
+            "left_and_flagged_correctly": 1368,
+            "missed": 1763,
+            "success_rate": 0.4339
+          },
+          "mixed_date_format": {
+            "injected": 1275,
+            "detected_and_acted": 1274,
+            "fixed_correctly": 600,
+            "left_and_flagged_correctly": 486,
+            "missed": 189,
+            "success_rate": 0.8518
+          },
+          "outlier": {
+            "injected": 40,
+            "detected_and_acted": 0,
+            "fixed_correctly": 0,
+            "left_and_flagged_correctly": 0,
+            "missed": 40,
+            "success_rate": 0.0
+          }
+        },
+        "top_false_fix_columns": [],
+        "run_index": 1
+      },
+      {
+        "arm_name": "Arm B (Run 2)",
+        "mode": "llm",
+        "provenance": {
+          "steps_proposed": 47,
+          "steps_accepted": 47,
+          "steps_rejected": 0,
+          "rejected_reasons": [],
+          "was_fallback": false,
+          "fallback_reason": null
+        },
+        "overall_metrics": {
+          "total_injected_corruptions": 16869,
+          "total_detected_and_acted": 11431,
+          "total_fixed_correctly": 9357,
+          "total_left_and_flagged_correctly": 1854,
+          "total_resolved": 11211,
+          "total_missed": 5626,
+          "governed_success_rate": 0.6646,
+          "detection_recall": 0.6776,
+          "fix_correctness": 0.8186,
+          "clean_cells_evaluated": 209711,
+          "clean_cells_damaged": 0,
+          "false_fix_rate": 0.0
+        },
+        "per_issue_metrics": {
+          "duplicate_row": {
+            "injected": 503,
+            "detected_and_acted": 209,
+            "fixed_correctly": 209,
+            "left_and_flagged_correctly": 0,
+            "missed": 294,
+            "success_rate": 0.4155
+          },
+          "dirty_whitespace": {
+            "injected": 4665,
+            "detected_and_acted": 4654,
+            "fixed_correctly": 4654,
+            "left_and_flagged_correctly": 0,
+            "missed": 11,
+            "success_rate": 0.9976
+          },
+          "inconsistent_casing": {
+            "injected": 4665,
+            "detected_and_acted": 1989,
+            "fixed_correctly": 1989,
+            "left_and_flagged_correctly": 0,
+            "missed": 2676,
+            "success_rate": 0.4264
+          },
+          "category_typo": {
+            "injected": 15,
+            "detected_and_acted": 11,
+            "fixed_correctly": 11,
+            "left_and_flagged_correctly": 0,
+            "missed": 4,
+            "success_rate": 0.7333
+          },
+          "dirty_numeric": {
+            "injected": 2535,
+            "detected_and_acted": 1886,
+            "fixed_correctly": 1886,
+            "left_and_flagged_correctly": 0,
+            "missed": 649,
+            "success_rate": 0.744
+          },
+          "missing_value": {
+            "injected": 3171,
+            "detected_and_acted": 1408,
+            "fixed_correctly": 8,
+            "left_and_flagged_correctly": 1368,
+            "missed": 1763,
+            "success_rate": 0.4339
+          },
+          "mixed_date_format": {
+            "injected": 1275,
+            "detected_and_acted": 1274,
+            "fixed_correctly": 600,
+            "left_and_flagged_correctly": 486,
+            "missed": 189,
+            "success_rate": 0.8518
+          },
+          "outlier": {
+            "injected": 40,
+            "detected_and_acted": 0,
+            "fixed_correctly": 0,
+            "left_and_flagged_correctly": 0,
+            "missed": 40,
+            "success_rate": 0.0
+          }
+        },
+        "top_false_fix_columns": [],
+        "run_index": 2
+      },
+      {
+        "arm_name": "Arm B (Run 3)",
+        "mode": "llm",
+        "provenance": {
+          "steps_proposed": 47,
+          "steps_accepted": 47,
+          "steps_rejected": 0,
+          "rejected_reasons": [],
+          "was_fallback": false,
+          "fallback_reason": null
+        },
+        "overall_metrics": {
+          "total_injected_corruptions": 16869,
+          "total_detected_and_acted": 11431,
+          "total_fixed_correctly": 9357,
+          "total_left_and_flagged_correctly": 1854,
+          "total_resolved": 11211,
+          "total_missed": 5626,
+          "governed_success_rate": 0.6646,
+          "detection_recall": 0.6776,
+          "fix_correctness": 0.8186,
+          "clean_cells_evaluated": 209711,
+          "clean_cells_damaged": 0,
+          "false_fix_rate": 0.0
+        },
+        "per_issue_metrics": {
+          "duplicate_row": {
+            "injected": 503,
+            "detected_and_acted": 209,
+            "fixed_correctly": 209,
+            "left_and_flagged_correctly": 0,
+            "missed": 294,
+            "success_rate": 0.4155
+          },
+          "dirty_whitespace": {
+            "injected": 4665,
+            "detected_and_acted": 4654,
+            "fixed_correctly": 4654,
+            "left_and_flagged_correctly": 0,
+            "missed": 11,
+            "success_rate": 0.9976
+          },
+          "inconsistent_casing": {
+            "injected": 4665,
+            "detected_and_acted": 1989,
+            "fixed_correctly": 1989,
+            "left_and_flagged_correctly": 0,
+            "missed": 2676,
+            "success_rate": 0.4264
+          },
+          "category_typo": {
+            "injected": 15,
+            "detected_and_acted": 11,
+            "fixed_correctly": 11,
+            "left_and_flagged_correctly": 0,
+            "missed": 4,
+            "success_rate": 0.7333
+          },
+          "dirty_numeric": {
+            "injected": 2535,
+            "detected_and_acted": 1886,
+            "fixed_correctly": 1886,
+            "left_and_flagged_correctly": 0,
+            "missed": 649,
+            "success_rate": 0.744
+          },
+          "missing_value": {
+            "injected": 3171,
+            "detected_and_acted": 1408,
+            "fixed_correctly": 8,
+            "left_and_flagged_correctly": 1368,
+            "missed": 1763,
+            "success_rate": 0.4339
+          },
+          "mixed_date_format": {
+            "injected": 1275,
+            "detected_and_acted": 1274,
+            "fixed_correctly": 600,
+            "left_and_flagged_correctly": 486,
+            "missed": 189,
+            "success_rate": 0.8518
+          },
+          "outlier": {
+            "injected": 40,
+            "detected_and_acted": 0,
+            "fixed_correctly": 0,
+            "left_and_flagged_correctly": 0,
+            "missed": 40,
+            "success_rate": 0.0
+          }
+        },
+        "top_false_fix_columns": [],
+        "run_index": 3
+      }
+    ],
+    "governed_success_rate": {
+      "mean": 0.6646,
+      "min": 0.6646,
+      "max": 0.6646
+    },
+    "false_fix_rate": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "total_fixed_correctly": {
+      "mean": 9357.0,
+      "min": 9357,
+      "max": 9357
+    },
+    "total_left_and_flagged_correctly": {
+      "mean": 1854.0,
+      "min": 1854,
+      "max": 1854
+    },
+    "representative_run": {
+      "arm_name": "Arm B (Run 1)",
+      "mode": "llm",
+      "provenance": {
+        "steps_proposed": 47,
+        "steps_accepted": 47,
+        "steps_rejected": 0,
+        "rejected_reasons": [],
+        "was_fallback": false,
+        "fallback_reason": null
+      },
+      "overall_metrics": {
+        "total_injected_corruptions": 16869,
+        "total_detected_and_acted": 11431,
+        "total_fixed_correctly": 9357,
+        "total_left_and_flagged_correctly": 1854,
+        "total_resolved": 11211,
+        "total_missed": 5626,
+        "governed_success_rate": 0.6646,
+        "detection_recall": 0.6776,
+        "fix_correctness": 0.8186,
+        "clean_cells_evaluated": 209711,
+        "clean_cells_damaged": 0,
+        "false_fix_rate": 0.0
+      },
+      "per_issue_metrics": {
+        "duplicate_row": {
+          "injected": 503,
+          "detected_and_acted": 209,
+          "fixed_correctly": 209,
+          "left_and_flagged_correctly": 0,
+          "missed": 294,
+          "success_rate": 0.4155
+        },
+        "dirty_whitespace": {
+          "injected": 4665,
+          "detected_and_acted": 4654,
+          "fixed_correctly": 4654,
+          "left_and_flagged_correctly": 0,
+          "missed": 11,
+          "success_rate": 0.9976
+        },
+        "inconsistent_casing": {
+          "injected": 4665,
+          "detected_and_acted": 1989,
+          "fixed_correctly": 1989,
+          "left_and_flagged_correctly": 0,
+          "missed": 2676,
+          "success_rate": 0.4264
+        },
+        "category_typo": {
+          "injected": 15,
+          "detected_and_acted": 11,
+          "fixed_correctly": 11,
+          "left_and_flagged_correctly": 0,
+          "missed": 4,
+          "success_rate": 0.7333
+        },
+        "dirty_numeric": {
+          "injected": 2535,
+          "detected_and_acted": 1886,
+          "fixed_correctly": 1886,
+          "left_and_flagged_correctly": 0,
+          "missed": 649,
+          "success_rate": 0.744
+        },
+        "missing_value": {
+          "injected": 3171,
+          "detected_and_acted": 1408,
+          "fixed_correctly": 8,
+          "left_and_flagged_correctly": 1368,
+          "missed": 1763,
+          "success_rate": 0.4339
+        },
+        "mixed_date_format": {
+          "injected": 1275,
+          "detected_and_acted": 1274,
+          "fixed_correctly": 600,
+          "left_and_flagged_correctly": 486,
+          "missed": 189,
+          "success_rate": 0.8518
+        },
+        "outlier": {
+          "injected": 40,
+          "detected_and_acted": 0,
+          "fixed_correctly": 0,
+          "left_and_flagged_correctly": 0,
+          "missed": 40,
+          "success_rate": 0.0
+        }
+      },
+      "top_false_fix_columns": [],
+      "run_index": 1
+    }
+  },
+  "arm_c_naive_baseline": {
+    "arm_name": "Arm C: Unconstrained Naive Baseline (Blind Title/Strip/Datetime)",
+    "mode": "naive",
+    "provenance": {
+      "steps_proposed": 0,
+      "steps_accepted": 0,
+      "steps_rejected": 0,
+      "rejected_reasons": [],
+      "was_fallback": false,
+      "fallback_reason": null
+    },
+    "overall_metrics": {
+      "total_injected_corruptions": 16869,
+      "total_detected_and_acted": 11430,
+      "total_fixed_correctly": 8888,
+      "total_left_and_flagged_correctly": 0,
+      "total_resolved": 8888,
+      "total_missed": 6642,
+      "governed_success_rate": 0.5269,
+      "detection_recall": 0.6776,
+      "fix_correctness": 0.7776,
+      "clean_cells_evaluated": 209711,
+      "clean_cells_damaged": 6502,
+      "false_fix_rate": 0.031005
+    },
+    "per_issue_metrics": {
+      "duplicate_row": {
+        "injected": 503,
+        "detected_and_acted": 364,
+        "fixed_correctly": 364,
+        "left_and_flagged_correctly": 0,
+        "missed": 139,
+        "success_rate": 0.7237
+      },
+      "dirty_whitespace": {
+        "injected": 4665,
+        "detected_and_acted": 4563,
+        "fixed_correctly": 4351,
+        "left_and_flagged_correctly": 0,
+        "missed": 314,
+        "success_rate": 0.9327
+      },
+      "inconsistent_casing": {
+        "injected": 4665,
+        "detected_and_acted": 1909,
+        "fixed_correctly": 1706,
+        "left_and_flagged_correctly": 0,
+        "missed": 2959,
+        "success_rate": 0.3657
+      },
+      "category_typo": {
+        "injected": 15,
+        "detected_and_acted": 8,
+        "fixed_correctly": 7,
+        "left_and_flagged_correctly": 0,
+        "missed": 8,
+        "success_rate": 0.4667
+      },
+      "dirty_numeric": {
+        "injected": 2535,
+        "detected_and_acted": 2409,
+        "fixed_correctly": 2409,
+        "left_and_flagged_correctly": 0,
+        "missed": 126,
+        "success_rate": 0.9503
+      },
+      "missing_value": {
+        "injected": 3171,
+        "detected_and_acted": 1389,
+        "fixed_correctly": 50,
+        "left_and_flagged_correctly": 0,
+        "missed": 1782,
+        "success_rate": 0.0158
+      },
+      "mixed_date_format": {
+        "injected": 1275,
+        "detected_and_acted": 788,
+        "fixed_correctly": 1,
+        "left_and_flagged_correctly": 0,
+        "missed": 1274,
+        "success_rate": 0.0008
+      },
+      "outlier": {
+        "injected": 40,
+        "detected_and_acted": 0,
+        "fixed_correctly": 0,
+        "left_and_flagged_correctly": 0,
+        "missed": 40,
+        "success_rate": 0.0
+      }
+    },
+    "top_false_fix_columns": [
+      [
+        "orders.channel",
+        6223
+      ],
+      [
+        "products.brand",
+        140
+      ],
+      [
+        "products.name",
+        139
+      ]
+    ]
+  }
+}

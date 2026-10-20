@@ -46,6 +46,9 @@ class CleaningPlan(BaseModel):
     steps: list[CleaningStep] = Field(
         default_factory=list, description="Ordered sequence of cleaning steps"
     )
+    metadata: dict[str, Any] = Field(
+        default_factory=dict, description="Planner execution metadata (fallback status, step counts)"
+    )
 
 
 class AuditLogEntry(BaseModel):

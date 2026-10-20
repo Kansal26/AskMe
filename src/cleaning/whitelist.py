@@ -44,6 +44,16 @@ HIGH_STAKES_COLUMNS = {
 }
 
 
+# Columns explicitly designated as low-stakes categorical where mode/constant imputation is permitted
+LOW_STAKES_CATEGORICAL_COLUMNS = {
+    "channel",
+    "city",
+    "category",
+    "brand",
+    "reason",
+}
+
+
 def validate_step(step: CleaningStep) -> tuple[bool, str]:
     """Validates that a proposed step strictly conforms to whitelist specifications.
 
@@ -87,19 +97,28 @@ def validate_step(step: CleaningStep) -> tuple[bool, str]:
 
     if op == "fill_missing":
         strategy = params.get("strategy", "leave_and_flag")
-        allowed_strategies = ("median", "mode", "constant", "leave_and_flag")
+        allowed_strategies = ("mode", "constant", "leave_and_flag")
         if strategy not in allowed_strategies:
             return (
                 False,
                 f"fill_missing strategy must be one of {allowed_strategies}, got '{strategy}'",
             )
-        # Financial & ID safety guard
-        if col.lower() in HIGH_STAKES_COLUMNS and strategy != "leave_and_flag":
-            return (
-                False,
-                f"Safety violation: High-stakes column '{col}' cannot be imputed with '{strategy}'. "
-                f"Must use 'leave_and_flag'.",
-            )
+        col_lower = col.lower()
+        # High-stakes guard: amounts, IDs, dates, and non-categorical fields must NEVER be imputed
+        if strategy != "leave_and_flag":
+            if col_lower in HIGH_STAKES_COLUMNS:
+                return (
+                    False,
+                    f"Safety violation: High-stakes column '{col}' (amount, ID, or date) cannot be imputed with '{strategy}'. "
+                    f"Must use 'leave_and_flag'.",
+                )
+            if col_lower not in LOW_STAKES_CATEGORICAL_COLUMNS:
+                return (
+                    False,
+                    f"Safety violation: Column '{col}' is not an approved low-stakes categorical field. "
+                    f"Imputation is only permitted for: {sorted(LOW_STAKES_CATEGORICAL_COLUMNS)}. "
+                    f"Must use 'leave_and_flag'.",
+                )
         if strategy == "constant" and "value" not in params:
             return False, "fill_missing with strategy='constant' requires 'value' parameter"
         return True, ""

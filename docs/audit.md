@@ -1,7 +1,7 @@
 # Deep-Dive Engineering Audit & Hardening Report
 
 **Repository**: `AskMe` (`Ask-the-Business`)  
-**Auditor**: Antigravity Pair Programmer & Aditya Kansal  
+**Auditor**: Aditya Kansal  
 **Date**: 2026-10-20  
 **Status**: Stage 0 Complete (Read-Only Audit & Fact-Finding)  
 

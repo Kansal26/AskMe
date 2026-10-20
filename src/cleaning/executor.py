@@ -212,16 +212,6 @@ def execute_step(df: pd.DataFrame, step: CleaningStep) -> tuple[pd.DataFrame, Au
                     f"# Step {step.step_id}: Impute missing '{col}' with mode\n"
                     f"df['{col}'] = df['{col}'].fillna('{fill_val}')\n"
                 )
-            elif strategy == "median":
-                med_val = pd.to_numeric(df_out[col], errors="coerce").median()
-                if rows_affected > 0 and pd.notna(med_val):
-                    before_samples = [None]
-                    after_samples = [med_val]
-                    df_out.loc[null_mask, col] = med_val
-                py_code = (
-                    f"# Step {step.step_id}: Impute missing '{col}' with median\n"
-                    f"df['{col}'] = df['{col}'].fillna({med_val})\n"
-                )
             elif strategy == "constant":
                 c_val = params.get("value", "Unknown")
                 if rows_affected > 0:

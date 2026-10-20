@@ -76,13 +76,13 @@ Only 8 deterministic operations are permitted in `src/cleaning/whitelist.py`. An
 5. `to_numeric`:
    - Strips currency symbols (`$`, `₹`, `€`), removes thousand-separating commas, and casts to float.
 6. `fill_missing`:
-   - Imputation strategy: `median`, `mode`, `constant`, or `leave_and_flag`.
-   - **Safety Invariant**: Defaults to `leave_and_flag` for all monetary amounts, foreign keys, and dates. Only low-stakes categorical attributes (e.g., `review_text` fallback) may be imputed.
+   - Strategies: `leave_and_flag`, or `mode` / `constant` strictly for approved low-stakes categorical fields (`channel`, `city`, `category`, `brand`, `reason`).
+   - **Safety Invariant**: Strictly enforces `leave_and_flag` for all monetary amounts (`net_amount`, `gross_amount`, `discount_amount`, `mrp`, `refund_amount`), identifiers (`order_id`, `customer_id`, etc.), dates, and numerical quantities. Imputation is strictly forbidden on these columns.
 7. `map_categories`:
-   - Replaces spelling variants or fuzzy typos with an approved canonical term (e.g., `{"Skin care": "Skincare"}`).
+   - Replaces spelling variants or typo clusters with an approved canonical term (e.g., `{"Skin care": "Skincare"}`).
 8. `flag_outliers`:
-   - Identifies IQR/Z-score statistical anomalies and populates a separate boolean flag column (e.g., `is_outlier_quantity`).
-   - **Safety Invariant**: Never silently deletes or clips outlier rows.
+   - Identifies statistical IQR anomalies and populates a separate boolean flag column (e.g., `is_outlier_gross_amount`).
+   - **Safety Invariant**: Flags anomalous records for segmentation; never deletes, winsorizes, or caps outlier values.
 
 ---
 

@@ -61,7 +61,7 @@ flowchart TD
 
 ### 1. Why LLM Proposes, Deterministic Python Executes
 * **The Vulnerability**: Letting an LLM execute arbitrary generated Python code (`eval()`, `exec()`, or dynamic Pandas scripts) creates severe security hazards, unpredictable side effects, and silent data corruption.
-* **Our Solution**: The LLM is restricted to outputting a strictly typed JSON schema conforming to **8 whitelisted cleaning operations** (`drop_duplicate_rows`, `trim_whitespace`, `impute_missing`, `normalize_casing`, `fix_numeric_symbols`, `parse_date`, `cap_outliers`, `leave_and_flag`). Execution is carried out by deterministic, unit-tested Pandas transforms.
+* **Our Solution**: The LLM is restricted to outputting a strictly typed JSON schema conforming to **8 whitelisted cleaning operations** (`drop_duplicates`, `strip_whitespace`, `normalize_case`, `parse_dates`, `to_numeric`, `fill_missing`, `map_categories`, `flag_outliers`). Execution is carried out by deterministic, unit-tested Pandas transforms.
 * **Impact**: Eliminates code injection vectors and guarantees an exportable, reproducible audit trail and Python replay script.
 
 ### 2. Why Frequency-Dominant Canonical Mapping (0.0000% False-Fix Rate)
