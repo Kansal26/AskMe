@@ -1,0 +1,151 @@
+_row_id,sku,name,brand,category,mrp
+1,SKU-SKI-0001,LuxeAura Hydrating Hyaluronic Serum (Value Pack),LuxeAura,Skincare,899.0
+2,SKU-HAI-0002,VelvetPetal Biotin Anti-Hairfall Mask (Travel Size),VelvetPetal,Haircare,399.0
+3,SKU-BAT-0003,LuxeAura Cocoa Butter Stretch Mark Balm (Intense),LuxeAura,Bath & Body,299.0
+4,SKU-FRA-0004,GlowBotanica Golden Amber & Oud Mist (Travel Size),GlowBotanica,Fragrance,699.0
+5,SKU-COL-0005,GlowBotanica Ultra-Fine Setting Powder (Travel Size),GlowBotanica,Color Cosmetics,2499.0
+6,SKU-SKI-0006,DermaBloom Gentle Foaming Cleanser (Intense),DermaBloom,Skincare,899.0
+7,SKU-HAI-0007,GlowBotanica Rosemary Scalp Stimulating Oil (Value Pack),GlowBotanica,Haircare,1499.0
+8,SKU-BAT-0008,SilkRadiance Vanilla Cashmere Whipped Souffle (Travel Size),SilkRadiance,Bath & Body,699.0
+9,SKU-FRA-0009,SilkRadiance Golden Amber & Oud Mist (Original),SilkRadiance,Fragrance,1499.0
+10,SKU-COL-0010,LuxeAura Soft Tinted Lip & Cheek Balm (Refill Pack),LuxeAura,Color Cosmetics,899.0
+11,SKU-SKI-0011,GlowBotanica Retinol 0.5% Night Recovery Oil (Mini),GlowBotanica,Skincare,399.0
+12,SKU-HAI-0012,DermaBloom Keratin Smooth Intense Conditioner (Mini),DermaBloom,Haircare,899.0
+13,SKU-BAT-0013,SilkRadiance Cocoa Butter Stretch Mark Balm (Travel Size),SilkRadiance,Bath & Body,399.0
+14,SKU-FRA-0014,GlowBotanica Midnight Jasmine Intense Parfum (Refill Pack),GlowBotanica,Fragrance,399.0
+15,SKU-COL-0015,VelvetPetal Luminous Radiant Foundation (Intense),VelvetPetal,Color Cosmetics,899.0
+16,SKU-SKI-0016,BotanicalBliss Ceramide Daily Sunscreen SPF 50 (Travel Size),BotanicalBliss,Skincare,1199.0
+17,SKU-HAI-0017,SilkRadiance Biotin Anti-Hairfall Mask (Value Pack),SilkRadiance,Haircare,899.0
+18,SKU-BAT-0018,LuxeAura Cocoa Butter Stretch Mark Balm (Value Pack),LuxeAura,Bath & Body,499.0
+19,SKU-FRA-0019,VelvetPetal Citrus Breeze Eau de Toilette (Intense),VelvetPetal,Fragrance,1499.0
+20,SKU-COL-0020,AuraBotanics Ultra-Fine Setting Powder (Travel Size),AuraBotanics,Color Cosmetics,1199.0
+21,SKU-SKI-0021,GlowBotanica Gentle Foaming Cleanser (Original),GlowBotanica,Skincare,1199.0
+22,SKU-HAI-0022,DermaBloom Sulfate-Free Clarifying Cleanser (Original),DermaBloom,Haircare,699.0
+23,SKU-BAT-0023,SilkRadiance Coconut Milk Hydrating Body Wash (Value Pack),SilkRadiance,Bath & Body,1899.0
+24,SKU-FRA-0024,DermaBloom Ocean Salt & Driftwood EDC (Travel Size),DermaBloom,Fragrance,899.0
+25,SKU-COL-0025,PureDerma Volumizing Waterproof Mascara (Value Pack),PureDerma,Color Cosmetics,2499.0
+26,SKU-SKI-0026,AuraBotanics Centella Calming Gel Cream (Intense),AuraBotanics,Skincare,1499.0
+27,SKU-HAI-0027,SilkRadiance Biotin Anti-Hairfall Mask (Travel Size),SilkRadiance,Haircare,2499.0
+28,SKU-BAT-0028,BotanicalBliss Coffee Invigorating Body Scrub (Original),BotanicalBliss,Bath & Body,399.0
+29,SKU-FRA-0029,PureDerma Citrus Breeze Eau de Toilette (Value Pack),PureDerma,Fragrance,1499.0
+30,SKU-COL-0030,LuxeAura Hydrating Dewy Primer (Intense),LuxeAura,Color Cosmetics,1899.0
+31,SKU-SKI-0031,AuraBotanics Green Tea Mattifying Gel (Original),AuraBotanics,Skincare,399.0
+32,SKU-HAI-0032,AuraBotanics Bond Repair Leave-in Serum (Original),AuraBotanics,Haircare,899.0
+33,SKU-BAT-0033,DermaBloom Eucalyptus Uplifting Shower Gel (Intense),DermaBloom,Bath & Body,299.0
+34,SKU-FRA-0034,AuraBotanics Sweet Vanilla Orchid Perfume (Travel Size),AuraBotanics,Fragrance,2499.0
+35,SKU-COL-0035,LuxeAura Precision Felt-Tip Liquid Eyeliner (Value Pack),LuxeAura,Color Cosmetics,2499.0
+36,SKU-SKI-0036,VelvetPetal Niacinamide 10% Blemish Toner (Refill Pack),VelvetPetal,Skincare,499.0
+37,SKU-HAI-0037,GlowBotanica Curl Defining Flaxseed Cream (Refill Pack),GlowBotanica,Haircare,1899.0
+38,SKU-BAT-0038,GlowBotanica Coffee Invigorating Body Scrub (Refill Pack),GlowBotanica,Bath & Body,899.0
+39,SKU-FRA-0039,VelvetPetal Velvet Bloom Eau de Parfum (Travel Size),VelvetPetal,Fragrance,399.0
+40,SKU-COL-0040,LuxeAura Peach Blossom Powder Blush (Original),LuxeAura,Color Cosmetics,2499.0
+41,SKU-SKI-0041,PureDerma Niacinamide 10% Blemish Toner (Value Pack),PureDerma,Skincare,1899.0
+42,SKU-HAI-0042,PureDerma Sulfate-Free Clarifying Cleanser (Mini),PureDerma,Haircare,1499.0
+43,SKU-BAT-0043,VelvetPetal Peppermint Cooling Foot Cream (Value Pack),VelvetPetal,Bath & Body,699.0
+44,SKU-FRA-0044,AuraBotanics Saffron & Cardamom Noir (Value Pack),AuraBotanics,Fragrance,1199.0
+45,SKU-COL-0045,BotanicalBliss Ultra-Fine Setting Powder (Intense),BotanicalBliss,Color Cosmetics,399.0
+46,SKU-SKI-0046,VelvetPetal Gentle Foaming Cleanser (Original),VelvetPetal,Skincare,1199.0
+47,SKU-HAI-0047,GlowBotanica Curl Defining Flaxseed Cream (Mini),GlowBotanica,Haircare,699.0
+48,SKU-BAT-0048,VelvetPetal Shea Butter Deep Moisture Lotion (Original),VelvetPetal,Bath & Body,299.0
+49,SKU-FRA-0049,VelvetPetal Golden Amber & Oud Mist (Original),VelvetPetal,Fragrance,1199.0
+50,SKU-COL-0050,LuxeAura Ultra-Fine Setting Powder (Travel Size),LuxeAura,Color Cosmetics,899.0
+51,SKU-SKI-0051,BotanicalBliss Gentle Foaming Cleanser (Mini),BotanicalBliss,Skincare,499.0
+52,SKU-HAI-0052,BotanicalBliss Biotin Anti-Hairfall Mask (Intense),BotanicalBliss,Haircare,1499.0
+53,SKU-BAT-0053,VelvetPetal Coffee Invigorating Body Scrub (Original),VelvetPetal,Bath & Body,1499.0
+54,SKU-FRA-0054,SilkRadiance Saffron & Cardamom Noir (Intense),SilkRadiance,Fragrance,1899.0
+55,SKU-COL-0055,GlowBotanica Luminous Radiant Foundation (Original),GlowBotanica,Color Cosmetics,1499.0
+56,SKU-SKI-0056,SilkRadiance Vitamin C Radiance Glow Serum (Travel Size),SilkRadiance,Skincare,699.0
+57,SKU-HAI-0057,VelvetPetal Tea Tree Anti-Dandruff Tonic (Intense),VelvetPetal,Haircare,499.0
+58,SKU-BAT-0058,DermaBloom Eucalyptus Uplifting Shower Gel (Refill Pack),DermaBloom,Bath & Body,1899.0
+59,SKU-FRA-0059,VelvetPetal Golden Amber & Oud Mist (Intense),VelvetPetal,Fragrance,2499.0
+60,SKU-COL-0060,LuxeAura Matte Velvet Liquid Lipstick (Value Pack),LuxeAura,Color Cosmetics,2499.0
+61,SKU-SKI-0061,GlowBotanica Vitamin C Radiance Glow Serum (Travel Size),GlowBotanica,Skincare,499.0
+62,SKU-HAI-0062,DermaBloom Heat Protectant Styling Spray (Intense),DermaBloom,Haircare,699.0
+63,SKU-BAT-0063,DermaBloom Shea Butter Deep Moisture Lotion (Travel Size),DermaBloom,Bath & Body,1499.0
+64,SKU-FRA-0064,GlowBotanica Saffron & Cardamom Noir (Refill Pack),GlowBotanica,Fragrance,1899.0
+65,SKU-COL-0065,AuraBotanics Hydrating Dewy Primer (Value Pack),AuraBotanics,Color Cosmetics,2499.0
+66,SKU-SKI-0066,BotanicalBliss Niacinamide 10% Blemish Toner (Travel Size),BotanicalBliss,Skincare,899.0
+67,SKU-HAI-0067,VelvetPetal Argan Oil Restorative Shampoo (Mini),VelvetPetal,Haircare,2499.0
+68,SKU-BAT-0068,GlowBotanica Almond Oil Nourishing Body Oil (Original),GlowBotanica,Bath & Body,299.0
+69,SKU-FRA-0069,BotanicalBliss Sweet Vanilla Orchid Perfume (Mini),BotanicalBliss,Fragrance,499.0
+70,SKU-COL-0070,GlowBotanica Ultra-Fine Setting Powder (Original),GlowBotanica,Color Cosmetics,499.0
+71,SKU-SKI-0071,LuxeAura Centella Calming Gel Cream (Original),LuxeAura,Skincare,699.0
+72,SKU-HAI-0072,DermaBloom Keratin Smooth Intense Conditioner (Mini),DermaBloom,Haircare,699.0
+73,SKU-BAT-0073,GlowBotanica Cocoa Butter Stretch Mark Balm (Original),GlowBotanica,Bath & Body,1499.0
+74,SKU-FRA-0074,SilkRadiance Smoky Wood & Vetiver Cologne (Travel Size),SilkRadiance,Fragrance,1199.0
+75,SKU-COL-0075,VelvetPetal Precision Felt-Tip Liquid Eyeliner (Intense),VelvetPetal,Color Cosmetics,499.0
+76,SKU-SKI-0076,AuraBotanics Retinol 0.5% Night Recovery Oil (Refill Pack),AuraBotanics,Skincare,399.0
+77,SKU-HAI-0077,GlowBotanica Heat Protectant Styling Spray (Mini),GlowBotanica,Haircare,399.0
+78,SKU-BAT-0078,LuxeAura Peppermint Cooling Foot Cream (Travel Size),LuxeAura,Bath & Body,2499.0
+79,SKU-FRA-0079,AuraBotanics Citrus Breeze Eau de Toilette (Refill Pack),AuraBotanics,Fragrance,399.0
+80,SKU-COL-0080,VelvetPetal Soft Tinted Lip & Cheek Balm (Refill Pack),VelvetPetal,Color Cosmetics,499.0
+81,SKU-SKI-0081,BotanicalBliss Green Tea Mattifying Gel (Value Pack),BotanicalBliss,Skincare,899.0
+82,SKU-HAI-0082,GlowBotanica Tea Tree Anti-Dandruff Tonic (Refill Pack),GlowBotanica,Haircare,399.0
+83,SKU-BAT-0083,PureDerma Vanilla Cashmere Whipped Souffle (Original),PureDerma,Bath & Body,399.0
+84,SKU-FRA-0084,PureDerma Smoky Wood & Vetiver Cologne (Refill Pack),PureDerma,Fragrance,699.0
+85,SKU-COL-0085,SilkRadiance Volumizing Waterproof Mascara (Value Pack),SilkRadiance,Color Cosmetics,899.0
+86,SKU-SKI-0086,BotanicalBliss Barrier Repair Moisturizer (Original),BotanicalBliss,Skincare,399.0
+87,SKU-HAI-0087,DermaBloom Sulfate-Free Clarifying Cleanser (Original),DermaBloom,Haircare,299.0
+88,SKU-BAT-0088,SilkRadiance Eucalyptus Uplifting Shower Gel (Value Pack),SilkRadiance,Bath & Body,899.0
+89,SKU-FRA-0089,PureDerma Ocean Salt & Driftwood EDC (Mini),PureDerma,Fragrance,1499.0
+90,SKU-COL-0090,GlowBotanica Luminous Radiant Foundation (Original),GlowBotanica,Color Cosmetics,499.0
+91,SKU-SKI-0091,GlowBotanica Ceramide Daily Sunscreen SPF 50 (Mini),GlowBotanica,Skincare,2499.0
+92,SKU-HAI-0092,PureDerma Onion & Fenugreek Hair Oil (Travel Size),PureDerma,Haircare,299.0
+93,SKU-BAT-0093,AuraBotanics Almond Oil Nourishing Body Oil (Original),AuraBotanics,Bath & Body,1199.0
+94,SKU-FRA-0094,VelvetPetal Midnight Jasmine Intense Parfum (Value Pack),VelvetPetal,Fragrance,399.0
+95,SKU-COL-0095,SilkRadiance Ultra-Fine Setting Powder (Intense),SilkRadiance,Color Cosmetics,499.0
+96,SKU-SKI-0096,VelvetPetal Niacinamide 10% Blemish Toner (Travel Size),VelvetPetal,Skincare,1499.0
+97,SKU-HAI-0097,GlowBotanica Rosemary Scalp Stimulating Oil (Value Pack),GlowBotanica,Haircare,1199.0
+98,SKU-BAT-0098,DermaBloom Coconut Milk Hydrating Body Wash (Refill Pack),DermaBloom,Bath & Body,499.0
+99,SKU-FRA-0099,LuxeAura Saffron & Cardamom Noir (Original),LuxeAura,Fragrance,1899.0
+100,SKU-COL-0100,VelvetPetal Volumizing Waterproof Mascara (Intense),VelvetPetal,Color Cosmetics,1199.0
+101,SKU-SKI-0101,AuraBotanics Gentle Foaming Cleanser (Travel Size),AuraBotanics,Skincare,299.0
+102,SKU-HAI-0102,VelvetPetal Onion & Fenugreek Hair Oil (Refill Pack),VelvetPetal,Haircare,899.0
+103,SKU-BAT-0103,LuxeAura Vanilla Cashmere Whipped Souffle (Refill Pack),LuxeAura,Bath & Body,2499.0
+104,SKU-FRA-0104,DermaBloom Sweet Vanilla Orchid Perfume (Refill Pack),DermaBloom,Fragrance,299.0
+105,SKU-COL-0105,LuxeAura Precision Felt-Tip Liquid Eyeliner (Travel Size),LuxeAura,Color Cosmetics,899.0
+106,SKU-SKI-0106,GlowBotanica Vitamin C Radiance Glow Serum (Mini),GlowBotanica,Skincare,1499.0
+107,SKU-HAI-0107,SilkRadiance Bond Repair Leave-in Serum (Intense),SilkRadiance,Haircare,2499.0
+108,SKU-BAT-0108,LuxeAura Lavender Sleep Aromatherapy Wash (Mini),LuxeAura,Bath & Body,699.0
+109,SKU-FRA-0109,AuraBotanics Velvet Bloom Eau de Parfum (Value Pack),AuraBotanics,Fragrance,1499.0
+110,SKU-COL-0110,GlowBotanica Ultra-Fine Setting Powder (Mini),GlowBotanica,Color Cosmetics,699.0
+111,SKU-SKI-0111,SilkRadiance Glycolic Acid Exfoliating Toner (Original),SilkRadiance,Skincare,1199.0
+112,SKU-HAI-0112,SilkRadiance Keratin Smooth Intense Conditioner (Value Pack),SilkRadiance,Haircare,899.0
+113,SKU-BAT-0113,AuraBotanics Lavender Sleep Aromatherapy Wash (Refill Pack),AuraBotanics,Bath & Body,1499.0
+114,SKU-FRA-0114,AuraBotanics Sweet Vanilla Orchid Perfume (Travel Size),AuraBotanics,Fragrance,699.0
+115,SKU-COL-0115,DermaBloom Hydrating Dewy Primer (Value Pack),DermaBloom,Color Cosmetics,499.0
+116,SKU-SKI-0116,AuraBotanics Glycolic Acid Exfoliating Toner (Mini),AuraBotanics,Skincare,299.0
+117,SKU-HAI-0117,AuraBotanics Sulfate-Free Clarifying Cleanser (Travel Size),AuraBotanics,Haircare,1499.0
+118,SKU-BAT-0118,SilkRadiance Exfoliating Loofah Soap Bar (Intense),SilkRadiance,Bath & Body,1899.0
+119,SKU-FRA-0119,VelvetPetal Sweet Vanilla Orchid Perfume (Intense),VelvetPetal,Fragrance,499.0
+120,SKU-COL-0120,LuxeAura Precision Felt-Tip Liquid Eyeliner (Mini),LuxeAura,Color Cosmetics,1199.0
+121,SKU-SKI-0121,LuxeAura Gentle Foaming Cleanser (Value Pack),LuxeAura,Skincare,899.0
+122,SKU-HAI-0122,VelvetPetal Biotin Anti-Hairfall Mask (Travel Size),VelvetPetal,Haircare,299.0
+123,SKU-BAT-0123,GlowBotanica Coconut Milk Hydrating Body Wash (Intense),GlowBotanica,Bath & Body,399.0
+124,SKU-FRA-0124,BotanicalBliss Saffron & Cardamom Noir (Value Pack),BotanicalBliss,Fragrance,699.0
+125,SKU-COL-0125,DermaBloom Peach Blossom Powder Blush (Intense),DermaBloom,Color Cosmetics,699.0
+126,SKU-SKI-0126,PureDerma Hydrating Hyaluronic Serum (Original),PureDerma,Skincare,1499.0
+127,SKU-HAI-0127,VelvetPetal Rosemary Scalp Stimulating Oil (Value Pack),VelvetPetal,Haircare,2499.0
+128,SKU-BAT-0128,BotanicalBliss Shea Butter Deep Moisture Lotion (Mini),BotanicalBliss,Bath & Body,699.0
+129,SKU-FRA-0129,LuxeAura Ocean Salt & Driftwood EDC (Travel Size),LuxeAura,Fragrance,1899.0
+130,SKU-COL-0130,SilkRadiance Peach Blossom Powder Blush (Mini),SilkRadiance,Color Cosmetics,2499.0
+131,SKU-SKI-0131,DermaBloom Green Tea Mattifying Gel (Intense),DermaBloom,Skincare,499.0
+132,SKU-HAI-0132,BotanicalBliss Heat Protectant Styling Spray (Refill Pack),BotanicalBliss,Haircare,699.0
+133,SKU-BAT-0133,AuraBotanics Peppermint Cooling Foot Cream (Intense),AuraBotanics,Bath & Body,699.0
+134,SKU-FRA-0134,AuraBotanics Ocean Salt & Driftwood EDC (Original),AuraBotanics,Fragrance,899.0
+135,SKU-COL-0135,VelvetPetal Precision Felt-Tip Liquid Eyeliner (Refill Pack),VelvetPetal,Color Cosmetics,1199.0
+136,SKU-SKI-0136,LuxeAura Niacinamide 10% Blemish Toner (Travel Size),LuxeAura,Skincare,699.0
+137,SKU-HAI-0137,DermaBloom Rosemary Scalp Stimulating Oil (Value Pack),DermaBloom,Haircare,699.0
+138,SKU-BAT-0138,LuxeAura Lavender Sleep Aromatherapy Wash (Intense),LuxeAura,Bath & Body,1199.0
+139,SKU-FRA-0139,BotanicalBliss Saffron & Cardamom Noir (Original),BotanicalBliss,Fragrance,699.0
+140,SKU-COL-0140,DermaBloom Hydrating Dewy Primer (Mini),DermaBloom,Color Cosmetics,299.0
+141,SKU-SKI-0141,DermaBloom Retinol 0.5% Night Recovery Oil (Original),DermaBloom,Skincare,1199.0
+142,SKU-HAI-0142,AuraBotanics Onion & Fenugreek Hair Oil (Intense),AuraBotanics,Haircare,2499.0
+143,SKU-BAT-0143,VelvetPetal Exfoliating Loofah Soap Bar (Travel Size),VelvetPetal,Bath & Body,899.0
+144,SKU-FRA-0144,DermaBloom Ocean Salt & Driftwood EDC (Original),DermaBloom,Fragrance,1499.0
+145,SKU-COL-0145,SilkRadiance Hydrating Dewy Primer (Value Pack),SilkRadiance,Color Cosmetics,499.0
+146,SKU-SKI-0146,BotanicalBliss Niacinamide 10% Blemish Toner (Mini),BotanicalBliss,Skincare,2499.0
+147,SKU-HAI-0147,GlowBotanica Onion & Fenugreek Hair Oil (Mini),GlowBotanica,Haircare,299.0
+148,SKU-BAT-0148,LuxeAura Lavender Sleep Aromatherapy Wash (Travel Size),LuxeAura,Bath & Body,1899.0
+149,SKU-FRA-0149,PureDerma Velvet Bloom Eau de Parfum (Refill Pack),PureDerma,Fragrance,1499.0
+150,SKU-COL-0150,SilkRadiance Volumizing Waterproof Mascara (Intense),SilkRadiance,Color Cosmetics,1199.0

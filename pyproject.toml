@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ask-the-business"
+version = "0.1.0"
+description = "End-to-end LLM data cleaning, DuckDB analytics, and natural language SQL agent"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Portfolio Author" }
+]
+dependencies = [
+    "pandas>=2.1.0",
+    "duckdb>=1.0.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.2.0",
+    "sqlglot>=23.0.0",
+    "mcp>=1.0.0",
+    "google-genai>=1.0.0",
+    "groq>=0.9.0",
+    "python-dotenv>=1.0.0",
+    "streamlit>=1.35.0",
+    "plotly>=5.20.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.4.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = []
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["."]
