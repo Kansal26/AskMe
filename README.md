@@ -91,24 +91,30 @@ flowchart TD
 ## 📊 Empirical Evaluation & Benchmarks
 
 > **Zero Fabricated Numbers**: All metrics below were computed directly by running `eval/cleaning_eval.py` and `eval/qa_eval.py` against live data and LLM endpoints.
+> - **Data Cleaning Benchmark (Stage 1)**: Evaluated using `openai/gpt-oss-120b` (Groq, temperature 0.0, deterministic across 3 passes).
+> - **Conversational BI & QA Benchmark (Stage 2)**: Evaluated using `openai/gpt-oss-20b` (Groq, temperature 0.0).
 
-### Benchmark 1: Two-Arm Data Cleaning Benchmark
-* **Dataset**: 20,000 e-commerce transactions with **16,869 ground-truth corruptions** injected with row-level tracking (`manifest.json`), including 487 ambiguous dates (`03/04/2024`) and 503 duplicate row clones.
+### Benchmark 1: Three-Arm Data Cleaning Benchmark (Complete 4-Bucket Accounting)
+* **Dataset**: 20,000 e-commerce transactions across 4 relational tables (`products`, `orders`, `returns`, `reviews`) with **16,869 ground-truth corruptions** tracked cell-by-cell in `manifest.json`.
 * **Evaluation Code**: `eval/cleaning_eval.py`
+* **Accounting Invariant**: Every injected cell falls into exactly one mutually exclusive bucket: `fixed_correctly + fixed_incorrectly + left_and_flagged_correctly + missed == 16,869`.
 
-| Metric | Arm A: Rule-Based Profiler | Arm B: LLM-Assisted Planner | Target Invariant |
-| :--- | :---: | :---: | :---: |
-| **Detection Recall** | 78.9% | 78.9% | $\ge 75\%$ |
-| **Detection Precision** | **100.0%** | **100.0%** | $\ge 95\%$ |
-| **Fix Correctness** | **91.2%** | **91.2%** | $\ge 90\%$ |
-| **False-Fix Rate (Damage to Clean Data)** | **0.0000%** | **0.0000%** | **$\le 0.05\%$** |
+| Evaluation Metric | Arm A: Rule-Based Planner | Arm B: LLM Planner (`gpt-oss-120b`, Deterministic) | Arm C: Naive Baseline | Target Invariant |
+| :--- | :---: | :---: | :---: | :---: |
+| **Blended Governed Success Rate** | **76.24%** | **73.16%** | **55.58%** | $\ge 70\%$ |
+| **Fixed-Only Rate** | 59.44% (10,027) | 56.56% (9,541) | 55.58% (9,375) | — |
+| **Left & Flagged-Only Rate** | 16.80% (2,834) | 16.60% (2,800) | 0.00% (0) | — |
+| **Fixed-Incorrectly Rate** | 5.53% (933) | 8.35% (1,408) | 25.57% (4,313) | Minimize |
+| **Missed Rate** | 18.23% (3,075) | 18.50% (3,120) | 18.86% (3,181) | Minimize |
+| **Clean Cells Damaged** | **0** | **6,363** | **6,502** | $\le 10$ |
+| **False-Fix Rate (Clean Data Damage)** | **0.0000%** | **3.0342%** | **3.1005%** | **$\le 0.05\%$** |
 
-#### Granular Breakdown by Injected Corruptions (Arm B):
-- `dirty_whitespace`: **99.8% recall, 100.0% fix correctness** (4,654 of 4,665 fixed).
-- `dirty_numeric`: **96.5% recall, 100.0% fix correctness** (2,445 of 2,535 currency/separator corruptions fixed).
-- `outlier`: **100.0% recall, 100.0% fix correctness** (all 40 extreme outliers detected and capped).
-- `missing_value`: **100.0% recall, 100.0% precision** (missing values handled via median/mode or flagged).
-- `mixed_date_format`: **100% of ambiguous dates (`03/04/2024`) preserved without guessing** and flagged in `is_ambiguous_date`.
+#### Granular Breakdown by Injected Issue Type (Arm B: Representative Run):
+- `dirty_whitespace`: **95.3% Governed Success** (4,445 fixed correctly, 209 fixed incorrectly, 11 missed).
+- `dirty_numeric`: **96.5% Governed Success** (2,445 fixed correctly, 90 missed).
+- `outlier`: **100.0% Governed Success** (all 40 extreme outliers in `orders.quantity` preserved and flagged under `is_outlier_quantity`).
+- `missing_value`: **73.2% Governed Success** (46 fixed correctly via low-stakes mode, 2,274 high-stakes cells left null and flagged, 810 mode-imputed with value differing from ground truth, 41 missed).
+- `mixed_date_format`: **85.2% Governed Success** (600 standardized to ISO YYYY-MM-DD, 486 ambiguous dates like `03/04/2024` preserved and flagged under `is_ambiguous_date`).
 
 ---
 

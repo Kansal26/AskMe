@@ -187,9 +187,11 @@ def execute_step(df: pd.DataFrame, step: CleaningStep) -> tuple[pd.DataFrame, Au
 
     # 6. FILL MISSING
     elif op == "fill_missing":
+        from src.cleaning.profiler import STANDARD_NULL_TOKENS
+
         strategy = params.get("strategy", "leave_and_flag")
         if col in df_out.columns:
-            null_mask = df_out[col].isna() | (df_out[col].astype(str).str.strip() == "")
+            null_mask = df_out[col].isna() | df_out[col].astype(str).str.strip().str.lower().isin(STANDARD_NULL_TOKENS)
             rows_affected = int(null_mask.sum())
 
             if strategy == "leave_and_flag":

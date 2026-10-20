@@ -26,9 +26,26 @@ RE_DATE_SLASH_DMY_OR_MDY = re.compile(r"^\d{1,2}/\d{1,2}/\d{4}")
 RE_DATE_DASH_MDY = re.compile(r"^\d{1,2}-\d{1,2}-\d{4}")
 
 
+# Standard null tokens across tabular CSV sources
+STANDARD_NULL_TOKENS = {
+    "",
+    "nan",
+    "null",
+    "none",
+    "n/a",
+    "na",
+    "-",
+    "--",
+    "?",
+    r"\n",
+    r"\N",
+}
+
+
 def _infer_semantic_type(series: pd.Series) -> str:
     """Infers high-level semantic type: 'numeric', 'date', 'categorical', or 'text'."""
     non_nulls = series.dropna().astype(str).str.strip()
+    non_nulls = non_nulls[~non_nulls.str.lower().isin(STANDARD_NULL_TOKENS)]
     if len(non_nulls) == 0:
         return "empty"
 
@@ -63,8 +80,8 @@ def profile_column(col_name: str, series: pd.Series) -> dict[str, Any]:
     """Profiles a single column for quality issues, distributions, and outliers."""
     total_count = len(series)
 
-    # Missing / empty string count
-    is_null_mask = series.isna() | (series.astype(str).str.strip() == "")
+    # Missing / empty string / standard null token count
+    is_null_mask = series.isna() | series.astype(str).str.strip().str.lower().isin(STANDARD_NULL_TOKENS)
     null_count = int(is_null_mask.sum())
     null_rate = round(null_count / total_count, 4) if total_count > 0 else 0.0
 

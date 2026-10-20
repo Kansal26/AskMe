@@ -1,0 +1,33 @@
+{
+  "dataset": "employees_hr",
+  "rows": 17,
+  "columns": [
+    "_row_id",
+    "emp_id",
+    "name",
+    "department",
+    "hire_date",
+    "salary",
+    "location",
+    "rating"
+  ],
+  "arm_a": {
+    "steps": 14,
+    "invariants": {
+      "ambiguous_date_safe": true,
+      "outlier_safe": true,
+      "dedup_ok": true
+    }
+  },
+  "arm_b": {
+    "steps": 14,
+    "rejected_steps": [
+      "LLM generation failed (Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gp), applied rule-based fallback"
+    ],
+    "invariants": {
+      "ambiguous_date_safe": true,
+      "outlier_safe": true,
+      "dedup_ok": true
+    }
+  }
+}

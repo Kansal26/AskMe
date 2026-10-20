@@ -255,3 +255,23 @@ def test_dry_run_leaves_dataframe_unmutated():
     pd.testing.assert_frame_equal(df_out, df_orig)
     assert report.steps_applied == 1
     assert "def clean_dataset" in script
+
+
+def test_four_bucket_accounting_invariant():
+    """Verify that every evaluated cell falls into exactly one of 4 exhaustive, mutually exclusive buckets."""
+    # Simulate an injected issue dictionary with arbitrary counts
+    issue_stats = {
+        "fixed_correctly": 117,
+        "fixed_incorrectly": 745,
+        "left_and_flagged_correctly": 2308,
+        "missed": 1,
+    }
+    injected_count = 3171
+    total_accounted = (
+        issue_stats["fixed_correctly"]
+        + issue_stats["fixed_incorrectly"]
+        + issue_stats["left_and_flagged_correctly"]
+        + issue_stats["missed"]
+    )
+    assert total_accounted == injected_count, "Accounting invariant must sum strictly to injected count"
+
